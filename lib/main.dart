@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:subs_tracker/menu_bar.dart';
+import 'package:subs_tracker/widgets/menu_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {

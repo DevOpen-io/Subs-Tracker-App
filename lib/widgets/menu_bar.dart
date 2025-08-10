@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:subs_tracker/pie_chart.dart';
+import 'package:subs_tracker/models/sub_slice.dart';
+import 'package:subs_tracker/providers/sub_slices_provider.dart';
+import 'package:subs_tracker/widgets/add_subs_dialog.dart';
+import 'package:subs_tracker/widgets/pie_chart.dart';
 
-class Menubar extends StatefulWidget {
+class Menubar extends ConsumerStatefulWidget {
   const Menubar({
     super.key,
     required this.isDark,
@@ -13,10 +17,10 @@ class Menubar extends StatefulWidget {
   final ValueChanged<bool> onDarkModeChange;
 
   @override
-  State<Menubar> createState() => _MenubarState();
+  ConsumerState<Menubar> createState() => _MenubarState();
 }
 
-class _MenubarState extends State<Menubar> {
+class _MenubarState extends ConsumerState<Menubar> {
   late Future<PackageInfo> _pkg;
 
   @override
@@ -80,6 +84,32 @@ class _MenubarState extends State<Menubar> {
                 title: const Text("Favorites"),
                 onTap: () {},
               ),
+              ListTile(
+                leading: const Icon(Icons.add_outlined),
+                title: const Text('Add Subscription'),
+                onTap: () async {
+                  Navigator.pop(context);
+
+                  final notifier = ref.read(subSlicesProvider.notifier);
+                  final messenger = ScaffoldMessenger.of(context);
+
+                  final SubSlice? result = await showDialog<SubSlice>(
+                    context: context,
+                    builder: (_) => const AddSubsDialog(),
+                  );
+
+                  if (!mounted) return;
+
+                  if (result != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      notifier.addSlice(result);
+                    });
+                    messenger.showSnackBar(
+                      SnackBar(content: Text('Added : ${result.name}')),
+                    );
+                  }
+                },
+              ),
               const _SectionTitle('Settings'),
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode_outlined),
@@ -123,21 +153,74 @@ class _MenubarState extends State<Menubar> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-            SubsPie(),
-            const SizedBox(height: 12,),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Column(
-                children: [
-                  
-                ],
+      body: Consumer(
+        builder: (context, ref, child) {
+          final slices = ref.watch(subSlicesProvider);
+
+          if (slices.isEmpty) {
+            return const Center(
+              child: Text(
+                "Subscription Data Not Added Yet.",
+                style: TextStyle(color: Colors.grey),
               ),
-            )
-          ]
-        ),
+            );
+          }
+          return Column(
+            children: [
+              SubsPie(),
+              const SizedBox(height: 12),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: slices.length,
+                  itemBuilder: (context, index) {
+                    final s = slices[index];
+                    final percent =
+                        slices.fold<double>(0, (a, b) => a + b.amount) == 0
+                        ? 0
+                        : (s.amount /
+                                  slices.fold<double>(
+                                    0,
+                                    (a, b) => a + b.amount,
+                                  )) *
+                              100;
+
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: s.color,
+                          child: Text(
+                            s.name[0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        title: Text(s.name),
+                        subtitle: Text(
+                          "${s.amount.toStringAsFixed(2)} ₺ · ${percent.toStringAsFixed(1)}%",
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () {
+                            ref
+                                .read(subSlicesProvider.notifier)
+                                .removeAt(index);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
