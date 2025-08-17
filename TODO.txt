@@ -1,0 +1,12 @@
+girerken kayitederken firmalarin iconlari internetten cekilicek buna gore bi sistem
+aylik yillik gider gosterme
+chartda en yuksek 5 odeme gozuksun geri kalanlari diger seklinde olsun
+kategorilendirme ...
+ 
+bunlar uygulama mvp'si ciktiktan sonra olucak
+
+
+
+onemli olan seyler :
+
+    Verilerin kapanip acilinca gitmemesi -

@@ -38,6 +38,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   fl_chart: ^1.0.0
   flutter_riverpod: ^2.6.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

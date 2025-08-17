@@ -5,6 +5,7 @@ import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/sub_slices_provider.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/pie_chart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Menubar extends ConsumerStatefulWidget {
   const Menubar({
@@ -27,6 +28,14 @@ class _MenubarState extends ConsumerState<Menubar> {
   void initState() {
     super.initState();
     _pkg = PackageInfo.fromPlatform();
+  }
+
+  final Uri _url = Uri.parse('https://github.com/kullaniciAdin/subs_tracker');
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   @override
@@ -144,6 +153,17 @@ class _MenubarState extends ConsumerState<Menubar> {
                       Text(
                         "An open source application that allows you to easily track your subscriptions.",
                       ),
+                      const SizedBox(height: 12),
+                      InkWell(
+                        onTap: _launchUrl,
+                        child: Text(
+                          "View on GitHub",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
                     ],
                     child: const Text("About"),
                   );
@@ -202,14 +222,95 @@ class _MenubarState extends ConsumerState<Menubar> {
                         ),
                         title: Text(s.name),
                         subtitle: Text(
-                          "${s.amount.toStringAsFixed(2)} ₺ · ${percent.toStringAsFixed(1)}%",
+                          "${s.amount.toStringAsFixed(2)} ₺ · ${percent.toStringAsFixed(1)}% · ${s.startDate.month}/${s.startDate.day}/${s.startDate.year}",
                         ),
                         trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline),
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            color: Colors.white,
+                          ),
+                          style: IconButton.styleFrom(
+                            backgroundColor: widget.isDark ? Colors.red[900] : Colors.red,
+                          ),
                           onPressed: () {
-                            ref
-                                .read(subSlicesProvider.notifier)
-                                .removeAt(index);
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  insetPadding: EdgeInsets.all(10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Text(
+                                            "Are You Sure Delete This Sub Data ?",
+                                            style: TextStyle(
+                                              fontSize: 48,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Cancel"),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                ref
+                                                    .read(
+                                                      subSlicesProvider
+                                                          .notifier,
+                                                    )
+                                                    .removeAt(index);
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: widget.isDark
+                                                    ? Colors.red[900]
+                                                    : Colors.red,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                "Delete",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
                           },
                         ),
                       ),
