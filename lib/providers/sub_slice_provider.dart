@@ -25,7 +25,7 @@ class SubSlicesNotifier extends StateNotifier<List<SubSlice>> {
   }
 }
 
-final subSlicesProvider =
+final subSliceProvider =
     StateNotifierProvider<SubSlicesNotifier, List<SubSlice>>(
       (ref) => SubSlicesNotifier(),
     );

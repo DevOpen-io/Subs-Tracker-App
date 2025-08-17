@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:subs_tracker/providers/sub_slices_provider.dart';
+import 'package:subs_tracker/providers/sub_slice_provider.dart';
 import 'package:subs_tracker/utils/color_utils.dart';
 
 class SubsPie extends ConsumerStatefulWidget {
@@ -16,7 +16,7 @@ class _SubsPieState extends ConsumerState<SubsPie> {
 
   @override
   Widget build(BuildContext context) {
-    final slices = ref.watch(subSlicesProvider);
+    final slices = ref.watch(subSliceProvider);
     final total = slices.fold<double>(0, (a, b) => a + b.amount);
 
     if (slices.isEmpty) {

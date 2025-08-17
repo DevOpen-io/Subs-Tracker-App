@@ -2,20 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
-import 'package:subs_tracker/providers/sub_slices_provider.dart';
+import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/providers/sub_slice_provider.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/pie_chart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menubar extends ConsumerStatefulWidget {
-  const Menubar({
-    super.key,
-    required this.isDark,
-    required this.onDarkModeChange,
-  });
+  const Menubar({super.key, required this.isDark});
 
   final bool isDark;
-  final ValueChanged<bool> onDarkModeChange;
 
   @override
   ConsumerState<Menubar> createState() => _MenubarState();
@@ -99,7 +95,7 @@ class _MenubarState extends ConsumerState<Menubar> {
                 onTap: () async {
                   Navigator.pop(context);
 
-                  final notifier = ref.read(subSlicesProvider.notifier);
+                  final notifier = ref.read(subSliceProvider.notifier);
                   final messenger = ScaffoldMessenger.of(context);
 
                   final SubSlice? result = await showDialog<SubSlice>(
@@ -124,7 +120,9 @@ class _MenubarState extends ConsumerState<Menubar> {
                 secondary: const Icon(Icons.dark_mode_outlined),
                 title: const Text("Dark Mode"),
                 value: widget.isDark,
-                onChanged: (value) => widget.onDarkModeChange(value),
+                onChanged: (value) {
+                  ref.read(settingsSliceProvider.notifier).updateTheme();
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.language_outlined),
@@ -175,7 +173,7 @@ class _MenubarState extends ConsumerState<Menubar> {
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          final slices = ref.watch(subSlicesProvider);
+          final slices = ref.watch(subSliceProvider);
 
           if (slices.isEmpty) {
             return const Center(
@@ -230,7 +228,9 @@ class _MenubarState extends ConsumerState<Menubar> {
                             color: Colors.white,
                           ),
                           style: IconButton.styleFrom(
-                            backgroundColor: widget.isDark ? Colors.red[900] : Colors.red,
+                            backgroundColor: widget.isDark
+                                ? Colors.red[900]
+                                : Colors.red,
                           ),
                           onPressed: () {
                             showDialog(
@@ -281,8 +281,7 @@ class _MenubarState extends ConsumerState<Menubar> {
                                               onPressed: () {
                                                 ref
                                                     .read(
-                                                      subSlicesProvider
-                                                          .notifier,
+                                                      subSliceProvider.notifier,
                                                     )
                                                     .removeAt(index);
                                                 Navigator.of(context).pop();
