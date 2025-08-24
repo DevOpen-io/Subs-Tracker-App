@@ -3,19 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
-import 'package:subs_tracker/providers/sub_slice_provider.dart';
-import 'package:subs_tracker/screens/home_screen.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Menubar extends ConsumerStatefulWidget {
-  const Menubar({super.key});
+class SidebarMenu extends ConsumerStatefulWidget {
+  const SidebarMenu({super.key});
 
   @override
-  ConsumerState<Menubar> createState() => _MenubarState();
+  ConsumerState<SidebarMenu> createState() => _MenubarState();
 }
 
-class _MenubarState extends ConsumerState<Menubar> {
+class _MenubarState extends ConsumerState<SidebarMenu> {
   late Future<PackageInfo> _pkg;
 
   @override
@@ -35,15 +33,13 @@ class _MenubarState extends ConsumerState<Menubar> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(settingsSliceProvider).theme;
-    return Scaffold(
-      appBar: AppBar(title: Text("Subs Tracker")),
-      drawer: Drawer(
+    return Drawer(
         child: SafeArea(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(color: Colors.blue),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -59,14 +55,14 @@ class _MenubarState extends ConsumerState<Menubar> {
                         Text(
                           "Mustangtr",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "mustangtr@proton.me",
-                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 14),
                         ),
                       ],
                     ),
@@ -94,33 +90,21 @@ class _MenubarState extends ConsumerState<Menubar> {
                 onTap: () async {
                   Navigator.pop(context);
 
-                  final notifier = ref.read(subSliceProvider.notifier);
-                  final messenger = ScaffoldMessenger.of(context);
-
-                  final SubSlice? result = await showDialog<SubSlice>(
+                  await showAdaptiveDialog<SubSlice>(
                     context: context,
                     builder: (_) => const AddSubsDialog(),
                   );
-
-                  if (!mounted) return;
-
-                  if (result != null) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      notifier.addSlice(result);
-                    });
-                    messenger.showSnackBar(
-                      SnackBar(content: Text('Added : ${result.name}')),
-                    );
-                  }
                 },
               ),
               const _SectionTitle('Settings'),
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode_outlined),
                 title: const Text("Dark Mode"),
-                value: theme == ThemeMode.dark,
+                value: theme == ThemeMode.dark || theme == ThemeMode.system,
                 onChanged: (value) {
-                  ref.read(settingsSliceProvider.notifier).updateTheme();
+                  ref.read(settingsSliceProvider.notifier).updateTheme(
+                    value ? ThemeMode.dark : ThemeMode.light,
+                  );
                 },
               ),
               ListTile(
@@ -168,8 +152,6 @@ class _MenubarState extends ConsumerState<Menubar> {
             ],
           ),
         ),
-      ),
-      body: HomeScreen(),
     );
   }
 }
@@ -182,7 +164,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelSmall?.copyWith(
       letterSpacing: 0.8,
-      color: Colors.grey.shade600, // .shade600, [] yerine
+      color: Theme.of(context).colorScheme.onSurface,
       fontWeight: FontWeight.w600,
     );
 
