@@ -4,14 +4,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
 import 'package:subs_tracker/providers/sub_slice_provider.dart';
+import 'package:subs_tracker/screens/home_screen.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
-import 'package:subs_tracker/widgets/pie_chart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Menubar extends ConsumerStatefulWidget {
-  const Menubar({super.key, required this.isDark});
-
-  final bool isDark;
+  const Menubar({super.key});
 
   @override
   ConsumerState<Menubar> createState() => _MenubarState();
@@ -36,6 +34,7 @@ class _MenubarState extends ConsumerState<Menubar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(settingsSliceProvider).theme;
     return Scaffold(
       appBar: AppBar(title: Text("Subs Tracker")),
       drawer: Drawer(
@@ -119,7 +118,7 @@ class _MenubarState extends ConsumerState<Menubar> {
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode_outlined),
                 title: const Text("Dark Mode"),
-                value: widget.isDark,
+                value: theme == ThemeMode.dark,
                 onChanged: (value) {
                   ref.read(settingsSliceProvider.notifier).updateTheme();
                 },
@@ -129,7 +128,6 @@ class _MenubarState extends ConsumerState<Menubar> {
                 title: const Text("Language"),
                 onTap: () {},
               ),
-
               const _SectionTitle("About"),
               FutureBuilder<PackageInfo>(
                 future: _pkg,
@@ -171,156 +169,7 @@ class _MenubarState extends ConsumerState<Menubar> {
           ),
         ),
       ),
-      body: Consumer(
-        builder: (context, ref, child) {
-          final slices = ref.watch(subSliceProvider);
-
-          if (slices.isEmpty) {
-            return const Center(
-              child: Text(
-                "Subscription Data Not Added Yet.",
-                style: TextStyle(color: Colors.grey),
-              ),
-            );
-          }
-          return Column(
-            children: [
-              SubsPie(),
-              const SizedBox(height: 12),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: slices.length,
-                  itemBuilder: (context, index) {
-                    final s = slices[index];
-                    final percent =
-                        slices.fold<double>(0, (a, b) => a + b.amount) == 0
-                        ? 0
-                        : (s.amount /
-                                  slices.fold<double>(
-                                    0,
-                                    (a, b) => a + b.amount,
-                                  )) *
-                              100;
-
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 2,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: s.color,
-                          child: Text(
-                            s.name[0].toUpperCase(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        title: Text(s.name),
-                        subtitle: Text(
-                          "${s.amount.toStringAsFixed(2)} ₺ · ${percent.toStringAsFixed(1)}% · ${s.startDate.month}/${s.startDate.day}/${s.startDate.year}",
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(
-                            Icons.delete_outline,
-                            color: Colors.white,
-                          ),
-                          style: IconButton.styleFrom(
-                            backgroundColor: widget.isDark
-                                ? Colors.red[900]
-                                : Colors.red,
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  insetPadding: EdgeInsets.all(10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  elevation: 3,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.contain,
-                                          child: Text(
-                                            "Are You Sure Delete This Sub Data ?",
-                                            style: TextStyle(
-                                              fontSize: 48,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("Cancel"),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                ref
-                                                    .read(
-                                                      subSliceProvider.notifier,
-                                                    )
-                                                    .removeAt(index);
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: widget.isDark
-                                                    ? Colors.red[900]
-                                                    : Colors.red,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                "Delete",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+      body: HomeScreen(),
     );
   }
 }

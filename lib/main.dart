@@ -34,9 +34,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         useMaterial3: true,
       ),
       themeMode: themeData,
-      home: Menubar(
-        isDark: themeData == ThemeMode.dark,
-      ),
+      home: Menubar(),
     );
   }
 }
