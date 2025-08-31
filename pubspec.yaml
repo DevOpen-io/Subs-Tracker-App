@@ -48,6 +48,8 @@ dependencies:
   riverpod_sqflite: ^0.2.0
   sqflite: ^2.4.2
   path: ^1.9.1
+  flutter_local_notifications: ^19.4.1
+  timezone: ^0.10.1
 
 dev_dependencies:
   flutter_test:
