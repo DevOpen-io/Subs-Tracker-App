@@ -71,30 +71,6 @@ class _SubsPieState extends ConsumerState<SubsPie> {
           ),
         ),
         const SizedBox(height: 12),
-        // Wrap(
-        //   spacing: 12,
-        //   runSpacing: 8,
-        //   children: slices.map((s) {
-        //     final percent = total == 0 ? 0 : (s.amount / total) * 100;
-        //     return Row(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         Container(
-        //           width: 12,
-        //           height: 12,
-        //           decoration: BoxDecoration(
-        //             color: s.color,
-        //             shape: BoxShape.circle,
-        //           ),
-        //         ),
-        //         const SizedBox(width: 6),
-        //         Text(
-        //           '${s.name} · ${s.amount.toStringAsFixed(0)} ₺ (${percent.toStringAsFixed(2)}%)',
-        //         ),
-        //       ],
-        //     );
-        //   }).toList(),
-        // ),
       ],
     );
   }
