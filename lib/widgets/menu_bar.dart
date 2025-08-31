@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/utils/notification_service.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
