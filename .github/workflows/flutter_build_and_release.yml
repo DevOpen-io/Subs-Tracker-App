@@ -1,0 +1,58 @@
+name: Flutter APK Build and Release
+
+on:
+  push:
+    branches:
+      - main  # Bu, ana dalınızın adı olmalı. Eğer master kullanıyorsanız master olarak değiştirin.
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+      
+      - name: Get App Version and Build Number
+        id: get_version
+        run: |
+          VERSION_LINE=$(grep "version:" pubspec.yaml)
+          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
+          BUILD_NUMBER=$(echo $VERSION_LINE | cut -d'+' -f2)
+          
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
+          release_name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
+          body: |
+            Flutter uygulaması için otomatik olarak oluşturulmuş yeni sürüm.
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/zip
