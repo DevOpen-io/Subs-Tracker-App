@@ -87,6 +87,13 @@ flutter:
   assets:
     - assets/pp.gif
     - assets/App_Logo.png
+    - assets/linkedin.png
+    - assets/github.png
+    - assets/instagram.png
+    - assets/youtube.png
+    - assets/twitter.png
+    - assets/egunpp.png
+    - assets/saksoypp.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

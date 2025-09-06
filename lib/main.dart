@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
 import 'package:subs_tracker/screens/home_screen.dart';
+import 'package:subs_tracker/screens/teams_screen.dart';
 import 'package:subs_tracker/utils/app_theme.dart';
 import 'package:subs_tracker/utils/notification_service.dart';
 
@@ -19,7 +20,6 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     final themeData = ref.watch(settingsSliceProvider).theme;
@@ -29,6 +29,10 @@ class _MyAppState extends ConsumerState<MyApp> {
       darkTheme: AppTheme.dark,
       themeMode: themeData,
       home: HomeScreen(),
+      routes: {
+        '/home': (context) => HomeScreen(),
+        '/teams': (context) => TeamsScreen(),
+      },
     );
   }
 }
