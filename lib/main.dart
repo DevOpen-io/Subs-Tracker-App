@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
-import 'package:subs_tracker/screens/home_screen.dart';
 import 'package:subs_tracker/utils/app_theme.dart';
 import 'package:subs_tracker/utils/notification_service.dart';
 
@@ -11,24 +11,19 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerStatefulWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  ConsumerState createState() => _MyAppState();
-}
-
-class _MyAppState extends ConsumerState<MyApp> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeData = ref.watch(settingsSliceProvider).theme;
-    return MaterialApp(
+    final router = ref.watch(goRouterProvider);
+    return MaterialApp.router(
+      routerConfig: router,
       title: 'Subs Tracker',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: themeData,
-      home: HomeScreen(),
     );
   }
 }

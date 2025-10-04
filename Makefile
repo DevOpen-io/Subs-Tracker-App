@@ -16,3 +16,6 @@ profileApk:
 
 releaseApk:
 	flutter build apk --release
+
+runnerBuild:
+	dart run build_runner build -d

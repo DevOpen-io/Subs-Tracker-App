@@ -46,11 +46,8 @@ jobs:
           tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
           release_name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
           body: |
-            Flutter uygulaması için otomatik olarak oluşturulmuş yeni sürüm.
-
             New Change Include:
-              - Apk name has been updated.
-              - App name has been updated.
+              - Data Cache Time Change To Forever
           draft: false
           prerelease: false
 

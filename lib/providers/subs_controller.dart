@@ -10,9 +10,9 @@ import 'package:subs_tracker/utils/notification_service.dart';
 
 part 'subs_controller.g.dart';
 
-/// There is a limit imposed by iOS where it will only keep the 64 notifications 
-/// that were last set on any iOS versions newer than 9. On iOS versions 9 and older, 
-/// the 64 notifications that fire soonest are kept. 
+/// There is a limit imposed by iOS where it will only keep the 64 notifications
+/// that were last set on any iOS versions newer than 9. On iOS versions 9 and older,
+/// the 64 notifications that fire soonest are kept.
 /// See https://developer.apple.com/documentation/uikit/uilocalnotification.
 int maxNotifications = 64;
 
@@ -32,7 +32,13 @@ Future<JsonSqFliteStorage> subsStorage(Ref ref) async {
 class SubsController extends _$SubsController {
   @override
   FutureOr<List<SubSlice>> build() async {
-    await persist(ref.watch(subsStorageProvider.future)).future;
+    await persist(
+      ref.watch(subsStorageProvider.future),
+      options: StorageOptions(
+        cacheTime: StorageCacheTime.unsafe_forever,
+        destroyKey: "v1",
+      ),
+    ).future;
     scheduleNotification();
     return state.value ?? [];
   }
@@ -90,7 +96,10 @@ class SubsController extends _$SubsController {
         id: slice.hashCode + i,
         title: "Subscription Reminder",
         body: "Your subscription for ${slice.name} is due tomorrow.",
-        scheduledDate: scheduledDate.copyWith(month: scheduledDate.month + i, day: scheduledDate.day - 1),
+        scheduledDate: scheduledDate.copyWith(
+          month: scheduledDate.month + i,
+          day: scheduledDate.day - 1,
+        ),
       );
       LocalNotificationService.instance.scheduleNotification(
         id: slice.hashCode + i,

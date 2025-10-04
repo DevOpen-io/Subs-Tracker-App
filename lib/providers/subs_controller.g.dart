@@ -72,7 +72,7 @@ final class SubsControllerProvider
   SubsController create() => SubsController();
 }
 
-String _$subsControllerHash() => r'975089894d68e3a4b7c278aca81f588bb67f5d25';
+String _$subsControllerHash() => r'56d050b48d1dbd22bc89179e8872a3127ae796cf';
 
 abstract class _$SubsControllerBase extends $AsyncNotifier<List<SubSlice>> {
   FutureOr<List<SubSlice>> build();
