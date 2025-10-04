@@ -6,7 +6,7 @@ import 'package:subs_tracker/widgets/menu_bar.dart';
 class RootLayout extends StatelessWidget {
   const RootLayout({super.key, required this.child});
   
-  final Widget child; // GoRouter'ın buraya HomeScreen veya TestScreen'i yerleştireceği değişken
+  final Widget child; // The widget (e.g., HomeScreen or TestScreen) that GoRouter will place here
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class RootLayout extends StatelessWidget {
         title: const Text("Subs Tracker"),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () async {
               await showAdaptiveDialog<SubSlice>(
                 context: context,
@@ -26,7 +26,7 @@ class RootLayout extends StatelessWidget {
         ],
       ),
       drawer: const SidebarMenu(),
-      body: child, // İçerik olarak gelen sayfayı burada gösteriyoruz.
+      body: child, // Display the incoming page as content here.
     );
   }
 }

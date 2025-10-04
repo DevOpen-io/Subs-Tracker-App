@@ -5,7 +5,13 @@ class TestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold'u buradan kaldırıyoruz.
-    return const Column(children: [Center(child: Text("Test Page"))]);
+    // Removed the Scaffold from here.
+    return const Scaffold(
+      body: Column(
+        children: [
+          Center(child: Text("Test Page"))
+        ],
+      ),
+    );
   }
 }
