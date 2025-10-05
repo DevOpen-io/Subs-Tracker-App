@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -38,7 +39,7 @@ class LocalNotificationService implements NotificationService {
           android: initializationSettingsAndroid,
           iOS: initializationSettingsIOS,
         );
-    
+
     tz.initializeTimeZones();
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -51,22 +52,32 @@ class LocalNotificationService implements NotificationService {
     required String body,
     required DateTime scheduledDate,
   }) async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledDate, tz.local),
-      const NotificationDetails(
-        iOS: DarwinNotificationDetails(),
-        android: AndroidNotificationDetails(
-          'subscription_channel_id',
-          'Subscription Notifications',
-          channelDescription:
-              'Notifications for subscription updates to show you the upcoming subscriptions',
+    var status = await Permission.scheduleExactAlarm.status;
+
+    if (status.isDenied) {
+      await Permission.scheduleExactAlarm.request();
+    }
+
+    if (status.isGranted) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.from(scheduledDate, tz.local),
+        const NotificationDetails(
+          iOS: DarwinNotificationDetails(),
+          android: AndroidNotificationDetails(
+            'subscription_channel_id',
+            'Subscription Notifications',
+            channelDescription:
+                'Notifications for subscription updates to show you the upcoming subscriptions',
+          ),
         ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    } else {
+      print("Exact Alarm Permission Is Not Granted.");
+    }
   }
 
   @override
