@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -76,7 +77,7 @@ class LocalNotificationService implements NotificationService {
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       );
     } else {
-      print("Exact Alarm Permission Is Not Granted.");
+      debugPrint("Exact Alarm Permission Is Not Granted.");
     }
   }
 
