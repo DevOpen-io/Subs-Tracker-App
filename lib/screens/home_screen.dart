@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
-import 'package:subs_tracker/widgets/menu_bar.dart';
 import 'package:subs_tracker/widgets/pie_chart.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -14,30 +13,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     final slicesAsync = ref.watch(subsControllerProvider);
-    return Scaffold(
-      appBar: AppBar(title: Text("Subs Tracker"), actions: [
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () async {
-            await showAdaptiveDialog<SubSlice>(
-              context: context,
-              builder: (_) => const AddSubsDialog(),
-            );
-          },
-        ),
-      ]),
-      drawer: SidebarMenu(),
-      body: switch (slicesAsync) {
-        AsyncLoading<List<SubSlice>>() => CircularProgressIndicator.adaptive(),
-        AsyncData<List<SubSlice>>(:final value) => _buildBody(value),
-        AsyncError<List<SubSlice>>(:final error) => Center(
-          child: Text('Error: $error'),
-        ),
-      },
-    );
+
+    return switch (slicesAsync) {
+      AsyncLoading<List<SubSlice>>() => const Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
+      AsyncData<List<SubSlice>>(:final value) => _buildBody(value),
+      AsyncError<List<SubSlice>>(:final error) => Center(
+        child: Text("Error: $error"),
+      ),
+    };
   }
 
   Widget _buildBody(List<SubSlice> slices) {
@@ -45,18 +34,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Center(
-            child: Text(
-              "Subscription Data Not Added Yet.",
-            ),
-          ),
+          const Center(child: Text("Subscription Data Not Added Yet.")),
           const SizedBox(height: 12),
-          TextButton(onPressed: () {
-            showAdaptiveDialog<SubSlice>(
-              context: context,
-              builder: (_) => const AddSubsDialog(),
-            );
-          }, child: const Text("Add Subscription"))
+          TextButton(
+            onPressed: () {
+              showAdaptiveDialog<SubSlice>(
+                context: context,
+                builder: (_) => const AddSubsDialog(),
+              );
+            },
+            child: const Text("Add Subscription"),
+          ),
         ],
       );
     }
