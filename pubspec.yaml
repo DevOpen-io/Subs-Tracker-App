@@ -37,20 +37,21 @@ dependencies:
   package_info_plus: ^8.3.0
   flutter_launcher_icons: ^0.14.4
   fl_chart: ^1.0.0
-  flutter_riverpod: ^3.0.0-dev.17
+  flutter_riverpod: ^3.0.1
   url_launcher: ^6.3.2
   flex_color_scheme: ^8.3.0
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   hooks_riverpod: ^3.0.0-dev.17
   flutter_hooks: ^0.21.3+1
-  riverpod_annotation: ^3.0.0-dev.17
-  riverpod_sqflite: ^0.2.0
+  riverpod_annotation: ^3.0.1
+  riverpod_sqflite: ^0.3.1
   sqflite: ^2.4.2
   path: ^1.9.1
   flutter_local_notifications: ^19.4.1
   timezone: ^0.10.1
   go_router: ^16.2.4
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
