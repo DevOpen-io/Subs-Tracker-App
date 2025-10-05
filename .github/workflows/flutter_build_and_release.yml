@@ -63,12 +63,23 @@ jobs:
             --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
             --build-number "${{ github.run_number }}"
 
+      - name: 📤 Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
   github-release:
     needs: [android-release-upload]
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Check out code
         uses: actions/checkout@v4
+      - name: 📥 Download APK artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: apk-release
+          path: ./artifacts
       - name: 🏷️ Create GitHub Release (APK & IPA)
         uses: softprops/action-gh-release@v1
         with:
@@ -80,6 +91,6 @@ jobs:
             ${{ github.event.pull_request.body }}
             release build from ${{ github.sha }}
           files: |
-            build/app/outputs/flutter-apk/app-release.apk
+            ./artifacts/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
