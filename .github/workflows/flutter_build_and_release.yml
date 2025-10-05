@@ -44,15 +44,17 @@ jobs:
             ~/.gradle/caches
           key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
-      # 4️⃣  Firebase CLI (still needed for token flow)
-      - name: 🛠️ Install Firebase CLI
-        run: npm install -g firebase-tools@latest
-
       - name: 🔢 Parse pubspec version
         id: version
         run: |
           prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
           echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
+
+      - name: 📦 Get Flutter dependencies
+        run: flutter pub get
+      
+      - name: Run build runner
+        run: dart run build_runner build --delete-conflicting-outputs
 
       # 5️⃣  Build release APK
       - name: 🏗️ Build Android release APK
