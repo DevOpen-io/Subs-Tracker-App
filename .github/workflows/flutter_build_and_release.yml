@@ -15,6 +15,9 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
+    outputs:
+      version_prefix: ${{ steps.version.outputs.version_prefix }}
+
     env:
       DISTRIBUTION_GROUPS: "YP-Android"
       RELEASE_NOTES: |
@@ -37,7 +40,7 @@ jobs:
 
       # 3️⃣  Cache Pub + Gradle to speed up CI
       - name: 🧹 Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.pub-cache
@@ -49,6 +52,7 @@ jobs:
         run: |
           prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
           echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
+          echo "version_prefix=$prefix" >> $GITHUB_OUTPUT
 
       - name: 📦 Get Flutter dependencies
         run: flutter pub get
@@ -81,10 +85,10 @@ jobs:
           name: apk-release
           path: ./artifacts
       - name: 🏷️ Create GitHub Release (APK & IPA)
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: "release-${{ github.run_number }}"
-          name: "${{ github.event.pull_request.title }}"
+          name: ${{ format('Release v{0}+{1}', needs.android-release-upload.outputs.version_prefix, github.run_number) }}
           body: |
             ${{ github.event.pull_request.title }}
 
