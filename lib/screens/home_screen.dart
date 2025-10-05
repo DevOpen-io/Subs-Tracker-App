@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
+import 'package:subs_tracker/providers/ui_providers.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/pie_chart.dart';
 
@@ -14,32 +15,35 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(appBarActionsProvider.notifier).state = [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () async {
+            await showAdaptiveDialog<SubSlice>(
+              context: context,
+              builder: (_) => const AddSubsDialog(),
+            );
+          },
+        ),
+      ];
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(appBarActionsProvider.notifier).state = null;
+    });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final slicesAsync = ref.watch(subsControllerProvider);
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Subs Tracker"),
-    //     actions: [
-    //       IconButton(
-    //         icon: Icon(Icons.add),
-    //         onPressed: () async {
-    //           await showAdaptiveDialog<SubSlice>(
-    //             context: context,
-    //             builder: (_) => const AddSubsDialog(),
-    //           );
-    //         },
-    //       ),
-    //     ],
-    //   ),
-    //   drawer: SidebarMenu(),
-    //   body: switch (slicesAsync) {
-    //     AsyncLoading<List<SubSlice>>() => CircularProgressIndicator.adaptive(),
-    //     AsyncData<List<SubSlice>>(:final value) => _buildBody(value),
-    //     AsyncError<List<SubSlice>>(:final error) => Center(
-    //       child: Text('Error: $error'),
-    //     ),
-    //   },
-    // );
 
     return switch (slicesAsync) {
       AsyncLoading<List<SubSlice>>() => const Center(

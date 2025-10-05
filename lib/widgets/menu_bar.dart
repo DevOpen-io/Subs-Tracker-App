@@ -88,10 +88,10 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
             ),
             ListTile(
               leading: const Icon(Icons.texture_sharp),
-              title: const Text("Test Page"),
+              title: const Text("Second Page"),
               onTap: () {
                 Navigator.of(context).pop();
-                context.go(Routes.test.route);
+                context.go(Routes.second.route);
                 // Navigator.pop(context)
                 // Navigator.pushNamed(context , '/home')
               },

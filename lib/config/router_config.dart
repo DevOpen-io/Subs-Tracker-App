@@ -3,12 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:subs_tracker/layout/root_layout.dart';
 import 'package:subs_tracker/screens/home_screen.dart';
-import 'package:subs_tracker/screens/test_screen.dart';
+import 'package:subs_tracker/screens/second_screen.dart';
 part 'router_config.g.dart';
 
 enum Routes {
   home,
-  test;
+  second;
 
   String get name => toString().replaceAll('Routes.', '');
   String get route => '/$name';
@@ -30,9 +30,9 @@ GoRouter goRouter(Ref ref) => GoRouter(
           },
         ),
         GoRoute(
-          path: Routes.test.route,
+          path: Routes.second.route,
           builder: (BuildContext context, GoRouterState state) =>
-              const TestScreen(),
+              const SecondScreen(),
         ),
       ],
     ),
