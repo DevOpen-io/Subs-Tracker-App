@@ -1,65 +1,82 @@
 name: Flutter APK Build and Release
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - main  # Bu, ana dalınızın adı olmalı. Eğer master kullanıyorsanız master olarak değiştirin.
+      - main
+    
 
 env:
   APP_NAME: subs_tracker
 
 jobs:
-  build-and-release:
+  android-release-upload:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    env:
+      DISTRIBUTION_GROUPS: "YP-Android"
+      RELEASE_NOTES: |
+        ${{ github.event.pull_request.title }}
 
-      - name: Set up Flutter
+        ${{ github.event.pull_request.body }}
+        release build from ${{ github.sha }}
+
+    steps:
+      # 1️⃣  Source
+      - name: 📥 Check out code
+        uses: actions/checkout@v4
+
+      # 2️⃣  Flutter SDK (with built-in cache flag)
+      - name: 🐦 Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: stable
+          cache: true
 
-      - name: Install Dependencies
-        run: flutter pub get
+      # 3️⃣  Cache Pub + Gradle to speed up CI
+      - name: 🧹 Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
-      - name: Build APK
-        run: flutter build apk --release
-      
-      - name: Get App Version and Build Number
-        id: get_version
+      # 4️⃣  Firebase CLI (still needed for token flow)
+      - name: 🛠️ Install Firebase CLI
+        run: npm install -g firebase-tools@latest
+
+      - name: 🔢 Parse pubspec version
+        id: version
         run: |
-          VERSION_LINE=$(grep "version:" pubspec.yaml)
-          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
-          BUILD_NUMBER=$(echo $VERSION_LINE | cut -d'+' -f2)
-          
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
+          echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 5️⃣  Build release APK
+      - name: 🏗️ Build Android release APK
+        run: |
+          flutter build apk --release --obfuscate \
+            --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
+            --build-number "${{ github.run_number }}"
+
+  github-release:
+    needs: [android-release-upload]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Check out code
+        uses: actions/checkout@v4
+      - name: 🏷️ Create GitHub Release (APK & IPA)
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          release_name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
+          tag_name: "release-${{ github.run_number }}"
+          name: "${{ github.event.pull_request.title }}"
           body: |
-            Flutter uygulaması için otomatik olarak oluşturulmuş yeni sürüm.
+            ${{ github.event.pull_request.title }}
 
-            New Change Include:
-              - Apk name has been updated.
-              - App name has been updated.
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+            ${{ github.event.pull_request.body }}
+            release build from ${{ github.sha }}
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: ${{ env.APP_NAME }}_${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}.apk
-          asset_content_type: application/zip
