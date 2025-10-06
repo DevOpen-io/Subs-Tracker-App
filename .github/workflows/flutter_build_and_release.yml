@@ -1,64 +1,100 @@
 name: Flutter APK Build and Release
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - main  # Bu, ana dalınızın adı olmalı. Eğer master kullanıyorsanız master olarak değiştirin.
+      - main
+    
 
 env:
   APP_NAME: subs_tracker
 
 jobs:
-  build-and-release:
+  android-release-upload:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    outputs:
+      version_prefix: ${{ steps.version.outputs.version_prefix }}
 
-      - name: Set up Flutter
+    env:
+      DISTRIBUTION_GROUPS: "YP-Android"
+      RELEASE_NOTES: |
+        ${{ github.event.pull_request.title }}
+
+        ${{ github.event.pull_request.body }}
+        release build from ${{ github.sha }}
+
+    steps:
+      # 1️⃣  Source
+      - name: 📥 Check out code
+        uses: actions/checkout@v4
+
+      # 2️⃣  Flutter SDK (with built-in cache flag)
+      - name: 🐦 Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: stable
+          cache: true
 
-      - name: Install Dependencies
-        run: flutter pub get
+      # 3️⃣  Cache Pub + Gradle to speed up CI
+      - name: 🧹 Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
-      - name: Build APK
-        run: flutter build apk --release
-      
-      - name: Get App Version and Build Number
-        id: get_version
+      - name: 🔢 Parse pubspec version
+        id: version
         run: |
-          VERSION_LINE=$(grep "version:" pubspec.yaml)
-          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
-          BUILD_NUMBER=$(echo $VERSION_LINE | cut -d'+' -f2)
-          
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
+          echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
+          echo "version_prefix=$prefix" >> $GITHUB_OUTPUT
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📦 Get Flutter dependencies
+        run: flutter pub get
+      
+      - name: Run build runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      # 5️⃣  Build release APK
+      - name: 🏗️ Build Android release APK
+        run: |
+          flutter build apk --release --obfuscate \
+            --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
+            --build-number "${{ github.run_number }}"
+
+      - name: 📤 Upload APK artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          release_name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
+          name: apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  github-release:
+    needs: [android-release-upload]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Check out code
+        uses: actions/checkout@v4
+      - name: 📥 Download APK artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: apk-release
+          path: ./artifacts
+      - name: 🏷️ Create GitHub Release (APK & IPA)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "release-${{ github.run_number }}"
+          name: ${{ format('Release v{0}+{1}', needs.android-release-upload.outputs.version_prefix, github.run_number) }}
           body: |
-            New Change Include:
-              - Data Cache Time Change To Forever
-              - Router Config Added
-              - Multiple Action Button View Fix
-          draft: false
-          prerelease: false
+            ${{ github.event.pull_request.title }}
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+            ${{ github.event.pull_request.body }}
+            release build from ${{ github.sha }}
+          files: |
+            ./artifacts/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: ${{ env.APP_NAME }}_${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}.apk
-          asset_content_type: application/zip
