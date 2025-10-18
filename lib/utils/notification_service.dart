@@ -67,35 +67,23 @@ class LocalNotificationService implements NotificationService {
     required String body,
     required DateTime scheduledDate,
   }) async {
-    var status =
-        await flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >()!
-            .areNotificationsEnabled() ??
-        false;
-
-    if (status) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledDate, tz.local),
-        const NotificationDetails(
-          iOS: DarwinNotificationDetails(),
-          android: AndroidNotificationDetails(
-            'subscription_channel_id',
-            'Subscription Notifications',
-            channelDescription:
-                'Notifications for subscription updates to show you the upcoming subscriptions',
-          ),
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.from(scheduledDate, tz.local),
+      const NotificationDetails(
+        iOS: DarwinNotificationDetails(),
+        android: AndroidNotificationDetails(
+          'subscription_channel_id',
+          'Subscription Notifications',
+          channelDescription:
+              'Notifications for subscription updates to show you the upcoming subscriptions',
         ),
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
-      );
-    } else {
-      debugPrint("Notification Permission Is Not Granted.");
-    }
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+    );
   }
 
   @override
