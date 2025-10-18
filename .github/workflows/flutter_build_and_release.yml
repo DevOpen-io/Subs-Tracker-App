@@ -5,7 +5,6 @@ on:
     types: [closed]
     branches:
       - main
-    
 
 env:
   APP_NAME: subs_tracker
@@ -76,14 +75,22 @@ jobs:
   github-release:
     needs: [android-release-upload]
     runs-on: ubuntu-latest
+    
+    # --- DEĞİŞİKLİK BURADA ---
+    # Bu işin (job) release oluşturabilmesi için GITHUB_TOKEN'a yazma izni veriyoruz.
+    permissions:
+      contents: write
+
     steps:
       - name: 📥 Check out code
         uses: actions/checkout@v4
+        
       - name: 📥 Download APK artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4 # download-artifact versiyonunu v4 olarak güncelledim
         with:
           name: apk-release
           path: ./artifacts
+          
       - name: 🏷️ Create GitHub Release (APK & IPA)
         uses: softprops/action-gh-release@v2
         with:
@@ -96,5 +103,4 @@ jobs:
             release build from ${{ github.sha }}
           files: |
             ./artifacts/app-release.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # env bloğu gereksiz olduğu için kaldırıldı. Action zaten GITHUB_TOKEN'ı otomatik olarak kullanır.
