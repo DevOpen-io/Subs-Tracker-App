@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -44,6 +42,20 @@ class LocalNotificationService implements NotificationService {
     tz.initializeTimeZones();
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // ANDROID 13+: ask for runtime permission
+    final androidImpl = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    await androidImpl?.requestNotificationsPermission();
+
+    // iOS: ask for alert/badge/sound permissions
+    final iosImpl = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
+    await iosImpl?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
   @override
@@ -53,32 +65,23 @@ class LocalNotificationService implements NotificationService {
     required String body,
     required DateTime scheduledDate,
   }) async {
-    var status = await Permission.scheduleExactAlarm.status;
-
-    if (status.isDenied) {
-      await Permission.scheduleExactAlarm.request();
-    }
-
-    if (status.isGranted) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledDate, tz.local),
-        const NotificationDetails(
-          iOS: DarwinNotificationDetails(),
-          android: AndroidNotificationDetails(
-            'subscription_channel_id',
-            'Subscription Notifications',
-            channelDescription:
-                'Notifications for subscription updates to show you the upcoming subscriptions',
-          ),
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.from(scheduledDate, tz.local),
+      const NotificationDetails(
+        iOS: DarwinNotificationDetails(),
+        android: AndroidNotificationDetails(
+          'subscription_channel_id',
+          'Subscription Notifications',
+          channelDescription:
+              'Notifications for subscription updates to show you the upcoming subscriptions',
         ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      );
-    } else {
-      debugPrint("Exact Alarm Permission Is Not Granted.");
-    }
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+    );
   }
 
   @override
