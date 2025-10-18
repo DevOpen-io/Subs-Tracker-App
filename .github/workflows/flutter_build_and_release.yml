@@ -63,7 +63,7 @@ jobs:
       # 5️⃣  Build release APK
       - name: 🏗️ Build Android release APK
         run: |
-          flutter build apk --release --obfuscate \
+          flutter build apk --release \
             --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
             --build-number "${{ github.run_number }}"
 
