@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -43,6 +43,20 @@ class LocalNotificationService implements NotificationService {
     tz.initializeTimeZones();
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // ANDROID 13+: ask for runtime permission
+    final androidImpl = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    await androidImpl?.requestNotificationsPermission();
+
+    // iOS: ask for alert/badge/sound permissions
+    final iosImpl = flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
+    await iosImpl?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
   @override
@@ -52,13 +66,15 @@ class LocalNotificationService implements NotificationService {
     required String body,
     required DateTime scheduledDate,
   }) async {
-    var status = await Permission.scheduleExactAlarm.status;
+    var status =
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()!
+            .areNotificationsEnabled() ??
+        false;
 
-    if (status.isDenied) {
-      await Permission.scheduleExactAlarm.request();
-    }
-
-    if (status.isGranted) {
+    if (status) {
       await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
@@ -73,10 +89,11 @@ class LocalNotificationService implements NotificationService {
                 'Notifications for subscription updates to show you the upcoming subscriptions',
           ),
         ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
       );
     } else {
-      print("Exact Alarm Permission Is Not Granted.");
+      debugPrint("Notification Permission Is Not Granted.");
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:riverpod_sqflite/riverpod_sqflite.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/utils/notification_service.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 part 'subs_controller.g.dart';
 
@@ -63,7 +64,7 @@ class SubsController extends _$SubsController {
     int sliceCount,
   ) async {
     if (sliceCount == 0) return;
-    final now = DateTime.now();
+    final now = tz.TZDateTime.now(tz.local);
     DateTime scheduledDate = DateTime(
       now.year,
       now.month,
@@ -72,7 +73,7 @@ class SubsController extends _$SubsController {
       0,
       0,
     );
-
+  
     // If the scheduled date is before now, move it to the next month
     if (scheduledDate.isBefore(now)) {
       scheduledDate = DateTime(
@@ -92,8 +93,11 @@ class SubsController extends _$SubsController {
 
     /// Schedule the all monthly notifications
     for (int i = 0; i < countPerSlice; i++) {
+      /// Unique IDs for each notification
+      final id1 = slice.hashCode + i;
+      final id2 = slice.hashCode + i + countPerSlice;
       LocalNotificationService.instance.scheduleNotification(
-        id: slice.hashCode + i,
+        id: id1,
         title: "Subscription Reminder",
         body: "Your subscription for ${slice.name} is due tomorrow.",
         scheduledDate: scheduledDate.copyWith(
@@ -102,7 +106,7 @@ class SubsController extends _$SubsController {
         ),
       );
       LocalNotificationService.instance.scheduleNotification(
-        id: slice.hashCode + i,
+        id: id2,
         title: "Subscription Reminder",
         body: "Your subscription for ${slice.name} is due.",
         scheduledDate: scheduledDate.copyWith(month: scheduledDate.month + i),
