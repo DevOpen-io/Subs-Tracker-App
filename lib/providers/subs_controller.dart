@@ -65,7 +65,8 @@ class SubsController extends _$SubsController {
   ) async {
     if (sliceCount == 0) return;
     final now = tz.TZDateTime.now(tz.local);
-    DateTime scheduledDate = DateTime(
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
       now.year,
       now.month,
       slice.startDate.day,
@@ -76,7 +77,8 @@ class SubsController extends _$SubsController {
   
     // If the scheduled date is before now, move it to the next month
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = DateTime(
+      scheduledDate = tz.TZDateTime(
+        tz.local,
         now.year,
         now.month + 1,
         slice.startDate.day,
