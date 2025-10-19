@@ -115,7 +115,7 @@ class _ActionTextFormFieldState extends State<ActionTextFormField> {
               // 5. KOŞULLU GENİŞLİK:
               // Değiştirilmişse _kButtonWidth (56.0) yap, değilse 0.0 yap
               width: _isModified ? _kButtonWidth : 0.0,
-              color: primaryColor.withOpacity(0.8),
+              color: primaryColor.withValues(alpha: 0.8),
 
               // 6. TAŞMAYI ENGELLEME:
               // Genişlik 0 olduğunda içindeki ikonun görünmesini engeller
