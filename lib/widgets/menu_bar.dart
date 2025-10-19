@@ -6,6 +6,7 @@ import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_slice_provider.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
+import 'package:subs_tracker/widgets/edit_user_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SidebarMenu extends ConsumerStatefulWidget {
@@ -35,6 +36,9 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(settingsSliceProvider).theme;
+    final profilePicture = ref.watch(settingsSliceProvider).profilePicture;
+    final userName = ref.watch(settingsSliceProvider).userName;
+    final email = ref.watch(settingsSliceProvider).email;
     return Drawer(
       child: SafeArea(
         child: ListView(
@@ -42,34 +46,59 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 48,
-                    backgroundImage: AssetImage('assets/pp.gif'),
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "Mustangtr",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      CircleAvatar(
+                        radius: 48,
+                        backgroundImage: profilePicture != null
+                            ? FileImage(profilePicture)
+                                  as ImageProvider // Seçilen resim
+                            : const AssetImage('assets/pp.gif'),
                       ),
-                      Text(
-                        "mustangtr@proton.me",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 14,
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userName,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              email,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
+                  ),
+                  Positioned(
+                    top: -8,
+                    right: -8,
+                    child: IconButton(
+                      onPressed: () async {
+                        await showAdaptiveDialog(
+                          context: context,
+                          builder: (_) => const EditUserProfileDialog(),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.edit_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -121,7 +150,9 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               onChanged: (value) {
                 ref
                     .read(settingsSliceProvider.notifier)
-                    .updateTheme(value ? ThemeMode.dark : ThemeMode.light);
+                    .updateSettingsSliceData(
+                      theme: value ? ThemeMode.dark : ThemeMode.light,
+                    );
               },
             ),
             ListTile(
