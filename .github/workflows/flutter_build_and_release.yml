@@ -92,7 +92,7 @@ jobs:
           path: ./artifacts
           
       - name: 🏷️ Create GitHub Release (APK & IPA)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: "release-${{ github.run_number }}"
           name: ${{ format('Release v{0}+{1}', needs.android-release-upload.outputs.version_prefix, github.run_number) }}
