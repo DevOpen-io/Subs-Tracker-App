@@ -84,23 +84,46 @@ jobs:
     steps:
       - name: 📥 Check out code
         uses: actions/checkout@v4
-        
+      
       - name: 📥 Download APK artifact
         uses: actions/download-artifact@v4 # download-artifact versiyonunu v4 olarak güncelledim
         with:
           name: apk-release
           path: ./artifacts
+      
+      - name: 🔢 Get App Version and Build Number
+        id: get_version
+        run: |
+          VERSION_LINE=$(grep "version:" pubspec.yaml)
+          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
+          BUILD_NUMBER=${{ github.run_number }}
           
-      - name: 🏷️ Create GitHub Release (APK & IPA)
-        uses: softprops/action-gh-release@v1
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+      
+      - name: 🏷️ Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "release-${{ github.run_number }}"
-          name: ${{ format('Release v{0}+{1}', needs.android-release-upload.outputs.version_prefix, github.run_number) }}
+          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
+          release_name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
           body: |
             ${{ github.event.pull_request.title }}
 
             ${{ github.event.pull_request.body }}
+            
             release build from ${{ github.sha }}
-          files: |
-            ./artifacts/app-release.apk
-        # env bloğu gereksiz olduğu için kaldırıldı. Action zaten GITHUB_TOKEN'ı otomatik olarak kullanır.
+          draft: false
+          prerelease: false
+      
+      - name: 📤 Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/app-release.apk
+          asset_name: ${{ env.APP_NAME }}_${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}.apk
+          asset_content_type: application/zip
