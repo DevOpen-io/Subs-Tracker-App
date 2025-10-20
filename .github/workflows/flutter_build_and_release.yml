@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version_prefix: ${{ steps.version.outputs.version_prefix }}
+      version: ${{ steps.get_version.outputs.version }}
+      build_number: ${{ steps.get_version.outputs.build_number }}
 
     env:
       DISTRIBUTION_GROUPS: "YP-Android"
@@ -47,12 +48,17 @@ jobs:
             ~/.gradle/caches
           key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
-      - name: 🔢 Parse pubspec version
-        id: version
+      - name: 🔢 Get App Version and Build Number
+        id: get_version
         run: |
-          prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
-          echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
-          echo "version_prefix=$prefix" >> $GITHUB_OUTPUT
+          VERSION_LINE=$(grep "version:" pubspec.yaml)
+          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
+          BUILD_NUMBER=$(echo $VERSION_LINE | cut -d'+' -f2)
+          
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
 
       - name: 📦 Get Flutter dependencies
         run: flutter pub get
@@ -64,8 +70,8 @@ jobs:
       - name: 🏗️ Build Android release APK
         run: |
           flutter build apk --release \
-            --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
-            --build-number "${{ github.run_number }}"
+            --build-name "${{ env.APP_VERSION }}" \
+            --build-number "${{ env.BUILD_NUMBER }}"
 
       - name: 📤 Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -79,22 +85,36 @@ jobs:
     steps:
       - name: 📥 Check out code
         uses: actions/checkout@v4
+        
       - name: 📥 Download APK artifact
         uses: actions/download-artifact@v5
         with:
           name: apk-release
           path: ./artifacts
-      - name: 🏷️ Create GitHub Release (APK & IPA)
-        uses: softprops/action-gh-release@v1
+          
+      - name: 🏷️ Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "release-${{ github.run_number }}"
-          name: ${{ format('Release v{0}+{1}', needs.android-release-upload.outputs.version_prefix, github.run_number) }}
+          tag_name: v${{ needs.android-release-upload.outputs.version }}+${{ needs.android-release-upload.outputs.build_number }}
+          release_name: Release v${{ needs.android-release-upload.outputs.version }}+${{ needs.android-release-upload.outputs.build_number }}
           body: |
             ${{ github.event.pull_request.title }}
 
             ${{ github.event.pull_request.body }}
-            release build from ${{ github.sha }}
-          files: |
-            ./artifacts/app-release.apk
+            
+            Release build from ${{ github.sha }}
+          draft: false
+          prerelease: false
+
+      - name: 📤 Upload Release Asset
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/app-release.apk
+          asset_name: ${{ env.APP_NAME }}_${{ needs.android-release-upload.outputs.version }}+${{ needs.android-release-upload.outputs.build_number }}.apk
+          asset_content_type: application/zip
