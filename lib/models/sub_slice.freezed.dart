@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SubSlice {
 
- String get name; double get amount; int get color; DateTime get startDate;
+ Brand? get brand; String get name; double get amount; int get color; DateTime get startDate;
 /// Create a copy of SubSlice
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SubSliceCopyWith<SubSlice> get copyWith => _$SubSliceCopyWithImpl<SubSlice>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubSlice&&(identical(other.name, name) || other.name == name)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.color, color) || other.color == color)&&(identical(other.startDate, startDate) || other.startDate == startDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubSlice&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.name, name) || other.name == name)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.color, color) || other.color == color)&&(identical(other.startDate, startDate) || other.startDate == startDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,amount,color,startDate);
+int get hashCode => Object.hash(runtimeType,brand,name,amount,color,startDate);
 
 @override
 String toString() {
-  return 'SubSlice(name: $name, amount: $amount, color: $color, startDate: $startDate)';
+  return 'SubSlice(brand: $brand, name: $name, amount: $amount, color: $color, startDate: $startDate)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $SubSliceCopyWith<$Res>  {
   factory $SubSliceCopyWith(SubSlice value, $Res Function(SubSlice) _then) = _$SubSliceCopyWithImpl;
 @useResult
 $Res call({
- String name, double amount, int color, DateTime startDate
+ Brand? brand, String name, double amount, int color, DateTime startDate
 });
 
 
-
+$BrandCopyWith<$Res>? get brand;
 
 }
 /// @nodoc
@@ -65,16 +65,29 @@ class _$SubSliceCopyWithImpl<$Res>
 
 /// Create a copy of SubSlice
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? amount = null,Object? color = null,Object? startDate = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? brand = freezed,Object? name = null,Object? amount = null,Object? color = null,Object? startDate = null,}) {
   return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+brand: freezed == brand ? _self.brand : brand // ignore: cast_nullable_to_non_nullable
+as Brand?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as int,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
+/// Create a copy of SubSlice
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BrandCopyWith<$Res>? get brand {
+    if (_self.brand == null) {
+    return null;
+  }
 
+  return $BrandCopyWith<$Res>(_self.brand!, (value) {
+    return _then(_self.copyWith(brand: value));
+  });
+}
 }
 
 
@@ -156,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  double amount,  int color,  DateTime startDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Brand? brand,  String name,  double amount,  int color,  DateTime startDate)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SubSlice() when $default != null:
-return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
+return $default(_that.brand,_that.name,_that.amount,_that.color,_that.startDate);case _:
   return orElse();
 
 }
@@ -177,10 +190,10 @@ return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  double amount,  int color,  DateTime startDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Brand? brand,  String name,  double amount,  int color,  DateTime startDate)  $default,) {final _that = this;
 switch (_that) {
 case _SubSlice():
-return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
+return $default(_that.brand,_that.name,_that.amount,_that.color,_that.startDate);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +210,10 @@ return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  double amount,  int color,  DateTime startDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Brand? brand,  String name,  double amount,  int color,  DateTime startDate)?  $default,) {final _that = this;
 switch (_that) {
 case _SubSlice() when $default != null:
-return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
+return $default(_that.brand,_that.name,_that.amount,_that.color,_that.startDate);case _:
   return null;
 
 }
@@ -212,9 +225,10 @@ return $default(_that.name,_that.amount,_that.color,_that.startDate);case _:
 @JsonSerializable()
 
 class _SubSlice implements SubSlice {
-  const _SubSlice({required this.name, required this.amount, required this.color, required this.startDate});
+  const _SubSlice({this.brand, required this.name, required this.amount, required this.color, required this.startDate});
   factory _SubSlice.fromJson(Map<String, dynamic> json) => _$SubSliceFromJson(json);
 
+@override final  Brand? brand;
 @override final  String name;
 @override final  double amount;
 @override final  int color;
@@ -233,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubSlice&&(identical(other.name, name) || other.name == name)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.color, color) || other.color == color)&&(identical(other.startDate, startDate) || other.startDate == startDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubSlice&&(identical(other.brand, brand) || other.brand == brand)&&(identical(other.name, name) || other.name == name)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.color, color) || other.color == color)&&(identical(other.startDate, startDate) || other.startDate == startDate));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,amount,color,startDate);
+int get hashCode => Object.hash(runtimeType,brand,name,amount,color,startDate);
 
 @override
 String toString() {
-  return 'SubSlice(name: $name, amount: $amount, color: $color, startDate: $startDate)';
+  return 'SubSlice(brand: $brand, name: $name, amount: $amount, color: $color, startDate: $startDate)';
 }
 
 
@@ -253,11 +267,11 @@ abstract mixin class _$SubSliceCopyWith<$Res> implements $SubSliceCopyWith<$Res>
   factory _$SubSliceCopyWith(_SubSlice value, $Res Function(_SubSlice) _then) = __$SubSliceCopyWithImpl;
 @override @useResult
 $Res call({
- String name, double amount, int color, DateTime startDate
+ Brand? brand, String name, double amount, int color, DateTime startDate
 });
 
 
-
+@override $BrandCopyWith<$Res>? get brand;
 
 }
 /// @nodoc
@@ -270,9 +284,10 @@ class __$SubSliceCopyWithImpl<$Res>
 
 /// Create a copy of SubSlice
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? amount = null,Object? color = null,Object? startDate = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? brand = freezed,Object? name = null,Object? amount = null,Object? color = null,Object? startDate = null,}) {
   return _then(_SubSlice(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+brand: freezed == brand ? _self.brand : brand // ignore: cast_nullable_to_non_nullable
+as Brand?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as int,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
@@ -280,7 +295,19 @@ as DateTime,
   ));
 }
 
+/// Create a copy of SubSlice
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$BrandCopyWith<$Res>? get brand {
+    if (_self.brand == null) {
+    return null;
+  }
 
+  return $BrandCopyWith<$Res>(_self.brand!, (value) {
+    return _then(_self.copyWith(brand: value));
+  });
+}
 }
 
 // dart format on
