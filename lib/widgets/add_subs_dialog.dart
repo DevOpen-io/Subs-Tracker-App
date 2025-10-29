@@ -1,143 +1,493 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:subs_tracker/models/brand.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
+import 'package:subs_tracker/providers/brands_provider.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:subs_tracker/utils/color_palette.dart';
 
-class AddSubsDialog extends ConsumerStatefulWidget {
+class AddSubsDialog extends HookConsumerWidget {
   const AddSubsDialog({super.key});
 
   @override
-  ConsumerState<AddSubsDialog> createState() => _AddSubsDialogState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = useMemoized(() => GlobalKey<FormState>());
+    final nameCtrl = useTextEditingController();
+    final amountCtrl = useTextEditingController();
+    final brandFocusNode = useFocusNode();
 
-class _AddSubsDialogState extends ConsumerState<AddSubsDialog> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController();
-  final _amountCtrl = TextEditingController();
-  Color _selected = kSliceColors.first;
-  DateTime _selectedDate = DateTime.now();
+    // Use single SubSlice state to hold all form data
+    final draftSlice = useState<SubSlice>(
+      SubSlice(
+        brand: null,
+        name: '',
+        amount: 0,
+        color: kSliceColors.first.toARGB32(),
+        startDate: DateTime.now(),
+      ),
+    );
 
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _amountCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog.adaptive(
-      title: const Text('Add Subscription'),
-      content: Material(
-        type: MaterialType.transparency,
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _nameCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Name (e.g. Netflix)',
-                ),
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _amountCtrl,
-                decoration: const InputDecoration(labelText: 'Amount (₺)'),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (v) {
-                  final d = double.tryParse((v ?? '').replaceAll(',', '.'));
-                  if (d == null || d < 0) return 'Enter a valid number';
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(Icons.event, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Start : ${_selectedDate.toLocal().toString().split(' ').first}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+    Future<void> openCustomColorPicker() async {
+      Color tempColor = Color(draftSlice.value.color);
+      final Color? result = await showDialog<Color>(
+        context: context,
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (context, setStateDialog) {
+              return AlertDialog.adaptive(
+                title: const Text('Custom color'),
+                content: SingleChildScrollView(
+                  child: ColorPicker(
+                    pickerColor: tempColor,
+                    onColorChanged: (color) => setStateDialog(() {
+                      tempColor = color;
+                    }),
+                    enableAlpha: false,
+                    paletteType: PaletteType.hsvWithHue,
+                    labelTypes: const [],
+                    pickerAreaBorderRadius: const BorderRadius.all(
+                      Radius.circular(12),
                     ),
                   ),
+                ),
+                actions: [
                   TextButton(
-                    onPressed: () async {
-                      final picked = await showDatePicker(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: const Text('Cancel'),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(dialogContext, tempColor),
+                    child: const Text('Use color'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+
+      if (result != null) {
+        draftSlice.value = draftSlice.value.copyWith(color: result.toARGB32());
+      }
+    }
+
+    Widget buildDialog(BuildContext context, List<Brand> allBrands) {
+      return AlertDialog.adaptive(
+        title: const Text('Add Subscription'),
+        content: Material(
+          type: MaterialType.transparency,
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Column(
+                spacing: 8,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8),
+                  RawAutocomplete<Brand>(
+                    textEditingController: nameCtrl,
+                    focusNode: brandFocusNode,
+                    displayStringForOption: (option) => option.text,
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.trim().isEmpty) {
+                        return const Iterable<Brand>.empty();
+                      }
+                      final query = textEditingValue.text.toLowerCase();
+                      return allBrands.where(
+                        (Brand option) =>
+                            option.text.toLowerCase().contains(query),
+                      );
+                    },
+                    onSelected: (Brand selection) {
+                      draftSlice.value = draftSlice.value.copyWith(
+                        brand: selection,
+                        name: selection.text,
+                      );
+                      nameCtrl.value = TextEditingValue(
+                        text: selection.text,
+                        selection: TextSelection.collapsed(
+                          offset: selection.text.length,
+                        ),
+                      );
+                    },
+                    fieldViewBuilder:
+                        (
+                          context,
+                          textEditingController,
+                          focusNode,
+                          onFieldSubmitted,
+                        ) {
+                          return TextFormField(
+                            controller: textEditingController,
+                            focusNode: focusNode,
+                            decoration: InputDecoration(
+                              labelText: 'Brand or custom name',
+                              isDense: true,
+                              prefixIcon: draftSlice.value.brand != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: SizedBox.square(
+                                          dimension: 32,
+                                          child:
+                                              draftSlice.value.brand!.logo !=
+                                                  null
+                                              ? CachedNetworkImage(
+                                                  imageUrl: draftSlice
+                                                      .value
+                                                      .brand!
+                                                      .logo!,
+                                                  fit: BoxFit.contain,
+                                                  placeholder: (_, __) =>
+                                                      const _LogoPlaceholder(),
+                                                  errorWidget: (_, __, ___) =>
+                                                      const Icon(
+                                                        Icons.business,
+                                                      ),
+                                                )
+                                              : Container(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .surfaceContainerHighest,
+                                                  child: const Icon(
+                                                    Icons.business,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    )
+                                  : const Icon(Icons.search),
+                              suffixIcon: draftSlice.value.brand != null
+                                  ? Tooltip(
+                                      message:
+                                          'Selected: ${draftSlice.value.brand!.text}',
+                                      child: Icon(
+                                        Icons.check_circle,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            validator: (value) =>
+                                (value == null || value.trim().isEmpty)
+                                ? 'Required'
+                                : null,
+                            textInputAction: TextInputAction.search,
+                            onChanged: (value) {
+                              if (draftSlice.value.brand != null &&
+                                  draftSlice.value.brand!.text != value) {
+                                draftSlice.value = draftSlice.value.copyWith(
+                                  brand: null,
+                                );
+                              }
+                            },
+                            onFieldSubmitted: (_) => onFieldSubmitted(),
+                          );
+                        },
+                    optionsViewBuilder: (context, onSelected, options) {
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: Material(
+                          borderRadius: BorderRadius.circular(12),
+                          clipBehavior: Clip.hardEdge,
+                          elevation: 6,
+                          child: SizedBox(
+                            width: 360,
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemCount: options.length,
+                              separatorBuilder: (_, __) =>
+                                  const Divider(height: 0),
+                              itemBuilder: (context, index) {
+                                final Brand option = options.elementAt(index);
+                                return ListTile(
+                                  leading: option.logo != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          child: CachedNetworkImage(
+                                            imageUrl: option.logo!,
+                                            width: 40,
+                                            height: 40,
+                                            fit: BoxFit.cover,
+                                            placeholder: (_, __) =>
+                                                const _LogoPlaceholder(),
+                                            errorWidget: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.image_not_supported,
+                                                ),
+                                          ),
+                                        )
+                                      : const CircleAvatar(
+                                          child: Icon(Icons.business),
+                                        ),
+                                  title: Text(option.text),
+                                  subtitle:
+                                      option.category != null ||
+                                          option.country != null
+                                      ? Text(
+                                          [
+                                            if (option.category != null)
+                                              option.category!,
+                                            if (option.country != null)
+                                              option.country!,
+                                          ].join(' • '),
+                                        )
+                                      : null,
+                                  trailing: const Icon(
+                                    Icons.north_east,
+                                    size: 18,
+                                  ),
+                                  onTap: () => onSelected(option),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  TextFormField(
+                    controller: amountCtrl,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Monthly amount',
+                      prefixIcon: Icon(Icons.payments_outlined),
+                      isDense: true,
+                    ),
+
+                    validator: (v) {
+                      final d = double.tryParse((v ?? '').replaceAll(',', '.'));
+                      if (d == null || d < 0) return 'Enter a valid number';
+                      return null;
+                    },
+                  ),
+                  ListTile(
+                    onTap: () async {
+                      final pickedDate = await showDatePicker(
                         context: context,
-                        initialDate: _selectedDate,
-                        firstDate: DateTime(2000),
+                        initialDate: draftSlice.value.startDate,
+                        firstDate: DateTime(2024),
                         lastDate: DateTime(2100),
                       );
-                      if (picked != null) {
-                        setState(() {
-                          _selectedDate = picked;
-                        });
+                      if (pickedDate != null) {
+                        draftSlice.value = draftSlice.value.copyWith(
+                          startDate: pickedDate,
+                        );
                       }
                     },
-                    child: const Text('Change'),
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer,
+                      child: const Icon(Icons.event, size: 20),
+                    ),
+                    title: const Text('Start date'),
+                    subtitle: Text(
+                      draftSlice.value.startDate
+                          .toLocal()
+                          .toString()
+                          .split(' ')
+                          .first,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    trailing: const Icon(Icons.edit_calendar_outlined),
+                  ),
+                  Text(
+                    'Slice color',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: kSliceColors.map((c) {
+                      final isSelected = c.toARGB32() == draftSlice.value.color;
+                      return GestureDetector(
+                        onTap: () => draftSlice.value = draftSlice.value
+                            .copyWith(color: c.toARGB32()),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
+                          width: isSelected ? 44 : 38,
+                          height: isSelected ? 44 : 38,
+                          decoration: BoxDecoration(
+                            color: c,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.black12,
+                              width: isSelected ? 3 : 1,
+                            ),
+                            boxShadow: [
+                              if (isSelected)
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.25),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                            ],
+                          ),
+                          child: isSelected
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 20,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black45,
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                )
+                              : null,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final isCustomColor = !kSliceColors.any(
+                        (c) => c.toARGB32() == draftSlice.value.color,
+                      );
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: openCustomColorPicker,
+                              icon: Icon(
+                                isCustomColor ? Icons.check_circle : Icons.colorize,
+                              ),
+                              label: Text(
+                                isCustomColor ? 'Custom color selected' : 'Custom color',
+                              ),
+                              style: isCustomColor
+                                  ? OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        width: 2,
+                                      ),
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer
+                                          .withValues(alpha: 0.3),
+                                    )
+                                  : null,
+                            ),
+                          ),
+                          if (isCustomColor) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Color(draftSlice.value.color),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withValues(alpha: 0.25),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: kSliceColors.map((c) {
-                  final sel = c == _selected;
-                  return GestureDetector(
-                    onTap: () => setState(() => _selected = c),
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: c,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: sel
-                              ? Theme.of(context).colorScheme.onSurface
-                              : Colors.black26,
-                          width: sel ? 2 : 1,
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+            ),
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                final amount = double.parse(
+                  amountCtrl.text.replaceAll(',', '.'),
+                );
+                ref
+                    .read(subsControllerProvider.notifier)
+                    .addSlice(
+                      draftSlice.value.copyWith(
+                        name: nameCtrl.text.trim(),
+                        amount: amount,
+                      ),
+                    );
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      );
+    }
+
+    final brandsAsync = ref.watch(brandsProvider);
+
+    return brandsAsync.when(
+      data: (allBrands) => buildDialog(context, allBrands),
+      loading: () => AlertDialog.adaptive(
+        title: const Text('Add Subscription'),
+        content: const SizedBox(
+          height: 100,
+          child: Center(child: CircularProgressIndicator()),
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final amount = double.parse(
-                _amountCtrl.text.replaceAll(',', '.'),
-              );
-              ref.read(subsControllerProvider.notifier).addSlice(
-                SubSlice(
-                  name: _nameCtrl.text.trim(),
-                  amount: amount,
-                  color: _selected.toARGB32(),
-                  startDate: _selectedDate,
-                ),
-              );
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('Add'),
-        ),
-      ],
+      error: (err, stack) => AlertDialog.adaptive(
+        title: const Text('Add Subscription'),
+        content: Text('Error loading brands: $err'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LogoPlaceholder extends StatelessWidget {
+  const _LogoPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
     );
   }
 }
