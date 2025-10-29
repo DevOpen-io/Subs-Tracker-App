@@ -6,6 +6,9 @@ part of 'subs_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(subsStorage)
 const subsStorageProvider = SubsStorageProvider._();
 
@@ -51,6 +54,7 @@ String _$subsStorageHash() => r'2e3ce2bce27a4b50ba13ce6a41863ac5131f4985';
 @JsonPersist()
 const subsControllerProvider = SubsControllerProvider._();
 
+@JsonPersist()
 final class SubsControllerProvider
     extends $AsyncNotifierProvider<SubsController, List<SubSlice>> {
   const SubsControllerProvider._()
@@ -72,8 +76,9 @@ final class SubsControllerProvider
   SubsController create() => SubsController();
 }
 
-String _$subsControllerHash() => r'56d050b48d1dbd22bc89179e8872a3127ae796cf';
+String _$subsControllerHash() => r'c558d5c64d9366ad75eed419989c9f6038a880a0';
 
+@JsonPersist()
 abstract class _$SubsControllerBase extends $AsyncNotifier<List<SubSlice>> {
   FutureOr<List<SubSlice>> build();
   @$mustCallSuper
@@ -93,13 +98,11 @@ abstract class _$SubsControllerBase extends $AsyncNotifier<List<SubSlice>> {
   }
 }
 
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
-
 // **************************************************************************
 // JsonGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 abstract class _$SubsController extends _$SubsControllerBase {
   /// The default key used by [persist].
   String get key {
