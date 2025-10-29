@@ -144,9 +144,9 @@ class AddSubsDialog extends HookConsumerWidget {
                                                       .brand!
                                                       .logo!,
                                                   fit: BoxFit.contain,
-                                                  placeholder: (_, __) =>
+                                                  placeholder: (_, _) =>
                                                       const _LogoPlaceholder(),
-                                                  errorWidget: (_, __, ___) =>
+                                                  errorWidget: (_, _, _) =>
                                                       const Icon(
                                                         Icons.business,
                                                       ),
