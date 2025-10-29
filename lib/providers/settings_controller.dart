@@ -1,14 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/experimental/json_persist.dart';
 import 'package:riverpod_annotation/experimental/persist.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_sqflite/riverpod_sqflite.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:subs_tracker/data/settings_slice_data.dart';
 import 'package:subs_tracker/models/settings_slice.dart';
 
 part 'settings_controller.g.dart';

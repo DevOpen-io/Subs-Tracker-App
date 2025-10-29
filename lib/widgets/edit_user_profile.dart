@@ -111,7 +111,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                     onPressed: () async {
                       try {
                         final Uint8List? imageBytes = await getGravatar(
-                          slice.email!,
+                          slice.email ?? "",
                           size: 500,
                         );
 
@@ -135,7 +135,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
               const Divider(height: 32),
               ActionTextFormField(
                 labelText: "User Name",
-                initialValue: slice.userName!,
+                initialValue: slice.userName ?? "",
                 onSave: (newUserName) {
                   // Provider'ı güncelle
                   ref
@@ -150,8 +150,8 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
               ),
               const SizedBox(height: 8),
               ActionTextFormField(
-                labelText: "User Name",
-                initialValue: slice.email!,
+                labelText: "User Mail",
+                initialValue: slice.email ?? "",
                 onSave: (newEmail) {
                   // Provider'ı güncelle
                   ref
