@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:subs_tracker/models/brand.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:subs_tracker/utils/color_utils.dart';
@@ -47,6 +48,7 @@ class _SubsPieState extends ConsumerState<SubsPie> {
               ),
               sections: List.generate(slices.length, (i) {
                 final s = slices[i];
+                final label = s.brand?.text ?? s.name;
                 final isTouched = i == touchedIndex;
                 final percent = total == 0 ? 0 : (s.amount / total) * 100;
                 return PieChartSectionData(
@@ -60,7 +62,8 @@ class _SubsPieState extends ConsumerState<SubsPie> {
                   ),
                   radius: isTouched ? 150 : 130,
                   badgeWidget: _Badge(
-                    label: s.name,
+                    label: label,
+                    brand: s.brand,
                     borderColor: Color(s.color),
                   ),
                   badgePositionPercentageOffset: 0.95,
@@ -77,15 +80,15 @@ class _SubsPieState extends ConsumerState<SubsPie> {
 }
 
 class _Badge extends StatelessWidget {
-  const _Badge({required this.label, required this.borderColor});
+  const _Badge({required this.label, required this.borderColor, this.brand});
   final String label;
   final Color borderColor;
+  final Brand? brand;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: label.length * 8 + 16,
-      height: 28,
+      constraints: const BoxConstraints(minHeight: 28, minWidth: 56),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
@@ -96,7 +99,21 @@ class _Badge extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Text(label, style: Theme.of(context).textTheme.labelMedium),
+        child: brand?.logo != null ? Image.network(
+          brand!.logo!,
+          width: 40,
+          height: 20,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) =>
+              const Icon(Icons.business, size: 16),
+        ) :
+                    Flexible(
+        child: Text(
+          label,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
+                    ),
       ),
     );
   }
