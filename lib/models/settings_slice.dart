@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -7,29 +8,29 @@ part 'settings_slice.freezed.dart';
 part 'settings_slice.g.dart';
 
 // A JsonConverter for File? <-> String? conversion
-class NullableFileConverter implements JsonConverter<File?, String?> {
+class NullableFileConverter implements JsonConverter<Uint8List?, String?> {
   const NullableFileConverter();
 
   // Convert from JSON (String?) to a File? when reading
   @override
-  File? fromJson(String? json) {
-    return json == null ? null : File(json);
+  Uint8List? fromJson(String? json) {
+    return json == null ? null : base64Decode(json);
   }
 
   // Convert a File? to JSON (String?) when writing
   @override
-  String? toJson(File? file) {
-    return file?.path;
+  String? toJson(Uint8List? bytes) {
+    return bytes == null ? null : base64Encode(bytes);
   }
 }
 
 @freezed
 abstract class SettingsSlice with _$SettingsSlice {
   const factory SettingsSlice({
-    required ThemeMode theme,
-    @NullableFileConverter() File? profilePicture,
-    required String userName,
-    required String email,
+    ThemeMode? theme,
+    @NullableFileConverter() Uint8List? profilePicture,
+    String? userName,
+    String? email,
   }) = _SettingsSlice;
 
   factory SettingsSlice.fromJson(Map<String, dynamic> json) =>

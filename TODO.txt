@@ -6,7 +6,15 @@ kategorilendirme ...
 bunlar uygulama mvp'si ciktiktan sonra olucak
 
 
+------ User Settingsler DB ye eklenicek
+
 
 onemli olan seyler :
 
     Verilerin kapanip acilinca gitmemesi -
+
+
+Kullaniciya Giris Ekrani Kaydirmali
+Kullanici Adi
+Maili
+Bide PP istenicek

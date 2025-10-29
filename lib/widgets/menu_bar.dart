@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
-import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/edit_user_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,169 +35,180 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ref.watch(settingsSliceProvider).theme;
-    final profilePicture = ref.watch(settingsSliceProvider).profilePicture;
-    final userName = ref.watch(settingsSliceProvider).userName;
-    final email = ref.watch(settingsSliceProvider).email;
-    return Drawer(
-      child: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Stack(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 48,
-                        backgroundImage: profilePicture != null
-                            ? FileImage(profilePicture)
-                                  as ImageProvider // Seçilen resim
-                            : const AssetImage('assets/pp.gif'),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              userName,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              email,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: -8,
-                    right: -8,
-                    child: IconButton(
-                      onPressed: () async {
-                        await showAdaptiveDialog(
-                          context: context,
-                          builder: (_) => const EditUserProfileDialog(),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.edit_outlined,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Menu Section
-            const _SectionTitle("Main Menu"),
-            ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text("Home"),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.go(Routes.home.route);
-                // Navigator.pop(context)
-                // Navigator.pushNamed(context , '/home')
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.texture_sharp),
-              title: const Text("Second Page"),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.go(Routes.second.route);
-                // Navigator.pop(context)
-                // Navigator.pushNamed(context , '/home')
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.star_outline),
-              title: const Text("Favorites"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.add_outlined),
-              title: const Text('Add Subscription'),
-              onTap: () async {
-                Navigator.pop(context);
+    final settingsController = ref.watch(settingsControllerProvider);
 
-                await showAdaptiveDialog<SubSlice>(
-                  context: context,
-                  builder: (_) => const AddSubsDialog(),
-                );
-              },
-            ),
-            const _SectionTitle('Settings'),
-            SwitchListTile(
-              secondary: const Icon(Icons.dark_mode_outlined),
-              title: const Text("Dark Mode"),
-              value: theme == ThemeMode.dark || theme == ThemeMode.system,
-              onChanged: (value) {
-                ref
-                    .read(settingsSliceProvider.notifier)
-                    .updateSettingsSliceData(
-                      theme: value ? ThemeMode.dark : ThemeMode.light,
-                    );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.language_outlined),
-              title: const Text("Language"),
-              onTap: () {},
-            ),
-            const _SectionTitle("About"),
-            FutureBuilder<PackageInfo>(
-              future: _pkg,
-              builder: (context, snap) {
-                final version = snap.hasData
-                    ? "${snap.data!.version} (${snap.data!.buildNumber})"
-                    : "—";
-                return AboutListTile(
-                  icon: const Icon(Icons.info_outline),
-                  applicationName: "SubsTracker",
-                  applicationVersion: version,
-                  applicationIcon: Image.asset(
-                    "assets/App_Logo.png",
-                    width: 48,
-                    height: 48,
-                  ),
-                  aboutBoxChildren: [
-                    SizedBox(height: 8),
-                    Text(
-                      "An open source application that allows you to easily track your subscriptions.",
+    return Drawer(
+      child: settingsController.when(
+        error: (e, st) => Center(child: Text('Error: $e')),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        data: (slice) => SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Stack(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 48,
+                          backgroundImage: slice.profilePicture != null
+                              ? MemoryImage(slice.profilePicture!)
+                                    as ImageProvider // Seçilen resim
+                              : const AssetImage('assets/pp.gif'),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                slice.userName ?? "",
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                slice.email ?? "",
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    InkWell(
-                      onTap: _launchUrl,
-                      child: Text(
-                        "View on GitHub",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
+                    Positioned(
+                      top: -8,
+                      right: -8,
+                      child: IconButton(
+                        onPressed: () async {
+                          await showAdaptiveDialog(
+                            context: context,
+                            builder: (_) => const EditUserProfileDialog(),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.edit_outlined,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ],
-                  child: const Text("About"),
-                );
-              },
-            ),
-          ],
+                ),
+              ),
+              // Menu Section
+              const _SectionTitle("Main Menu"),
+              ListTile(
+                leading: const Icon(Icons.home_outlined),
+                title: const Text("Home"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.go(Routes.home.route);
+                  // Navigator.pop(context)
+                  // Navigator.pushNamed(context , '/home')
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.texture_sharp),
+                title: const Text("Second Page"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.go(Routes.second.route);
+                  // Navigator.pop(context)
+                  // Navigator.pushNamed(context , '/home')
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.star_outline),
+                title: const Text("Favorites"),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.add_outlined),
+                title: const Text('Add Subscription'),
+                onTap: () async {
+                  Navigator.pop(context);
+
+                  await showAdaptiveDialog<SubSlice>(
+                    context: context,
+                    builder: (_) => const AddSubsDialog(),
+                  );
+                },
+              ),
+              const _SectionTitle('Settings'),
+              SwitchListTile(
+                secondary: const Icon(Icons.dark_mode_outlined),
+                title: const Text("Dark Mode"),
+                value:
+                    slice.theme == ThemeMode.dark ||
+                    slice.theme == ThemeMode.system,
+                onChanged: (value) {
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .updateSettingsSliceData(
+                        theme: value ? ThemeMode.dark : ThemeMode.light,
+                      );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language_outlined),
+                title: const Text("Language"),
+                onTap: () {},
+              ),
+              const _SectionTitle("About"),
+              FutureBuilder<PackageInfo>(
+                future: _pkg,
+                builder: (context, snap) {
+                  final version = snap.hasData
+                      ? "${snap.data!.version} (${snap.data!.buildNumber})"
+                      : "—";
+                  return AboutListTile(
+                    icon: const Icon(Icons.info_outline),
+                    applicationName: "SubsTracker",
+                    applicationVersion: version,
+                    applicationIcon: Image.asset(
+                      "assets/App_Logo.png",
+                      width: 48,
+                      height: 48,
+                    ),
+                    aboutBoxChildren: [
+                      SizedBox(height: 8),
+                      Text(
+                        "An open source application that allows you to easily track your subscriptions.",
+                      ),
+                      const SizedBox(height: 12),
+                      InkWell(
+                        onTap: _launchUrl,
+                        child: Text(
+                          "View on GitHub",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                    child: const Text("About"),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

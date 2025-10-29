@@ -1,9 +1,9 @@
-import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/flutter-gravatar/bin/gravatar_picture.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/widgets/action_text_form_field.dart';
 
 class EditUserProfileDialog extends ConsumerStatefulWidget {
@@ -21,11 +21,11 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
       final XFile? image = await _picker.pickImage(source: source);
 
       if (image != null) {
-        File imageFile = File(image.path);
+        final Uint8List imageBytes = await image.readAsBytes();
 
         ref
-            .read(settingsSliceProvider.notifier)
-            .updateSettingsSliceData(profilePicture: imageFile);
+            .read(settingsControllerProvider.notifier)
+            .updateSettingsSliceData(profilePicture: imageBytes);
       }
     } catch (e) {
       debugPrint("Error While Select Image : $e");
@@ -73,77 +73,99 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final profilePicture = ref.watch(settingsSliceProvider).profilePicture;
-    final userName = ref.watch(settingsSliceProvider).userName;
-    final email = ref.watch(settingsSliceProvider).email;
+    final settingsController = ref.watch(settingsControllerProvider);
 
     return AlertDialog.adaptive(
       title: const Text("Edit Profile Picture"),
-      content: Material(
-        type: MaterialType.transparency,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 128,
-              backgroundImage: profilePicture != null
-                  ? FileImage(profilePicture) as ImageProvider
-                  : const AssetImage('assets/pp.gif'),
-              backgroundColor: Colors.grey.shade200,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              alignment: WrapAlignment.center, // Butonları ortalar
-              spacing: 8.0, // Butonlar arasındaki yatay boşluk
-              runSpacing:
-                  8.0, // Alta geçen buton ile üstteki arasındaki dikey boşluk
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.upload_file_outlined),
-                  onPressed: _showImageSourceOptions,
-                  label: const Text("Upload A Photo"),
-                ),
-                // Aradaki SizedBox'a gerek kalmadı
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.link_outlined),
-                  onPressed: () {},
-                  label: const Text("Connect Gravatar"),
-                ),
-              ],
-            ),
-            const Divider(height: 32),
-            ActionTextFormField(
-              labelText: "User Name",
-              initialValue: userName,
-              onSave: (newUserName) {
-                // Provider'ı güncelle
-                ref
-                    .read(settingsSliceProvider.notifier)
-                    .updateSettingsSliceData(userName: newUserName);
+      content: settingsController.when(
+        error: (e, st) => Center(child: Text('Error: $e')),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        data: (slice) => Material(
+          type: MaterialType.transparency,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 128,
+                backgroundImage: slice.profilePicture != null
+                    ? MemoryImage(slice.profilePicture!) as ImageProvider
+                    : const AssetImage('assets/pp.gif'),
+                backgroundColor: Colors.grey.shade200,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                alignment: WrapAlignment.center, // Butonları ortalar
+                spacing: 8.0, // Butonlar arasındaki yatay boşluk
+                runSpacing:
+                    8.0, // Alta geçen buton ile üstteki arasındaki dikey boşluk
+                children: [
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.upload_file_outlined),
+                    onPressed: _showImageSourceOptions,
+                    label: const Text("Upload A Photo"),
+                  ),
+                  // Aradaki SizedBox'a gerek kalmadı
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.link_outlined),
+                    onPressed: () async {
+                      try {
+                        final Uint8List? imageBytes = await getGravatar(
+                          slice.email!,
+                          size: 500,
+                        );
 
-                // (Opsiyonel) Kullanıcıya geri bildirim ver
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("User Name Saved!")),
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            ActionTextFormField(
-              labelText: "User Name",
-              initialValue: email,
-              onSave: (newEmail) {
-                // Provider'ı güncelle
-                ref
-                    .read(settingsSliceProvider.notifier)
-                    .updateSettingsSliceData(email: newEmail);
+                        if (imageBytes != null) {
+                          ref
+                              .read(settingsControllerProvider.notifier)
+                              .updateSettingsSliceData(
+                                profilePicture: imageBytes,
+                              );
+                        } else {
+                          debugPrint("Cant Get Profile Picture From Gravatar.");
+                        }
+                      } catch (e) {
+                        debugPrint("Error While Select Image : $e");
+                      }
+                    },
+                    label: const Text("Connect Gravatar"),
+                  ),
+                ],
+              ),
+              const Divider(height: 32),
+              ActionTextFormField(
+                labelText: "User Name",
+                initialValue: slice.userName!,
+                onSave: (newUserName) {
+                  // Provider'ı güncelle
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .updateSettingsSliceData(userName: newUserName);
 
-                // (Opsiyonel) Kullanıcıya geri bildirim ver
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text("Email Saved!")));
-              },
-            ),
-          ],
+                  // (Opsiyonel) Kullanıcıya geri bildirim ver
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("User Name Saved!")),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
+              ActionTextFormField(
+                labelText: "User Name",
+                initialValue: slice.email!,
+                onSave: (newEmail) {
+                  // Provider'ı güncelle
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .updateSettingsSliceData(email: newEmail);
+
+                  // (Opsiyonel) Kullanıcıya geri bildirim ver
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text("Email Saved!")));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
