@@ -63,7 +63,7 @@ final class SubsControllerProvider
         argument: null,
         retry: null,
         name: r'subsControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -76,7 +76,7 @@ final class SubsControllerProvider
   SubsController create() => SubsController();
 }
 
-String _$subsControllerHash() => r'c558d5c64d9366ad75eed419989c9f6038a880a0';
+String _$subsControllerHash() => r'89d884d74ede03381233c76ecd9853dfb1988b2d';
 
 @JsonPersist()
 abstract class _$SubsControllerBase extends $AsyncNotifier<List<SubSlice>> {
