@@ -2,15 +2,27 @@
 
 Project for manage your monthly price payment
 
-## Getting Started
+## 📱 App Preview
 
-This project is a starting point for a Flutter application.
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <b>Home Screen</b>
+        <br/>
+        <img src="docs/screenshots/home-screen.png" alt="Home Screen" width="250" height="500" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
+        <br/>
+        <p><i>Dashboard overview with budget tracking</i></p>
+      </td>
+      <td align="center" width="50%">
+        <b>Subscriptions</b>
+        <br/>
+        <img src="docs/screenshots/subscriptions-screen.png" alt="Subscriptions Screen" width="250" height="500" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
+        <br/>
+        <p><i>Manage all your subscriptions</i></p>
+      </td>
+    </tr>
+  </table>
+</div>
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Subs Tracker** helps you manage and monitor your monthly subscription payments with an intuitive dashboard showing spending trends and budget tracking.
