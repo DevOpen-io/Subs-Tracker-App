@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';
+import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/edit_user_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,6 +36,99 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $_url');
+    }
+  }
+
+  Future<void> _exportSubscriptions() async {
+    try {
+      final controller = ref.read(subsControllerProvider.notifier);
+      final jsonString = await controller.exportToJson();
+      
+      // Get a directory to save the file
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = 'subscriptions_backup_$timestamp.json';
+      
+      // On mobile, use share
+      if (Platform.isAndroid || Platform.isIOS) {
+        final tempDir = Directory.systemTemp;
+        final tempFile = File('${tempDir.path}/$fileName');
+        await tempFile.writeAsString(jsonString);
+        
+        await Share.shareXFiles(
+          [XFile(tempFile.path)],
+          subject: 'Subscriptions Backup',
+        );
+      } else {
+        // On desktop, use file picker to select save location
+        final result = await FilePicker.platform.saveFile(
+          dialogTitle: 'Save Subscriptions Backup',
+          fileName: fileName,
+          type: FileType.custom,
+          allowedExtensions: ['json'],
+        );
+        
+        if (result != null) {
+          final file = File(result);
+          await file.writeAsString(jsonString);
+          
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Subscriptions exported successfully!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error exporting subscriptions: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _importSubscriptions() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+      );
+      
+      if (result != null && result.files.single.path != null) {
+        final file = File(result.files.single.path!);
+        final jsonString = await file.readAsString();
+        
+        final controller = ref.read(subsControllerProvider.notifier);
+        final success = await controller.importFromJson(jsonString);
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                success
+                    ? 'Subscriptions imported successfully!'
+                    : 'Error importing subscriptions. Invalid file format.',
+              ),
+              backgroundColor: success ? Colors.green : Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error importing subscriptions: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -144,47 +243,67 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                 onTap: () async {
                   Navigator.pop(context);
 
-                  await showAdaptiveDialog<SubSlice>(
-                    context: context,
-                    builder: (_) => const AddSubsDialog(),
-                  );
-                },
-              ),
-              const _SectionTitle('Settings'),
-              SwitchListTile(
-                secondary: const Icon(Icons.dark_mode_outlined),
-                title: const Text("Dark Mode"),
-                value:
-                    slice.theme == ThemeMode.dark ||
-                    slice.theme == ThemeMode.system,
-                onChanged: (value) {
-                  ref
-                      .read(settingsControllerProvider.notifier)
-                      .updateSettingsSliceData(
-                        theme: value ? ThemeMode.dark : ThemeMode.light,
-                      );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.language_outlined),
-                title: const Text("Language"),
-                onTap: () {},
-              ),
-              const _SectionTitle("About"),
-              FutureBuilder<PackageInfo>(
-                future: _pkg,
-                builder: (context, snap) {
-                  final version = snap.hasData
-                      ? "${snap.data!.version} (${snap.data!.buildNumber})"
-                      : "—";
-                  return AboutListTile(
-                    icon: const Icon(Icons.info_outline),
-                    applicationName: "SubsTracker",
-                    applicationVersion: version,
-                    applicationIcon: Image.asset(
-                      "assets/App_Logo.png",
-                      width: 48,
-                      height: 48,
+                await showAdaptiveDialog<SubSlice>(
+                  context: context,
+                  builder: (_) => const AddSubsDialog(),
+                );
+              },
+            ),
+            const _SectionTitle('Settings'),
+            SwitchListTile(
+              secondary: const Icon(Icons.dark_mode_outlined),
+              title: const Text("Dark Mode"),
+              value: theme == ThemeMode.dark || theme == ThemeMode.system,
+              onChanged: (value) {
+                ref
+                    .read(settingsSliceProvider.notifier)
+                    .updateTheme(value ? ThemeMode.dark : ThemeMode.light);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.language_outlined),
+              title: const Text("Language"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.upload_file_outlined),
+              title: const Text("Export Subscriptions"),
+              onTap: () {
+                _exportSubscriptions();
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.download_outlined),
+              title: const Text("Import Subscriptions"),
+              onTap: () {
+                _importSubscriptions().then((_) {
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                });
+              },
+            ),
+            const _SectionTitle("About"),
+            FutureBuilder<PackageInfo>(
+              future: _pkg,
+              builder: (context, snap) {
+                final version = snap.hasData
+                    ? "${snap.data!.version} (${snap.data!.buildNumber})"
+                    : "—";
+                return AboutListTile(
+                  icon: const Icon(Icons.info_outline),
+                  applicationName: "SubsTracker",
+                  applicationVersion: version,
+                  applicationIcon: Image.asset(
+                    "assets/App_Logo.png",
+                    width: 48,
+                    height: 48,
+                  ),
+                  aboutBoxChildren: [
+                    SizedBox(height: 8),
+                    Text(
+                      "An open source application that allows you to easily track your subscriptions.",
                     ),
                     aboutBoxChildren: [
                       SizedBox(height: 8),
