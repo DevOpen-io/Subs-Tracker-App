@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:subs_tracker/flutter-gravatar/bin/gravatar_picture.dart';
+import 'package:simple_gravatar_fetch/simple_gravatar_fetch.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/widgets/action_text_form_field.dart';
 
