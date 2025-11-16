@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subs_tracker/config/router_config.dart';
-import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/utils/app_theme.dart';
 import 'package:subs_tracker/utils/notification_service.dart';
 
@@ -16,7 +16,11 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeData = ref.watch(settingsSliceProvider).theme;
+    final themeData = ref.watch(settingsControllerProvider).when(
+          data: (settings) => settings.theme,
+          loading: () => ThemeMode.system,
+          error: (_, _) => ThemeMode.system,
+        );
     final router = ref.watch(goRouterProvider);
     return MaterialApp.router(
       routerConfig: router,
