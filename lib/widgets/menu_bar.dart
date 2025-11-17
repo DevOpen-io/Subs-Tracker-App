@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
-import 'package:subs_tracker/providers/settings_slice_provider.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,7 +34,9 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ref.watch(settingsSliceProvider).theme;
+    final settingsAsync = ref.watch(settingsControllerProvider);
+    final theme = settingsAsync.whenData((settings) => settings.theme).value;
+    
     return Drawer(
       child: SafeArea(
         child: ListView(
@@ -87,13 +89,11 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.texture_sharp),
-              title: const Text("Second Page"),
+              leading: const Icon(Icons.settings),
+              title: const Text("Settings"),
               onTap: () {
                 Navigator.of(context).pop();
-                context.go(Routes.second.route);
-                // Navigator.pop(context)
-                // Navigator.pushNamed(context , '/home')
+                context.go(Routes.settings.route);
               },
             ),
             ListTile(
@@ -120,7 +120,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               value: theme == ThemeMode.dark || theme == ThemeMode.system,
               onChanged: (value) {
                 ref
-                    .read(settingsSliceProvider.notifier)
+                    .read(settingsControllerProvider.notifier)
                     .updateTheme(value ? ThemeMode.dark : ThemeMode.light);
               },
             ),
