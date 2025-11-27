@@ -76,7 +76,7 @@ final class SubsControllerProvider
   SubsController create() => SubsController();
 }
 
-String _$subsControllerHash() => r'c558d5c64d9366ad75eed419989c9f6038a880a0';
+String _$subsControllerHash() => r'8b0f1d5852c7d23feec1c082cb17d181b5a94378';
 
 @JsonPersist()
 abstract class _$SubsControllerBase extends $AsyncNotifier<List<SubSlice>> {

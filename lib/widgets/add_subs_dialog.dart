@@ -263,7 +263,7 @@ class AddSubsDialog extends HookConsumerWidget {
                       decimal: true,
                     ),
                     decoration: const InputDecoration(
-                      labelText: 'Monthly amount',
+                      labelText: 'Amount',
                       prefixIcon: Icon(Icons.payments_outlined),
                       isDense: true,
                     ),
@@ -305,6 +305,27 @@ class AddSubsDialog extends HookConsumerWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     trailing: const Icon(Icons.edit_calendar_outlined),
+                  ),
+                  DropdownButtonFormField<Frequency>(
+                    initialValue: draftSlice.value.frequency,
+                    decoration: const InputDecoration(
+                      labelText: 'Frequency',
+                      prefixIcon: Icon(Icons.repeat),
+                      isDense: true,
+                    ),
+                    items: Frequency.values.map((f) {
+                      return DropdownMenuItem(
+                        value: f,
+                        child: Text(f.name.toUpperCase()),
+                      );
+                    }).toList(),
+                    onChanged: (v) {
+                      if (v != null) {
+                        draftSlice.value = draftSlice.value.copyWith(
+                          frequency: v,
+                        );
+                      }
+                    },
                   ),
                   Text(
                     'Slice color',
