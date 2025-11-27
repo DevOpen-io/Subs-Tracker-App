@@ -72,7 +72,7 @@ class CalendarScreen extends HookConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   todayDecoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(
@@ -98,7 +98,7 @@ class CalendarScreen extends HookConsumerWidget {
                               width: 32,
                               height: 32,
                               fit: BoxFit.contain,
-                              errorWidget: (_, __, ___) => CircleAvatar(
+                              errorWidget: (_, _, _) => CircleAvatar(
                                 radius: 16,
                                 backgroundColor: Color(sub.color),
                                 child: Text(sub.name[0].toUpperCase()),

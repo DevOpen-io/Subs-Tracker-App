@@ -352,8 +352,8 @@ class _CompactSliceLeading extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: slice.brand!.logo!,
                 fit: BoxFit.contain,
-                placeholder: (_, __) => const _SliceLogoPlaceholder(),
-                errorWidget: (_, __, ___) => SubAvatar(s: slice),
+                placeholder: (_, _) => const _SliceLogoPlaceholder(),
+                errorWidget: (_, _, _) => SubAvatar(s: slice),
               ),
             )
           : SubAvatar(s: slice),

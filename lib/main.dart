@@ -16,31 +16,21 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeData = ref.watch(settingsControllerProvider).when(
+    final themeData = ref
+        .watch(settingsControllerProvider)
+        .when(
           data: (settings) => settings.theme,
           loading: () => ThemeMode.system,
           error: (_, _) => ThemeMode.system,
         );
     final router = ref.watch(goRouterProvider);
-    
-    return settingsAsync.when(
-      data: (settings) => MaterialApp.router(
-        routerConfig: router,
-        title: 'Subs Tracker',
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: settings.theme,
-      ),
-      loading: () => const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
-      ),
-      error: (err, stack) => MaterialApp(
-        home: Scaffold(
-          body: Center(child: Text('Error: $err')),
-        ),
-      ),
+
+    return MaterialApp.router(
+      routerConfig: router,
+      title: 'Subs Tracker',
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: themeData,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/experimental/json_persist.dart';
@@ -45,5 +47,17 @@ class SettingsController extends _$SettingsController {
 
   void updateCurrency(Currency currency) {
     state = AsyncData(state.value!.copyWith(currency: currency));
+  }
+
+  void updateProfilePicture(Uint8List? profilePicture) {
+    state = AsyncData(state.value!.copyWith(profilePicture: profilePicture));
+  }
+
+  void updateUserName(String? userName) {
+    state = AsyncData(state.value!.copyWith(userName: userName));
+  }
+
+  void updateUserEmail(String? userEmail) {
+    state = AsyncData(state.value!.copyWith(email: userEmail));
   }
 }

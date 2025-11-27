@@ -221,16 +221,6 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.texture_sharp),
-                title: const Text("Second Page"),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  context.go(Routes.second.route);
-                  // Navigator.pop(context)
-                  // Navigator.pushNamed(context , '/home')
-                },
-              ),
-              ListTile(
                 leading: const Icon(Icons.star_outline),
                 title: const Text("Favorites"),
                 onTap: () {},
@@ -257,8 +247,8 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                 onChanged: (value) {
                   ref
                       .read(settingsControllerProvider.notifier)
-                      .updateSettingsSliceData(
-                        theme: value ? ThemeMode.dark : ThemeMode.light,
+                      .updateTheme(
+                         value ? ThemeMode.dark : ThemeMode.light,
                       );
                 },
               ),

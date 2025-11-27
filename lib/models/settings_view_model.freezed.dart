@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsViewModel {
 
- ThemeMode get theme; Currency get currency;
+ ThemeMode get theme; Currency get currency;@Uint8ListConverter() Uint8List? get profilePicture; String? get userName; String? get email;
 /// Create a copy of SettingsViewModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SettingsViewModelCopyWith<SettingsViewModel> get copyWith => _$SettingsViewMode
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsViewModel&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsViewModel&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,theme,currency);
+int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email);
 
 @override
 String toString() {
-  return 'SettingsViewModel(theme: $theme, currency: $currency)';
+  return 'SettingsViewModel(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SettingsViewModelCopyWith<$Res>  {
   factory $SettingsViewModelCopyWith(SettingsViewModel value, $Res Function(SettingsViewModel) _then) = _$SettingsViewModelCopyWithImpl;
 @useResult
 $Res call({
- ThemeMode theme, Currency currency
+ ThemeMode theme, Currency currency,@Uint8ListConverter() Uint8List? profilePicture, String? userName, String? email
 });
 
 
@@ -65,11 +65,14 @@ class _$SettingsViewModelCopyWithImpl<$Res>
 
 /// Create a copy of SettingsViewModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? theme = null,Object? currency = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? theme = null,Object? currency = null,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,}) {
   return _then(_self.copyWith(
 theme: null == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
 as ThemeMode,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as Currency,
+as Currency,profilePicture: freezed == profilePicture ? _self.profilePicture : profilePicture // ignore: cast_nullable_to_non_nullable
+as Uint8List?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -154,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode theme,  Currency currency)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode theme,  Currency currency, @Uint8ListConverter()  Uint8List? profilePicture,  String? userName,  String? email)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SettingsViewModel() when $default != null:
-return $default(_that.theme,_that.currency);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
   return orElse();
 
 }
@@ -175,10 +178,10 @@ return $default(_that.theme,_that.currency);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode theme,  Currency currency)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode theme,  Currency currency, @Uint8ListConverter()  Uint8List? profilePicture,  String? userName,  String? email)  $default,) {final _that = this;
 switch (_that) {
 case _SettingsViewModel():
-return $default(_that.theme,_that.currency);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +198,10 @@ return $default(_that.theme,_that.currency);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode theme,  Currency currency)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode theme,  Currency currency, @Uint8ListConverter()  Uint8List? profilePicture,  String? userName,  String? email)?  $default,) {final _that = this;
 switch (_that) {
 case _SettingsViewModel() when $default != null:
-return $default(_that.theme,_that.currency);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
   return null;
 
 }
@@ -210,11 +213,14 @@ return $default(_that.theme,_that.currency);case _:
 @JsonSerializable()
 
 class _SettingsViewModel implements SettingsViewModel {
-  const _SettingsViewModel({required this.theme, required this.currency});
+  const _SettingsViewModel({required this.theme, required this.currency, @Uint8ListConverter() this.profilePicture, this.userName, this.email});
   factory _SettingsViewModel.fromJson(Map<String, dynamic> json) => _$SettingsViewModelFromJson(json);
 
 @override final  ThemeMode theme;
 @override final  Currency currency;
+@override@Uint8ListConverter() final  Uint8List? profilePicture;
+@override final  String? userName;
+@override final  String? email;
 
 /// Create a copy of SettingsViewModel
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsViewModel&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsViewModel&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,theme,currency);
+int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email);
 
 @override
 String toString() {
-  return 'SettingsViewModel(theme: $theme, currency: $currency)';
+  return 'SettingsViewModel(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email)';
 }
 
 
@@ -249,7 +255,7 @@ abstract mixin class _$SettingsViewModelCopyWith<$Res> implements $SettingsViewM
   factory _$SettingsViewModelCopyWith(_SettingsViewModel value, $Res Function(_SettingsViewModel) _then) = __$SettingsViewModelCopyWithImpl;
 @override @useResult
 $Res call({
- ThemeMode theme, Currency currency
+ ThemeMode theme, Currency currency,@Uint8ListConverter() Uint8List? profilePicture, String? userName, String? email
 });
 
 
@@ -266,11 +272,14 @@ class __$SettingsViewModelCopyWithImpl<$Res>
 
 /// Create a copy of SettingsViewModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? theme = null,Object? currency = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? theme = null,Object? currency = null,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,}) {
   return _then(_SettingsViewModel(
 theme: null == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
 as ThemeMode,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
-as Currency,
+as Currency,profilePicture: freezed == profilePicture ? _self.profilePicture : profilePicture // ignore: cast_nullable_to_non_nullable
+as Uint8List?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

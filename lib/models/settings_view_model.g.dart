@@ -10,13 +10,22 @@ _SettingsViewModel _$SettingsViewModelFromJson(Map<String, dynamic> json) =>
     _SettingsViewModel(
       theme: $enumDecode(_$ThemeModeEnumMap, json['theme']),
       currency: $enumDecode(_$CurrencyEnumMap, json['currency']),
+      profilePicture: const Uint8ListConverter().fromJson(
+        json['profilePicture'] as List<int>?,
+      ),
+      userName: json['userName'] as String?,
+      email: json['email'] as String?,
     );
 
-Map<String, dynamic> _$SettingsViewModelToJson(_SettingsViewModel instance) =>
-    <String, dynamic>{
-      'theme': _$ThemeModeEnumMap[instance.theme]!,
-      'currency': _$CurrencyEnumMap[instance.currency]!,
-    };
+Map<String, dynamic> _$SettingsViewModelToJson(
+  _SettingsViewModel instance,
+) => <String, dynamic>{
+  'theme': _$ThemeModeEnumMap[instance.theme]!,
+  'currency': _$CurrencyEnumMap[instance.currency]!,
+  'profilePicture': const Uint8ListConverter().toJson(instance.profilePicture),
+  'userName': instance.userName,
+  'email': instance.email,
+};
 
 const _$ThemeModeEnumMap = {
   ThemeMode.system: 'system',

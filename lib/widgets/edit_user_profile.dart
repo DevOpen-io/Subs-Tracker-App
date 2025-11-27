@@ -25,7 +25,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
 
         ref
             .read(settingsControllerProvider.notifier)
-            .updateSettingsSliceData(profilePicture: imageBytes);
+            .updateProfilePicture(imageBytes);
       }
     } catch (e) {
       debugPrint("Error While Select Image : $e");
@@ -118,8 +118,8 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                         if (imageBytes != null) {
                           ref
                               .read(settingsControllerProvider.notifier)
-                              .updateSettingsSliceData(
-                                profilePicture: imageBytes,
+                              .updateProfilePicture(
+                                imageBytes,
                               );
                         } else {
                           debugPrint("Cant Get Profile Picture From Gravatar.");
@@ -140,7 +140,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                   // Provider'ı güncelle
                   ref
                       .read(settingsControllerProvider.notifier)
-                      .updateSettingsSliceData(userName: newUserName);
+                      .updateUserName(newUserName);
 
                   // (Opsiyonel) Kullanıcıya geri bildirim ver
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -156,7 +156,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                   // Provider'ı güncelle
                   ref
                       .read(settingsControllerProvider.notifier)
-                      .updateSettingsSliceData(email: newEmail);
+                      .updateUserEmail(newEmail);
 
                   // (Opsiyonel) Kullanıcıya geri bildirim ver
                   ScaffoldMessenger.of(
