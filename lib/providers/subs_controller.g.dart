@@ -63,7 +63,7 @@ final class SubsControllerProvider
         argument: null,
         retry: null,
         name: r'subsControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );

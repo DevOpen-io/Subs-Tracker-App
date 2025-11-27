@@ -104,7 +104,7 @@ class _Badge extends StatelessWidget {
           width: 40,
           height: 20,
           fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) =>
+          errorBuilder: (_, _, _) =>
               const Icon(Icons.business, size: 16),
         ) :
                     Flexible(

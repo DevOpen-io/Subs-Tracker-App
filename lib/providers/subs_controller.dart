@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/experimental/json_persist.dart';
@@ -28,7 +31,7 @@ Future<JsonSqFliteStorage> subsStorage(Ref ref) async {
   return storage;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 @JsonPersist()
 class SubsController extends _$SubsController {
   @override
@@ -221,5 +224,61 @@ class SubsController extends _$SubsController {
 
   void clear() {
     state = AsyncValue.data([]);
+  }
+
+  /// Export subscriptions to JSON format
+  Future<String> exportToJson() async {
+    final subs = state.value ?? [];
+    final jsonList = subs.map((sub) => sub.toJson()).toList();
+    return jsonEncode({
+      'version': 1,
+      'exportDate': DateTime.now().toIso8601String(),
+      'subscriptions': jsonList,
+    });
+  }
+
+  /// Import subscriptions from JSON format
+  Future<bool> importFromJson(String jsonString) async {
+    if (!ref.mounted) return false;
+    try {
+      final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+      final subscriptionsList = decoded['subscriptions'] as List<dynamic>;
+
+      final importedSubs = subscriptionsList
+          .map((json) => SubSlice.fromJson(json as Map<String, dynamic>))
+          .toList();
+      // Replace current subscriptions with imported ones
+      state = AsyncValue.data(importedSubs);
+      scheduleNotification();
+      return true;
+    } catch (e) {
+      debugPrint('Error importing subscriptions: $e');
+      return false;
+    }
+  }
+
+  /// Export to file and return the file path
+  Future<File?> exportToFile(String filePath) async {
+    try {
+      final jsonString = await exportToJson();
+      final file = File(filePath);
+      await file.writeAsString(jsonString);
+      return file;
+    } catch (e) {
+      debugPrint('Error exporting to file: $e');
+      return null;
+    }
+  }
+
+  /// Import from file
+  Future<bool> importFromFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      final jsonString = await file.readAsString();
+      return await importFromJson(jsonString);
+    } catch (e) {
+      debugPrint('Error importing from file: $e');
+      return false;
+    }
   }
 }

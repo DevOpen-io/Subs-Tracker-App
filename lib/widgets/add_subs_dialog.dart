@@ -144,9 +144,9 @@ class AddSubsDialog extends HookConsumerWidget {
                                                       .brand!
                                                       .logo!,
                                                   fit: BoxFit.contain,
-                                                  placeholder: (_, __) =>
+                                                  placeholder: (_, _) =>
                                                       const _LogoPlaceholder(),
-                                                  errorWidget: (_, __, ___) =>
+                                                  errorWidget: (_, _, _) =>
                                                       const Icon(
                                                         Icons.business,
                                                       ),
@@ -205,7 +205,7 @@ class AddSubsDialog extends HookConsumerWidget {
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
                               itemCount: options.length,
-                              separatorBuilder: (_, __) =>
+                              separatorBuilder: (_, _) =>
                                   const Divider(height: 0),
                               itemBuilder: (context, index) {
                                 final Brand option = options.elementAt(index);
@@ -220,9 +220,9 @@ class AddSubsDialog extends HookConsumerWidget {
                                             width: 40,
                                             height: 40,
                                             fit: BoxFit.cover,
-                                            placeholder: (_, __) =>
+                                            placeholder: (_, _) =>
                                                 const _LogoPlaceholder(),
-                                            errorWidget: (_, __, ___) =>
+                                            errorWidget: (_, _, _) =>
                                                 const Icon(
                                                   Icons.image_not_supported,
                                                 ),
