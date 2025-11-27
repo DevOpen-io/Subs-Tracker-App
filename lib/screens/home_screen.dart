@@ -52,9 +52,9 @@ class HomeScreen extends HookConsumerWidget {
         );
       }
 
-      final total = slices.fold<double>(0, (a, b) => a + b.amount);
+      final total = slices.fold<double>(0, (a, b) => a + b.monthlyAmount);
       final sortedSlices = List<SubSlice>.from(slices)
-        ..sort((a, b) => b.amount.compareTo(a.amount));
+        ..sort((a, b) => b.monthlyAmount.compareTo(a.monthlyAmount));
       final mostExpensive = sortedSlices.first;
 
       return SafeArea(
@@ -130,7 +130,7 @@ class _SummaryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Total Spending",
+                    "Total Monthly Spending",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.white70,
                         ),
@@ -177,7 +177,7 @@ class _SummaryCard extends StatelessWidget {
                       ),
                 ),
                 Text(
-                  "${mostExpensive.name} ($currencySymbol${mostExpensive.amount.toStringAsFixed(2)})",
+                  "${mostExpensive.name} ($currencySymbol${mostExpensive.amount.toStringAsFixed(2)}/${mostExpensive.frequency.name.substring(0, 1)})",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -205,6 +205,22 @@ class _CompactSubscriptionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    String frequencyShort;
+    switch (slice.frequency) {
+      case Frequency.daily:
+        frequencyShort = "/day";
+        break;
+      case Frequency.weekly:
+        frequencyShort = "/wk";
+        break;
+      case Frequency.monthly:
+        frequencyShort = "/mo";
+        break;
+      case Frequency.yearly:
+        frequencyShort = "/yr";
+        break;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Dismissible(
@@ -287,7 +303,7 @@ class _CompactSubscriptionTile extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "Renews ${slice.startDate.month}/${slice.startDate.day}",
+                        "Renews ${slice.startDate.month}/${slice.startDate.day} • ${slice.frequency.name}",
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
@@ -299,7 +315,7 @@ class _CompactSubscriptionTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  "$currencySymbol${slice.amount.toStringAsFixed(2)}",
+                  "$currencySymbol${slice.amount.toStringAsFixed(2)}$frequencyShort",
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,

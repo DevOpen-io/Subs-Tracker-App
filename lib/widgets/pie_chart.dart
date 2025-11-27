@@ -28,7 +28,7 @@ class _SubsPieState extends ConsumerState<SubsPie> {
   }
 
   Widget _buildChart(List<SubSlice> slices) {
-    final total = slices.fold<double>(0, (a, b) => a + b.amount);
+    final total = slices.fold<double>(0, (a, b) => a + b.monthlyAmount);
     return Column(
       children: [
         AspectRatio(
@@ -50,10 +50,10 @@ class _SubsPieState extends ConsumerState<SubsPie> {
                 final s = slices[i];
                 final label = s.brand?.text ?? s.name;
                 final isTouched = i == touchedIndex;
-                final percent = total == 0 ? 0 : (s.amount / total) * 100;
+                final percent = total == 0 ? 0 : (s.monthlyAmount / total) * 100;
                 return PieChartSectionData(
                   color: Color(s.color),
-                  value: s.amount,
+                  value: s.monthlyAmount,
                   title: '${percent.toStringAsFixed(2)}%',
                   titleStyle: TextStyle(
                     fontSize: isTouched ? 16 : 13,

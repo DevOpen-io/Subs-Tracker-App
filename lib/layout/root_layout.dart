@@ -19,10 +19,12 @@ class RootLayout extends ConsumerWidget {
     
     // Determine current tab index
     int selectedIndex = 0;
-    if (currentPath == Routes.analytics.route) {
+    if (currentPath == Routes.calendar.route) {
       selectedIndex = 1;
-    } else if (currentPath == Routes.settings.route) {
+    } else if (currentPath == Routes.analytics.route) {
       selectedIndex = 2;
+    } else if (currentPath == Routes.settings.route) {
+      selectedIndex = 3;
     }
 
     return Scaffold(
@@ -47,15 +49,19 @@ class RootLayout extends ConsumerWidget {
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
           switch (index) {
             case 0:
               context.go(Routes.home.route);
               break;
             case 1:
-              context.go(Routes.analytics.route);
+              context.go(Routes.calendar.route);
               break;
             case 2:
+              context.go(Routes.analytics.route);
+              break;
+            case 3:
               context.go(Routes.settings.route);
               break;
           }
@@ -64,6 +70,10 @@ class RootLayout extends ConsumerWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Subscriptions',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),

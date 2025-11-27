@@ -36,7 +36,7 @@ class AnalyticsScreen extends HookConsumerWidget {
         );
       }
 
-      final total = slices.fold<double>(0, (a, b) => a + b.amount);
+      final total = slices.fold<double>(0, (a, b) => a + b.monthlyAmount);
 
       return SafeArea(
         child: SingleChildScrollView(
@@ -70,7 +70,7 @@ class AnalyticsScreen extends HookConsumerWidget {
               ),
               const SizedBox(height: 12),
               _StatCard(
-                label: "Total Spending",
+                label: "Total Monthly Spending",
                 value: "${settings.currency.symbol}${total.toStringAsFixed(2)}",
                 icon: Icons.trending_up,
               ),
@@ -82,7 +82,7 @@ class AnalyticsScreen extends HookConsumerWidget {
               ),
               const SizedBox(height: 12),
               _StatCard(
-                label: "Average Cost",
+                label: "Average Monthly Cost",
                 value: "${settings.currency.symbol}${(total / slices.length).toStringAsFixed(2)}",
                 icon: Icons.calculate,
               ),
@@ -101,7 +101,7 @@ class AnalyticsScreen extends HookConsumerWidget {
                 itemCount: slices.length,
                 itemBuilder: (context, index) {
                   final slice = slices[index];
-                  final percent = total == 0 ? 0 : (slice.amount / total) * 100;
+                  final percent = total == 0 ? 0 : (slice.monthlyAmount / total) * 100;
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
@@ -127,7 +127,7 @@ class AnalyticsScreen extends HookConsumerWidget {
                                     ),
                               ),
                               Text(
-                                "${settings.currency.symbol}${slice.amount.toStringAsFixed(2)}",
+                                "${settings.currency.symbol}${slice.monthlyAmount.toStringAsFixed(2)}/mo",
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelLarge
