@@ -9,26 +9,25 @@ import 'package:subs_tracker/providers/brands_provider.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:subs_tracker/utils/color_palette.dart';
 
-class AddSubsDialog extends HookConsumerWidget {
-  const AddSubsDialog({super.key});
+class EditSubsDialog extends HookConsumerWidget {
+  const EditSubsDialog({
+    required this.slice,
+    required this.index,
+    super.key,
+  });
+
+  final SubSlice slice;
+  final int index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final nameCtrl = useTextEditingController();
-    final amountCtrl = useTextEditingController();
+    final nameCtrl = useTextEditingController(text: slice.name);
+    final amountCtrl = useTextEditingController(text: slice.amount.toString());
     final brandFocusNode = useFocusNode();
 
     // Use single SubSlice state to hold all form data
-    final draftSlice = useState<SubSlice>(
-      SubSlice(
-        brand: null,
-        name: '',
-        amount: 0,
-        color: kSliceColors.first.toARGB32(),
-        startDate: DateTime.now(),
-      ),
-    );
+    final draftSlice = useState<SubSlice>(slice);
 
     Future<void> openCustomColorPicker() async {
       Color tempColor = Color(draftSlice.value.color);
@@ -76,7 +75,7 @@ class AddSubsDialog extends HookConsumerWidget {
 
     Widget buildDialog(BuildContext context, List<Brand> allBrands) {
       return AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
+        title: const Text('Edit Subscription'),
         content: Material(
           type: MaterialType.transparency,
           child: Form(
@@ -458,7 +457,8 @@ class AddSubsDialog extends HookConsumerWidget {
                 );
                 ref
                     .read(subsControllerProvider.notifier)
-                    .addSlice(
+                    .updateAt(
+                      index,
                       draftSlice.value.copyWith(
                         name: nameCtrl.text.trim(),
                         amount: amount,
@@ -467,7 +467,7 @@ class AddSubsDialog extends HookConsumerWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Add'),
+            child: const Text('Save'),
           ),
         ],
       );
@@ -478,14 +478,14 @@ class AddSubsDialog extends HookConsumerWidget {
     return brandsAsync.when(
       data: (allBrands) => buildDialog(context, allBrands),
       loading: () => AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
+        title: const Text('Edit Subscription'),
         content: const SizedBox(
           height: 100,
           child: Center(child: CircularProgressIndicator()),
         ),
       ),
       error: (err, stack) => AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
+        title: const Text('Edit Subscription'),
         content: Text('Error loading brands: $err'),
         actions: [
           TextButton(

@@ -5,26 +5,47 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:subs_tracker/main.dart';
+import 'package:subs_tracker/models/settings_slice.dart';
+import 'package:subs_tracker/models/settings_view_model.dart';
+import 'package:subs_tracker/models/sub_slice.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
+import 'package:subs_tracker/providers/subs_controller.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App smoke test', (WidgetTester tester) async {
+    // Override the settings and subs controllers to return a fixed state
+    // This avoids database calls and platform channel issues
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsControllerProvider.overrideWith(() => FakeSettingsController()),
+          subsControllerProvider.overrideWith(() => FakeSubsController()),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the app builds and shows the loading or main screen
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
+}
+
+class FakeSettingsController extends SettingsController {
+  @override
+  FutureOr<SettingsViewModel> build() {
+    return const SettingsViewModel(theme: ThemeMode.light, currency: Currency.usd);
+  }
+}
+
+class FakeSubsController extends SubsController {
+  @override
+  FutureOr<List<SubSlice>> build() {
+    return [];
+  }
 }

@@ -14,6 +14,9 @@ _SubSlice _$SubSliceFromJson(Map<String, dynamic> json) => _SubSlice(
   amount: (json['amount'] as num).toDouble(),
   color: (json['color'] as num).toInt(),
   startDate: DateTime.parse(json['startDate'] as String),
+  frequency:
+      $enumDecodeNullable(_$FrequencyEnumMap, json['frequency']) ??
+      Frequency.monthly,
 );
 
 Map<String, dynamic> _$SubSliceToJson(_SubSlice instance) => <String, dynamic>{
@@ -22,4 +25,12 @@ Map<String, dynamic> _$SubSliceToJson(_SubSlice instance) => <String, dynamic>{
   'amount': instance.amount,
   'color': instance.color,
   'startDate': instance.startDate.toIso8601String(),
+  'frequency': _$FrequencyEnumMap[instance.frequency]!,
+};
+
+const _$FrequencyEnumMap = {
+  Frequency.daily: 'daily',
+  Frequency.weekly: 'weekly',
+  Frequency.monthly: 'monthly',
+  Frequency.yearly: 'yearly',
 };

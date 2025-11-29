@@ -58,11 +58,11 @@ class SubsController extends _$SubsController {
       "Scheduling notifications for ${state.value?.length} subscriptions.",
     );
     for (final slice in state.value ?? []) {
-      scheduleMonthlyRepeatingNotification(slice, state.value?.length ?? 0);
+      scheduleRepeatingNotification(slice, state.value?.length ?? 0);
     }
   }
 
-  Future<void> scheduleMonthlyRepeatingNotification(
+  Future<void> scheduleRepeatingNotification(
     SubSlice slice,
     int sliceCount,
   ) async {
@@ -78,17 +78,82 @@ class SubsController extends _$SubsController {
       0,
     );
 
-    // If the scheduled date is before now, move it to the next month
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = tz.TZDateTime(
-        tz.local,
-        now.year,
-        now.month + 1,
-        slice.startDate.day,
-        12, // 12 PM
-        0,
-        0,
-      );
+    // Adjust scheduledDate based on frequency
+    switch (slice.frequency) {
+      case Frequency.daily:
+        scheduledDate = tz.TZDateTime(
+          tz.local,
+          now.year,
+          now.month,
+          now.day,
+          12,
+          0,
+          0,
+        );
+        if (scheduledDate.isBefore(now)) {
+          scheduledDate = scheduledDate.add(const Duration(days: 1));
+        }
+        break;
+      case Frequency.weekly:
+        // Find next occurrence of the start day of week
+        scheduledDate = tz.TZDateTime(
+          tz.local,
+          now.year,
+          now.month,
+          now.day,
+          12,
+          0,
+          0,
+        );
+        while (scheduledDate.weekday != slice.startDate.weekday ||
+            scheduledDate.isBefore(now)) {
+          scheduledDate = scheduledDate.add(const Duration(days: 1));
+        }
+        break;
+      case Frequency.monthly:
+        scheduledDate = tz.TZDateTime(
+          tz.local,
+          now.year,
+          now.month,
+          slice.startDate.day,
+          12,
+          0,
+          0,
+        );
+        if (scheduledDate.isBefore(now)) {
+          scheduledDate = tz.TZDateTime(
+            tz.local,
+            now.year,
+            now.month + 1,
+            slice.startDate.day,
+            12,
+            0,
+            0,
+          );
+        }
+        break;
+      case Frequency.yearly:
+        scheduledDate = tz.TZDateTime(
+          tz.local,
+          now.year,
+          slice.startDate.month,
+          slice.startDate.day,
+          12,
+          0,
+          0,
+        );
+        if (scheduledDate.isBefore(now)) {
+          scheduledDate = tz.TZDateTime(
+            tz.local,
+            now.year + 1,
+            slice.startDate.month,
+            slice.startDate.day,
+            12,
+            0,
+            0,
+          );
+        }
+        break;
     }
 
     /// slice count -> 20
@@ -96,25 +161,55 @@ class SubsController extends _$SubsController {
     /// 64 max means 64 ~/ 20 = 3 notifications per slice
     int countPerSlice = maxNotifications ~/ sliceCount ~/ 2;
 
-    /// Schedule the all monthly notifications
+    /// Schedule the notifications
     for (int i = 0; i < countPerSlice; i++) {
       /// Unique IDs for each notification
       final id1 = slice.hashCode + i;
       final id2 = slice.hashCode + i + countPerSlice;
+      
+      tz.TZDateTime nextDate = scheduledDate;
+      switch (slice.frequency) {
+        case Frequency.daily:
+          nextDate = scheduledDate.add(Duration(days: i));
+          break;
+        case Frequency.weekly:
+          nextDate = scheduledDate.add(Duration(days: i * 7));
+          break;
+        case Frequency.monthly:
+          nextDate = tz.TZDateTime(
+            tz.local,
+            scheduledDate.year,
+            scheduledDate.month + i,
+            scheduledDate.day,
+            12,
+            0,
+            0,
+          );
+          break;
+        case Frequency.yearly:
+          nextDate = tz.TZDateTime(
+            tz.local,
+            scheduledDate.year + i,
+            scheduledDate.month,
+            scheduledDate.day,
+            12,
+            0,
+            0,
+          );
+          break;
+      }
+
       LocalNotificationService.instance.scheduleNotification(
         id: id1,
         title: "Subscription Reminder",
         body: "Your subscription for ${slice.name} is due tomorrow.",
-        scheduledDate: scheduledDate.copyWith(
-          month: scheduledDate.month + i,
-          day: scheduledDate.day - 1,
-        ),
+        scheduledDate: nextDate.subtract(const Duration(days: 1)),
       );
       LocalNotificationService.instance.scheduleNotification(
         id: id2,
         title: "Subscription Reminder",
         body: "Your subscription for ${slice.name} is due.",
-        scheduledDate: scheduledDate.copyWith(month: scheduledDate.month + i),
+        scheduledDate: nextDate,
       );
     }
   }

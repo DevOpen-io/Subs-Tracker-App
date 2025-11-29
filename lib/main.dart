@@ -16,12 +16,15 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeData = ref.watch(settingsControllerProvider).when(
+    final themeData = ref
+        .watch(settingsControllerProvider)
+        .when(
           data: (settings) => settings.theme,
           loading: () => ThemeMode.system,
           error: (_, _) => ThemeMode.system,
         );
     final router = ref.watch(goRouterProvider);
+
     return MaterialApp.router(
       routerConfig: router,
       title: 'Subs Tracker',

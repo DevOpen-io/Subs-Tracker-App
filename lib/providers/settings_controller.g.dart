@@ -56,7 +56,7 @@ const settingsControllerProvider = SettingsControllerProvider._();
 
 @JsonPersist()
 final class SettingsControllerProvider
-    extends $AsyncNotifierProvider<SettingsController, SettingsSlice> {
+    extends $AsyncNotifierProvider<SettingsController, SettingsViewModel> {
   const SettingsControllerProvider._()
     : super(
         from: null,
@@ -77,21 +77,23 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'2cfce70ba311cb9b01524fba08a743d7a36b4830';
+    r'e10146a6f141b850383c7d018df028d14f900398';
 
 @JsonPersist()
-abstract class _$SettingsControllerBase extends $AsyncNotifier<SettingsSlice> {
-  FutureOr<SettingsSlice> build();
+abstract class _$SettingsControllerBase
+    extends $AsyncNotifier<SettingsViewModel> {
+  FutureOr<SettingsViewModel> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<SettingsSlice>, SettingsSlice>;
+    final ref =
+        this.ref as $Ref<AsyncValue<SettingsViewModel>, SettingsViewModel>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<SettingsSlice>, SettingsSlice>,
-              AsyncValue<SettingsSlice>,
+              AnyNotifier<AsyncValue<SettingsViewModel>, SettingsViewModel>,
+              AsyncValue<SettingsViewModel>,
               Object?,
               Object?
             >;
@@ -117,8 +119,8 @@ abstract class _$SettingsController extends _$SettingsControllerBase {
   PersistResult persist(
     FutureOr<Storage<String, String>> storage, {
     String? key,
-    String Function(SettingsSlice state)? encode,
-    SettingsSlice Function(String encoded)? decode,
+    String Function(SettingsViewModel state)? encode,
+    SettingsViewModel Function(String encoded)? decode,
     StorageOptions options = const StorageOptions(),
   }) {
     return NotifierPersistX(this).persist<String, String>(
@@ -129,7 +131,7 @@ abstract class _$SettingsController extends _$SettingsControllerBase {
           decode ??
           (encoded) {
             final e = $jsonCodex.decode(encoded);
-            return SettingsSlice.fromJson(e as Map<String, Object?>);
+            return SettingsViewModel.fromJson(e as Map<String, Object?>);
           },
       options: options,
     );

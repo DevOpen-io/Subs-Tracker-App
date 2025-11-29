@@ -8,6 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_sqflite/riverpod_sqflite.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:subs_tracker/models/settings_slice.dart';
+import 'package:subs_tracker/models/settings_view_model.dart';
 
 part 'settings_controller.g.dart';
 
@@ -16,7 +17,6 @@ Future<JsonSqFliteStorage> settingsStorage(Ref ref) async {
   JsonSqFliteStorage storage = await JsonSqFliteStorage.open(
     join(await getDatabasesPath(), 'settings.db'),
   );
-
   ref
     ..onDispose(storage.close)
     ..keepAlive();
@@ -27,7 +27,7 @@ Future<JsonSqFliteStorage> settingsStorage(Ref ref) async {
 @JsonPersist()
 class SettingsController extends _$SettingsController {
   @override
-  FutureOr<SettingsSlice> build() async {
+  FutureOr<SettingsViewModel> build() async {
     await persist(
       ref.watch(settingsStorageProvider.future),
       options: StorageOptions(
@@ -35,23 +35,29 @@ class SettingsController extends _$SettingsController {
         destroyKey: "v1",
       ),
     ).future;
-    return state.value ?? SettingsSlice();
+    if (state.hasValue) {
+      return state.value!;
+    }
+    return SettingsViewModel(theme: ThemeMode.light, currency: Currency.try_);
   }
 
-  void updateSettingsSliceData({
-    ThemeMode? theme,
-    Uint8List? profilePicture,
-    String? userName,
-    String? email,
-  }) {
-    if (state.value == null) return;
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        theme: theme ?? state.value?.theme,
-        profilePicture: profilePicture ?? state.value?.profilePicture,
-        userName: userName ?? state.value?.userName,
-        email: email ?? state.value?.email,
-      ),
-    );
+  void updateTheme(ThemeMode mode) {
+    state = AsyncData(state.value!.copyWith(theme: mode));
+  }
+
+  void updateCurrency(Currency currency) {
+    state = AsyncData(state.value!.copyWith(currency: currency));
+  }
+
+  void updateProfilePicture(Uint8List? profilePicture) {
+    state = AsyncData(state.value!.copyWith(profilePicture: profilePicture));
+  }
+
+  void updateUserName(String? userName) {
+    state = AsyncData(state.value!.copyWith(userName: userName));
+  }
+
+  void updateUserEmail(String? userEmail) {
+    state = AsyncData(state.value!.copyWith(email: userEmail));
   }
 }
