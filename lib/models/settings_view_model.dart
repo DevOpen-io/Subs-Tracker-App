@@ -15,10 +15,12 @@ abstract class SettingsViewModel with _$SettingsViewModel {
     @Uint8ListConverter() Uint8List? profilePicture,
     String? userName,
     String? email,
+    bool? isFirstTime,
   }) = _SettingsViewModel;
 
   factory SettingsViewModel.fromJson(Map<String, dynamic> json) =>
       _$SettingsViewModelFromJson(json);
+
 }
 
 /// Converts to and from [Uint8List] and [List]<[int]>.

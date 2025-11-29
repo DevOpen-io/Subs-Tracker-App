@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SettingsSlice {
 
- ThemeMode? get theme; Currency? get currency;@NullableFileConverter() Uint8List? get profilePicture; String? get userName; String? get email;
+ ThemeMode? get theme; Currency? get currency;@NullableFileConverter() Uint8List? get profilePicture; String? get userName; String? get email; bool? get isFirstTime;
 /// Create a copy of SettingsSlice
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SettingsSliceCopyWith<SettingsSlice> get copyWith => _$SettingsSliceCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsSlice&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsSlice&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email)&&(identical(other.isFirstTime, isFirstTime) || other.isFirstTime == isFirstTime));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email);
+int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email,isFirstTime);
 
 @override
 String toString() {
-  return 'SettingsSlice(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email)';
+  return 'SettingsSlice(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email, isFirstTime: $isFirstTime)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SettingsSliceCopyWith<$Res>  {
   factory $SettingsSliceCopyWith(SettingsSlice value, $Res Function(SettingsSlice) _then) = _$SettingsSliceCopyWithImpl;
 @useResult
 $Res call({
- ThemeMode? theme, Currency? currency,@NullableFileConverter() Uint8List? profilePicture, String? userName, String? email
+ ThemeMode? theme, Currency? currency,@NullableFileConverter() Uint8List? profilePicture, String? userName, String? email, bool? isFirstTime
 });
 
 
@@ -65,14 +65,15 @@ class _$SettingsSliceCopyWithImpl<$Res>
 
 /// Create a copy of SettingsSlice
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? theme = freezed,Object? currency = freezed,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? theme = freezed,Object? currency = freezed,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,Object? isFirstTime = freezed,}) {
   return _then(_self.copyWith(
 theme: freezed == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
 as ThemeMode?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as Currency?,profilePicture: freezed == profilePicture ? _self.profilePicture : profilePicture // ignore: cast_nullable_to_non_nullable
 as Uint8List?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isFirstTime: freezed == isFirstTime ? _self.isFirstTime : isFirstTime // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email,  bool? isFirstTime)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SettingsSlice() when $default != null:
-return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email,_that.isFirstTime);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email,  bool? isFirstTime)  $default,) {final _that = this;
 switch (_that) {
 case _SettingsSlice():
-return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email,_that.isFirstTime);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode? theme,  Currency? currency, @NullableFileConverter()  Uint8List? profilePicture,  String? userName,  String? email,  bool? isFirstTime)?  $default,) {final _that = this;
 switch (_that) {
 case _SettingsSlice() when $default != null:
-return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email);case _:
+return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_that.email,_that.isFirstTime);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.theme,_that.currency,_that.profilePicture,_that.userName,_
 @JsonSerializable()
 
 class _SettingsSlice implements SettingsSlice {
-  const _SettingsSlice({this.theme, this.currency, @NullableFileConverter() this.profilePicture, this.userName, this.email});
+  const _SettingsSlice({this.theme, this.currency, @NullableFileConverter() this.profilePicture, this.userName, this.email, this.isFirstTime});
   factory _SettingsSlice.fromJson(Map<String, dynamic> json) => _$SettingsSliceFromJson(json);
 
 @override final  ThemeMode? theme;
@@ -221,6 +222,7 @@ class _SettingsSlice implements SettingsSlice {
 @override@NullableFileConverter() final  Uint8List? profilePicture;
 @override final  String? userName;
 @override final  String? email;
+@override final  bool? isFirstTime;
 
 /// Create a copy of SettingsSlice
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsSlice&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SettingsSlice&&(identical(other.theme, theme) || other.theme == theme)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.profilePicture, profilePicture)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.email, email) || other.email == email)&&(identical(other.isFirstTime, isFirstTime) || other.isFirstTime == isFirstTime));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email);
+int get hashCode => Object.hash(runtimeType,theme,currency,const DeepCollectionEquality().hash(profilePicture),userName,email,isFirstTime);
 
 @override
 String toString() {
-  return 'SettingsSlice(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email)';
+  return 'SettingsSlice(theme: $theme, currency: $currency, profilePicture: $profilePicture, userName: $userName, email: $email, isFirstTime: $isFirstTime)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$SettingsSliceCopyWith<$Res> implements $SettingsSliceCopy
   factory _$SettingsSliceCopyWith(_SettingsSlice value, $Res Function(_SettingsSlice) _then) = __$SettingsSliceCopyWithImpl;
 @override @useResult
 $Res call({
- ThemeMode? theme, Currency? currency,@NullableFileConverter() Uint8List? profilePicture, String? userName, String? email
+ ThemeMode? theme, Currency? currency,@NullableFileConverter() Uint8List? profilePicture, String? userName, String? email, bool? isFirstTime
 });
 
 
@@ -272,14 +274,15 @@ class __$SettingsSliceCopyWithImpl<$Res>
 
 /// Create a copy of SettingsSlice
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? theme = freezed,Object? currency = freezed,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? theme = freezed,Object? currency = freezed,Object? profilePicture = freezed,Object? userName = freezed,Object? email = freezed,Object? isFirstTime = freezed,}) {
   return _then(_SettingsSlice(
 theme: freezed == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
 as ThemeMode?,currency: freezed == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as Currency?,profilePicture: freezed == profilePicture ? _self.profilePicture : profilePicture // ignore: cast_nullable_to_non_nullable
 as Uint8List?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
 as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isFirstTime: freezed == isFirstTime ? _self.isFirstTime : isFirstTime // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 

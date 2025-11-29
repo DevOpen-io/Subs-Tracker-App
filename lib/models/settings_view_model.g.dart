@@ -15,6 +15,7 @@ _SettingsViewModel _$SettingsViewModelFromJson(Map<String, dynamic> json) =>
       ),
       userName: json['userName'] as String?,
       email: json['email'] as String?,
+      isFirstTime: json['isFirstTime'] as bool?,
     );
 
 Map<String, dynamic> _$SettingsViewModelToJson(
@@ -25,6 +26,7 @@ Map<String, dynamic> _$SettingsViewModelToJson(
   'profilePicture': const Uint8ListConverter().toJson(instance.profilePicture),
   'userName': instance.userName,
   'email': instance.email,
+  'isFirstTime': instance.isFirstTime,
 };
 
 const _$ThemeModeEnumMap = {

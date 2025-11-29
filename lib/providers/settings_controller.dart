@@ -60,4 +60,23 @@ class SettingsController extends _$SettingsController {
   void updateUserEmail(String? userEmail) {
     state = AsyncData(state.value!.copyWith(email: userEmail));
   }
+
+  void updateSettingsSliceData({
+      ThemeMode? theme,
+      Uint8List? profilePicture,
+      String? userName,
+      String? email,
+      bool? isFirstTime,
+    }) {
+      if (state.value == null) return;
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          theme: theme ?? state.value!.theme,
+          profilePicture: profilePicture ?? state.value!.profilePicture,
+          userName: userName ?? state.value!.userName,
+          email: email ?? state.value!.email,
+          isFirstTime : isFirstTime ?? state.value!.isFirstTime,
+        ),
+      );
+    }
 }

@@ -31,6 +31,7 @@ abstract class SettingsSlice with _$SettingsSlice {
   @NullableFileConverter() Uint8List? profilePicture,
   String? userName,
   String? email,
+  bool? isFirstTime,
   }) = _SettingsSlice;
 
     factory SettingsSlice.fromJson(Map<String, dynamic> json) =>

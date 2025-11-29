@@ -6,4 +6,5 @@ SettingsSlice settingsData = SettingsSlice(
   profilePicture: null,
   userName: "Acme",
   email: "VeryCoolMail@acme.com",
+  isFirstTime: true,
 );

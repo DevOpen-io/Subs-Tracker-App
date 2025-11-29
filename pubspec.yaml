@@ -61,6 +61,7 @@ dependencies:
   simple_gravatar_fetch: ^2.0.4+1
   file_picker: ^10.3.6
   share_plus: ^10.1.2
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:
