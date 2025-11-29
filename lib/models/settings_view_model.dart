@@ -2,10 +2,24 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:subs_tracker/models/settings_slice.dart';
 
 part 'settings_view_model.freezed.dart';
 part 'settings_view_model.g.dart';
+
+enum Currency {
+  try_('₺', 'Turkish Lira'),
+  usd('\$', 'US Dollar'),
+  eur('€', 'Euro'),
+  gbp('£', 'British Pound'),
+  jpy('¥', 'Japanese Yen'),
+  cad('C\$', 'Canadian Dollar'),
+  aud('A\$', 'Australian Dollar');
+
+  final String symbol;
+  final String label;
+
+  const Currency(this.symbol, this.label);
+}
 
 @freezed
 abstract class SettingsViewModel with _$SettingsViewModel {

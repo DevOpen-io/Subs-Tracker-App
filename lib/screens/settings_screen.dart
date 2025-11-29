@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:subs_tracker/models/settings_slice.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';
 

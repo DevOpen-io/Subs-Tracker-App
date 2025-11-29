@@ -63,7 +63,7 @@ final class SettingsControllerProvider
         argument: null,
         retry: null,
         name: r'settingsControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -77,7 +77,7 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'6276576b60fc7990de2a0f5cb188fe42c06efbf6';
+    r'82123b1d0cff91b83e3972bedcc6b2cdc5ef2740';
 
 @JsonPersist()
 abstract class _$SettingsControllerBase

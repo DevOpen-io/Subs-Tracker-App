@@ -7,7 +7,6 @@ import 'package:riverpod_annotation/experimental/persist.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_sqflite/riverpod_sqflite.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:subs_tracker/models/settings_slice.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
 
 part 'settings_controller.g.dart';
@@ -23,7 +22,7 @@ Future<JsonSqFliteStorage> settingsStorage(Ref ref) async {
   return storage;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 @JsonPersist()
 class SettingsController extends _$SettingsController {
   @override
@@ -35,10 +34,12 @@ class SettingsController extends _$SettingsController {
         destroyKey: "v1",
       ),
     ).future;
-    if (state.hasValue) {
-      return state.value!;
-    }
-    return SettingsViewModel(theme: ThemeMode.light, currency: Currency.try_);
+    return state.value ??
+        SettingsViewModel(
+          theme: ThemeMode.light,
+          currency: Currency.try_,
+          isFirstTime: true,
+        );
   }
 
   void updateTheme(ThemeMode mode) {
@@ -61,22 +62,7 @@ class SettingsController extends _$SettingsController {
     state = AsyncData(state.value!.copyWith(email: userEmail));
   }
 
-  void updateSettingsSliceData({
-      ThemeMode? theme,
-      Uint8List? profilePicture,
-      String? userName,
-      String? email,
-      bool? isFirstTime,
-    }) {
-      if (state.value == null) return;
-      state = AsyncValue.data(
-        state.value!.copyWith(
-          theme: theme ?? state.value!.theme,
-          profilePicture: profilePicture ?? state.value!.profilePicture,
-          userName: userName ?? state.value!.userName,
-          email: email ?? state.value!.email,
-          isFirstTime : isFirstTime ?? state.value!.isFirstTime,
-        ),
-      );
-    }
+  void updateIsFirstTime(bool isFirstTime) {
+    state = AsyncData(state.value!.copyWith(isFirstTime: isFirstTime));
+  }
 }
