@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subs_tracker/main.dart';
-import 'package:subs_tracker/models/settings_slice.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';

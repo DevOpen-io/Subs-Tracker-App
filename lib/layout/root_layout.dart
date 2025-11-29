@@ -16,7 +16,7 @@ class RootLayout extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
     final currentPath = router.state.path;
-    
+
     // Determine current tab index
     int selectedIndex = 0;
     if (currentPath == Routes.calendar.route) {
@@ -28,63 +28,63 @@ class RootLayout extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Subs Tracker"),
-        actions: [
-          Visibility(
-            visible: currentPath == Routes.home.route,
-            child: IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () async {
-                await showAdaptiveDialog<SubSlice>(
-                  context: context,
-                  builder: (_) => const AddSubsDialog(),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      drawer: const SidebarMenu(),
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.go(Routes.home.route);
-              break;
-            case 1:
-              context.go(Routes.calendar.route);
-              break;
-            case 2:
-              context.go(Routes.analytics.route);
-              break;
-            case 3:
-              context.go(Routes.settings.route);
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Subscriptions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
-    );
+          appBar: AppBar(
+                  title: const Text("Subs Tracker"),
+                  actions: [
+                    Visibility(
+                      visible: currentPath == Routes.home.route,
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () async {
+                          await showAdaptiveDialog<SubSlice>(
+                            context: context,
+                            builder: (_) => const AddSubsDialog(),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+          drawer: const SidebarMenu(),
+          body: child,
+          bottomNavigationBar: BottomNavigationBar(
+                  currentIndex: selectedIndex,
+                  type: BottomNavigationBarType.fixed,
+                  onTap: (index) {
+                    switch (index) {
+                      case 0:
+                        context.go(Routes.home.route);
+                        break;
+                      case 1:
+                        context.go(Routes.calendar.route);
+                        break;
+                      case 2:
+                        context.go(Routes.analytics.route);
+                        break;
+                      case 3:
+                        context.go(Routes.settings.route);
+                        break;
+                    }
+                  },
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Subscriptions',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.calendar_month),
+                      label: 'Calendar',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.analytics),
+                      label: 'Analytics',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.settings),
+                      label: 'Settings',
+                    ),
+                  ],
+                ),
+        );
   }
 }

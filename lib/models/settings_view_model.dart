@@ -2,10 +2,24 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:subs_tracker/models/settings_slice.dart';
 
 part 'settings_view_model.freezed.dart';
 part 'settings_view_model.g.dart';
+
+enum Currency {
+  try_('₺', 'Turkish Lira'),
+  usd('\$', 'US Dollar'),
+  eur('€', 'Euro'),
+  gbp('£', 'British Pound'),
+  jpy('¥', 'Japanese Yen'),
+  cad('C\$', 'Canadian Dollar'),
+  aud('A\$', 'Australian Dollar');
+
+  final String symbol;
+  final String label;
+
+  const Currency(this.symbol, this.label);
+}
 
 @freezed
 abstract class SettingsViewModel with _$SettingsViewModel {
@@ -15,22 +29,24 @@ abstract class SettingsViewModel with _$SettingsViewModel {
     @Uint8ListConverter() Uint8List? profilePicture,
     String? userName,
     String? email,
+    bool? isFirstTime,
   }) = _SettingsViewModel;
 
   factory SettingsViewModel.fromJson(Map<String, dynamic> json) =>
       _$SettingsViewModelFromJson(json);
+
 }
 
 /// Converts to and from [Uint8List] and [List]<[int]>.
-class Uint8ListConverter implements JsonConverter<Uint8List?, List<int>?> {
+class Uint8ListConverter implements JsonConverter<Uint8List?, List?> {
   /// Create a new instance of [Uint8ListConverter].
   const Uint8ListConverter();
 
   @override
-  Uint8List? fromJson(List<int>? json) {
+  Uint8List? fromJson(List? json) {
     if (json == null) return null;
 
-    return Uint8List.fromList(json);
+    return Uint8List.fromList(List.from(json));
   }
 
   @override
