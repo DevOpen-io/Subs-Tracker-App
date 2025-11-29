@@ -4,19 +4,14 @@ import 'package:subs_tracker/models/settings_view_model.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';
 
 class IntroPage extends HookConsumerWidget {
-  const IntroPage({
-    super.key,
-    required this.selectedCurrency,
-    required this.tmpThemeMode,
-  });
-
-  final ValueNotifier<Currency> selectedCurrency;
-  final ValueNotifier<ThemeMode> tmpThemeMode;
+  const IntroPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currency =
+        ref.watch(settingsControllerProvider.select((value) => value.value?.currency)) ?? Currency.try_;
     final themeMode =
-        ref.watch(settingsControllerProvider).value?.theme ?? ThemeMode.system;
+        ref.watch(settingsControllerProvider.select((value) => value.value?.theme)) ?? ThemeMode.system;
     final isDark = themeMode == ThemeMode.dark;
 
     return SingleChildScrollView(
@@ -64,7 +59,7 @@ class IntroPage extends HookConsumerWidget {
                 border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
               ),
               child: DropdownButton<Currency>(
-                value: selectedCurrency.value,
+                value: currency,
                 underline: const SizedBox(),
                 icon: const Icon(Icons.arrow_drop_down_rounded),
                 borderRadius: BorderRadius.circular(20),
@@ -89,7 +84,7 @@ class IntroPage extends HookConsumerWidget {
                 }).toList(),
                 onChanged: (Currency? newValue) {
                   if (newValue != null) {
-                    selectedCurrency.value = newValue;
+                    ref.read(settingsControllerProvider.notifier).updateCurrency(newValue);
                   }
                 },
               ),
@@ -114,16 +109,11 @@ class IntroPage extends HookConsumerWidget {
                   Switch(
                     value: isDark,
                     onChanged: (value) {
+                      final newTheme = value ? ThemeMode.dark : ThemeMode.light;
                       ref
                           .read(settingsControllerProvider.notifier)
-                          .updateTheme(
-                            value ? ThemeMode.dark : ThemeMode.light,
-                          );
-
-                      tmpThemeMode.value = value
-                          ? ThemeMode.dark
-                          : ThemeMode.light;
-                      debugPrint("theme ${tmpThemeMode.value}");
+                          .updateTheme(newTheme);
+                      debugPrint("theme $newTheme");
                     },
                   ),
                   const SizedBox(width: 12),
