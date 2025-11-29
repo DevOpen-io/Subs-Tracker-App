@@ -1,34 +1,32 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_gravatar_fetch/simple_gravatar_fetch.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 
 class ProfilePage extends HookConsumerWidget {
-  const ProfilePage({
-    super.key,
-    required this.profilePicture,
-    required this.isGravatarLoading,
-    required this.emailController,
-  });
-
-  final TextEditingController emailController;
-  final ValueNotifier<bool> isGravatarLoading;
-  final ValueNotifier<Uint8List?> profilePicture;
-
-  Future<void> pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      final bytes = await image.readAsBytes();
-      profilePicture.value = bytes;
-    }
-  }
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final profilePicture = useState<Uint8List?>(null);
+    final isGravatarLoading = useState<bool>(false);
+    final emailController = useTextEditingController();
+
+    Future<void> pickImage() async {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        final bytes = await image.readAsBytes();
+        profilePicture.value = bytes;
+        ref.read(settingsControllerProvider.notifier).updateProfilePicture(bytes);
+      }
+    }
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 60.0, 32.0, 24.0),
@@ -110,6 +108,9 @@ class ProfilePage extends HookConsumerWidget {
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
+                  // Optional: Save email in real-time if needed
+                },
               ),
             ),
             const SizedBox(height: 32),
@@ -158,6 +159,8 @@ class ProfilePage extends HookConsumerWidget {
 
                               if (imageBytes != null) {
                                 profilePicture.value = imageBytes;
+                                ref.read(settingsControllerProvider.notifier).updateProfilePicture(imageBytes);
+                                ref.read(settingsControllerProvider.notifier).updateUserEmail(emailController.text);
                               } else {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
