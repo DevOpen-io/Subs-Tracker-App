@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:subs_tracker/config/router_config.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
-import 'package:subs_tracker/providers/settings_controller.dart';
 import 'package:subs_tracker/widgets/add_subs_dialog.dart';
 import 'package:subs_tracker/widgets/menu_bar.dart';
 
@@ -27,12 +26,8 @@ class RootLayout extends ConsumerWidget {
     } else if (currentPath == Routes.settings.route) {
       selectedIndex = 3;
     }
-    final settingsAsync = ref.watch(settingsControllerProvider);
 
-    return settingsAsync.when(
-      data: (settings) {
-
-        return Scaffold(
+    return Scaffold(
           appBar: AppBar(
                   title: const Text("Subs Tracker"),
                   actions: [
@@ -91,11 +86,5 @@ class RootLayout extends ConsumerWidget {
                   ],
                 ),
         );
-      },
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, stackTrace) =>
-          Scaffold(body: Center(child: Text('Error: $error'))),
-    );
   }
 }
