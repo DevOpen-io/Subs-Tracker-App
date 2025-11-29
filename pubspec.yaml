@@ -59,7 +59,7 @@ dependencies:
   image_picker: ^1.2.0
   path_provider: ^2.1.5
   simple_gravatar_fetch: ^2.0.4+1
-  file_picker: ^10.3.6
+  file_picker: ^10.3.7
   share_plus: ^10.1.2
   crypto: ^3.0.7
   shared_preferences: ^2.5.3
