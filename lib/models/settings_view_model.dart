@@ -38,15 +38,15 @@ abstract class SettingsViewModel with _$SettingsViewModel {
 }
 
 /// Converts to and from [Uint8List] and [List]<[int]>.
-class Uint8ListConverter implements JsonConverter<Uint8List?, List<int>?> {
+class Uint8ListConverter implements JsonConverter<Uint8List?, List?> {
   /// Create a new instance of [Uint8ListConverter].
   const Uint8ListConverter();
 
   @override
-  Uint8List? fromJson(List<int>? json) {
+  Uint8List? fromJson(List? json) {
     if (json == null) return null;
 
-    return Uint8List.fromList(json);
+    return Uint8List.fromList(List.from(json));
   }
 
   @override

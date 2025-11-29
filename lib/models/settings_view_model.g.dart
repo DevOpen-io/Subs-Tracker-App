@@ -11,7 +11,7 @@ _SettingsViewModel _$SettingsViewModelFromJson(Map<String, dynamic> json) =>
       theme: $enumDecode(_$ThemeModeEnumMap, json['theme']),
       currency: $enumDecode(_$CurrencyEnumMap, json['currency']),
       profilePicture: const Uint8ListConverter().fromJson(
-        json['profilePicture'] as List<int>?,
+        json['profilePicture'] as List?,
       ),
       userName: json['userName'] as String?,
       email: json['email'] as String?,
