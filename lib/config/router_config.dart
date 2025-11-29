@@ -34,6 +34,9 @@ GoRouter goRouter(Ref ref) {
     routes: [
       ShellRoute(
         builder: (context, state, child) {
+          if (state.uri.toString() == Routes.intro.route) {
+            return child;
+          }
           return RootLayout(child: child);
         },
         routes: [
@@ -43,7 +46,7 @@ GoRouter goRouter(Ref ref) {
               return const AppStartup(child: HomeScreen());
             },
             redirect: (context, state) async {
-              final settingsAsync = await ref.watch(
+              final settingsAsync = await ref.read(
                 settingsControllerProvider.future,
               );
               debugPrint(
