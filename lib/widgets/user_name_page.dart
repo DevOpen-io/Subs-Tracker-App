@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:subs_tracker/providers/settings_controller.dart';
 
 class UserNamePage extends HookConsumerWidget {
-  const UserNamePage({
-    super.key,
-    required this.userNameController,
-  });
-
-  final TextEditingController userNameController;
-
+  const UserNamePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userNameController = useTextEditingController();
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 60.0, 32.0, 24.0),
@@ -65,6 +63,11 @@ class UserNamePage extends HookConsumerWidget {
               ),
               child: TextField(
                 controller: userNameController,
+                onChanged: (value) {
+                  ref
+                      .read(settingsControllerProvider.notifier)
+                      .updateUserName(value.trim());
+                },
                 decoration: InputDecoration(
                   labelText: 'Your Name',
                   hintText: 'John Doe',
