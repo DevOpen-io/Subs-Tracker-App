@@ -2,16 +2,17 @@ name: Flutter APK Build and Release
 
 on:
   pull_request:
-    types: [closed]
+    types: [closed, labeled]
     branches:
       - main
+
 
 env:
   APP_NAME: subs_tracker
 
 jobs:
   android-release-upload:
-    if: github.event.pull_request.merged == true
+    if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
 
     outputs:
@@ -76,9 +77,6 @@ jobs:
     needs: [android-release-upload]
     runs-on: ubuntu-latest
     
-    permissions:
-      contents: write
-
     steps:
       - name: 📥 Check out code
         uses: actions/checkout@v4
@@ -95,23 +93,23 @@ jobs:
           VERSION_LINE=$(grep "version:" pubspec.yaml)
           VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
           BUILD_NUMBER=${{ github.run_number }}
+          TAG_NAME="v${VERSION}+${BUILD_NUMBER}"
+          APK_NAME="${{ env.APP_NAME }}_${VERSION}+${BUILD_NUMBER}.apk"
           
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "APK_NAME=$APK_NAME" >> $GITHUB_ENV
       
       - name: 🏷️ Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          body: |
-            ${{ github.event.pull_request.title }}
-
-            ${{ github.event.pull_request.body }}
-            
-            Release build from ${{ github.sha }}
-          files: ./artifacts/app-release.apk
-          draft: false
-          prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ env.TAG_NAME }}" \
+            "./artifacts/app-release.apk#${{ env.APK_NAME }}" \
+            --title "Release ${{ env.TAG_NAME }}" \
+            --notes "${{ github.event.pull_request.title }}
+
+          ${{ github.event.pull_request.body }}
+          
+          Release build from ${{ github.sha }}"
