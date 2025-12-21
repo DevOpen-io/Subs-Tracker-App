@@ -49,7 +49,7 @@ class CalendarScreen extends HookConsumerWidget {
     return Scaffold(
       body: subsAsync.when(
         data: (subs) {
-          final selectedEvents = selectedDay.value == null
+          final List<SubSlice> selectedEvents = selectedDay.value == null
               ? []
               : getEventsForDay(selectedDay.value!, subs);
 
