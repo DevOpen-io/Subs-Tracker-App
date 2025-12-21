@@ -1,4 +1,4 @@
-package com.example.subs_tracker
+package io.devopen.subzilla
 
 import io.flutter.embedding.android.FlutterActivity
 

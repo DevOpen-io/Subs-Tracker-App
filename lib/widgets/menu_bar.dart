@@ -53,9 +53,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
         final tempFile = File('${tempDir.path}/$fileName');
         await tempFile.writeAsString(jsonString);
 
-        await Share.shareXFiles([
-          XFile(tempFile.path),
-        ], subject: 'Subscriptions Backup');
+        await SharePlus.instance.share(ShareParams(files: [XFile(tempFile.path)]));
       } else {
         // On desktop, use file picker to select save location
         final result = await FilePicker.platform.saveFile(
