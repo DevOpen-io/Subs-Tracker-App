@@ -16,6 +16,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
