@@ -13,18 +13,39 @@
 With recent major updates, SubZilla now offers an even smoother experience with enhanced performance, new features, and a polished design.
 
 <div align="center">
+  <h3>🏠 Home Screen</h3>
   <table>
     <tr>
-      <td align="center" width="50%">
-        <b>Home Screen</b>
-        <br/>
-        <img src="docs/screenshots/home-screen.png" alt="Home Screen" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
-      </td>
-      <td align="center" width="50%">
-        <b>Subscriptions</b>
-        <br/>
-        <img src="docs/screenshots/subscriptions-screen.png" alt="Subscriptions Screen" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
-      </td>
+      <td align="center"><b>Light Mode</b></td>
+      <td align="center"><b>Dark Mode</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/home_screen_light.png" alt="Home Light" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/home_screen_dark.png" alt="Home Dark" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+    </tr>
+  </table>
+
+  <h3>📊 Analytics</h3>
+  <table>
+    <tr>
+      <td align="center"><b>Light Mode</b></td>
+      <td align="center"><b>Dark Mode</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/analytics_screen_light.png" alt="Analytics Light" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/analytics_screen_dark.png" alt="Analytics Dark" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+    </tr>
+  </table>
+
+  <h3>📅 Calendar</h3>
+  <table>
+    <tr>
+      <td align="center"><b>Light Mode</b></td>
+      <td align="center"><b>Dark Mode</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/calendar_screen_light.png" alt="Calendar Light" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/calendar_screen_dark.png" alt="Calendar Dark" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
     </tr>
   </table>
 </div>
@@ -33,6 +54,7 @@ With recent major updates, SubZilla now offers an even smoother experience with 
 
 - **Subscription Tracking**: Keep all your subscriptions in one place.
 - **Visual Analytics**: Interactive charts to visualize your spending trends (`fl_chart`).
+- **Calendar View**: Manage payments with a monthly calendar view.
 - **Smart Notifications**: Get notified before a payment is due, so you never miss a beat.
 - **Local Database**: Your data is yours. Securely stored on your device using `sqflite`.
 - **Multi-Language Support**: Available in English and Turkish (`easy_localization`).
@@ -98,18 +120,39 @@ We love contributions! If you have ideas for new features or have found a bug, h
 Son büyük güncellemelerle birlikte SubZilla, gelişmiş performans, yeni özellikler ve cilalanmış bir tasarımla çok daha akıcı bir deneyim sunuyor.
 
 <div align="center">
+  <h3>🏠 Ana Ekran</h3>
   <table>
     <tr>
-      <td align="center" width="50%">
-        <b>Ana Ekran</b>
-        <br/>
-        <img src="docs/screenshots/home-screen.png" alt="Home Screen" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
-      </td>
-      <td align="center" width="50%">
-        <b>Abonelikler</b>
-        <br/>
-        <img src="docs/screenshots/subscriptions-screen.png" alt="Subscriptions Screen" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/>
-      </td>
+      <td align="center"><b>Aydınlık Mod</b></td>
+      <td align="center"><b>Karanlık Mod</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/home_screen_light.png" alt="Ana Ekran Aydınlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/home_screen_dark.png" alt="Ana Ekran Karanlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+    </tr>
+  </table>
+
+  <h3>📊 Analizler</h3>
+  <table>
+    <tr>
+      <td align="center"><b>Aydınlık Mod</b></td>
+      <td align="center"><b>Karanlık Mod</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/analytics_screen_light.png" alt="Analizler Aydınlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/analytics_screen_dark.png" alt="Analizler Karanlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+    </tr>
+  </table>
+
+  <h3>📅 Takvim</h3>
+  <table>
+    <tr>
+      <td align="center"><b>Aydınlık Mod</b></td>
+      <td align="center"><b>Karanlık Mod</b></td>
+    </tr>
+    <tr>
+      <td><img src="docs/screenshots/calendar_screen_light.png" alt="Takvim Aydınlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
+      <td><img src="docs/screenshots/calendar_screen_dark.png" alt="Takvim Karanlık" width="250" style="border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);"/></td>
     </tr>
   </table>
 </div>
@@ -118,6 +161,7 @@ Son büyük güncellemelerle birlikte SubZilla, gelişmiş performans, yeni öze
 
 - **Abonelik Takibi**: Tüm aboneliklerinizi tek bir yerde tutun.
 - **Görsel Analizler**: Harcama trendlerinizi görselleştirmek için etkileşimli grafikler (`fl_chart`).
+- **Takvim Görünümü**: Aylık takvim görünümü ile ödemelerinizi yönetin.
 - **Akıllı Bildirimler**: Ödeme günü yaklaşmadan bildirim alın, böylece hiçbir ödemeyi kaçırmazsınız.
 - **Yerel Veritabanı**: Verileriniz size aittir. `sqflite` kullanılarak cihazınızda güvenle saklanır.
 - **Çoklu Dil Desteği**: İngilizce ve Türkçe (`easy_localization`) seçenekleri mevcuttur.
