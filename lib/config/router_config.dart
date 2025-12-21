@@ -49,9 +49,6 @@ GoRouter goRouter(Ref ref) {
               final settingsAsync = await ref.read(
                 settingsControllerProvider.future,
               );
-              debugPrint(
-                'SettingsController , asdksajdhjlkasdjhklsadjkl: $settingsAsync',
-              );
               if (settingsAsync.isFirstTime ?? false) {
                 return Routes.intro.route;
               }
