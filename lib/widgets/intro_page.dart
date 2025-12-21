@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
@@ -35,7 +36,7 @@ class IntroPage extends HookConsumerWidget {
             ),
             const SizedBox(height: 40),
             Text(
-              'Welcome to\nSubs Tracker',
+              'intro.title'.tr(),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.2,
@@ -44,7 +45,7 @@ class IntroPage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Track all your subscriptions in one place.\nNever miss a payment again.',
+              'intro.subtitle'.tr(),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(color: Colors.grey, height: 1.5),

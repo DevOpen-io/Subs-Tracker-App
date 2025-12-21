@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
@@ -31,8 +32,8 @@ class AnalyticsScreen extends HookConsumerWidget {
     BuildContext context,
   ) {
       if (slices.isEmpty) {
-        return const Center(
-          child: Text("No subscription data to analyze yet."),
+        return Center(
+          child: Text("analytics.no_data".tr()),
         );
       }
 
@@ -45,7 +46,7 @@ class AnalyticsScreen extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Subscription Analytics",
+                "analytics.title".tr(),
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -63,33 +64,33 @@ class AnalyticsScreen extends HookConsumerWidget {
               const SizedBox(height: 24),
               // Statistics Cards
               Text(
-                "Summary",
+                "analytics.summary".tr(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 12),
               _StatCard(
-                label: "Total Monthly Spending",
+                label: "analytics.total_monthly".tr(),
                 value: "${settings.currency.symbol}${total.toStringAsFixed(2)}",
                 icon: Icons.trending_up,
               ),
               const SizedBox(height: 12),
               _StatCard(
-                label: "Active Subscriptions",
+                label: "analytics.active_subs".tr(),
                 value: slices.length.toString(),
                 icon: Icons.subscriptions,
               ),
               const SizedBox(height: 12),
               _StatCard(
-                label: "Average Monthly Cost",
+                label: "analytics.avg_cost".tr(),
                 value: "${settings.currency.symbol}${(total / slices.length).toStringAsFixed(2)}",
                 icon: Icons.calculate,
               ),
               const SizedBox(height: 24),
               // Detailed Breakdown
               Text(
-                "Breakdown by Subscription",
+                "analytics.breakdown".tr(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -127,7 +128,7 @@ class AnalyticsScreen extends HookConsumerWidget {
                                     ),
                               ),
                               Text(
-                                "${settings.currency.symbol}${slice.monthlyAmount.toStringAsFixed(2)}/mo",
+                                "${settings.currency.symbol}${slice.monthlyAmount.toStringAsFixed(2)}${'analytics.per_month'.tr()}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .labelLarge
@@ -150,7 +151,7 @@ class AnalyticsScreen extends HookConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "${percent.toStringAsFixed(1)}% of total",
+                            "${percent.toStringAsFixed(1)}${'analytics.percent_total'.tr()}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -68,7 +69,7 @@ class ProfilePage extends HookConsumerWidget {
 
             // Added Title for consistency
             Text(
-              'Complete your\nprofile',
+              'intro.profile_title'.tr(),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.2,
@@ -93,8 +94,8 @@ class ProfilePage extends HookConsumerWidget {
               child: TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  hintText: 'example@email.com',
+                  labelText: 'intro.email_label'.tr(),
+                  hintText: 'intro.email_hint'.tr(),
                   prefixIcon: const Icon(Icons.email_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -129,7 +130,7 @@ class ProfilePage extends HookConsumerWidget {
                       elevation: 2,
                     ),
                     icon: const Icon(Icons.photo_library_rounded),
-                    label: const Text('Gallery'),
+                    label: Text('intro.gallery_btn'.tr()),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -140,9 +141,9 @@ class ProfilePage extends HookConsumerWidget {
                         : () async {
                             if (emailController.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    "Please Enter Your Email Address.",
+                                    "intro.error_email_empty".tr(),
                                   ),
                                 ),
                               );
@@ -164,9 +165,9 @@ class ProfilePage extends HookConsumerWidget {
                               } else {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Text(
-                                        "Cant Get Profile Picture From Gravatar.",
+                                        "intro.error_gravatar".tr(),
                                       ),
                                     ),
                                   );
@@ -177,7 +178,7 @@ class ProfilePage extends HookConsumerWidget {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      "Error While Select Image : $e",
+                                      "intro.error_image".tr(args: [e.toString()]),
                                     ),
                                   ),
                                 );
@@ -208,14 +209,14 @@ class ProfilePage extends HookConsumerWidget {
                             ),
                           )
                         : const Icon(Icons.download_rounded),
-                    label: Text(isGravatarLoading.value ? 'Loading...' : 'Gravatar'),
+                    label: Text(isGravatarLoading.value ? 'intro.loading'.tr() : 'intro.gravatar_btn'.tr()),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             Text(
-              'Choose a photo from your gallery or fetch it from Gravatar using your email.',
+              'intro.profile_desc'.tr(),
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,

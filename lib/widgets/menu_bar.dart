@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +58,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
       } else {
         // On desktop, use file picker to select save location
         final result = await FilePicker.platform.saveFile(
-          dialogTitle: 'Save Subscriptions Backup',
+          dialogTitle: 'menu.save_backup_title'.tr(),
           fileName: fileName,
           type: FileType.custom,
           allowedExtensions: ['json'],
@@ -69,8 +70,8 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Subscriptions exported successfully!'),
+              SnackBar(
+                content: Text('menu.export_success'.tr()),
                 backgroundColor: Colors.green,
               ),
             );
@@ -81,7 +82,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error exporting subscriptions: $e'),
+            content: Text('menu.export_error'.tr(args: [e.toString()])),
             backgroundColor: Colors.red,
           ),
         );
@@ -108,8 +109,8 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
             SnackBar(
               content: Text(
                 success
-                    ? 'Subscriptions imported successfully!'
-                    : 'Error importing subscriptions. Invalid file format.',
+                    ? 'menu.import_success'.tr()
+                    : 'menu.import_error'.tr(),
               ),
               backgroundColor: success ? Colors.green : Colors.red,
             ),
@@ -120,7 +121,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error importing subscriptions: $e'),
+            content: Text('menu.import_error_details'.tr(args: [e.toString()])),
             backgroundColor: Colors.red,
           ),
         );
@@ -207,10 +208,10 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                 ),
               ),
               // Menu Section
-              const _SectionTitle("Main Menu"),
+              _SectionTitle("menu.main_menu".tr()),
               ListTile(
                 leading: const Icon(Icons.home_outlined),
-                title: const Text("Home"),
+                title: Text("menu.home".tr()),
                 onTap: () {
                   Navigator.of(context).pop();
                   context.go(Routes.home.route);
@@ -220,12 +221,12 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               ),
               ListTile(
                 leading: const Icon(Icons.star_outline),
-                title: const Text("Favorites"),
+                title: Text("menu.favorites".tr()),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(Icons.add_outlined),
-                title: const Text('Add Subscription'),
+                title: Text('menu.add_sub'.tr()),
                 onTap: () async {
                   Navigator.pop(context);
 
@@ -235,10 +236,10 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                   );
                 },
               ),
-              const _SectionTitle('Settings'),
+              _SectionTitle('menu.settings'.tr()),
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode_outlined),
-                title: const Text("Dark Mode"),
+                title: Text("menu.dark_mode".tr()),
                 value:
                     settingsController.value?.theme == ThemeMode.dark ||
                     settingsController.value?.theme == ThemeMode.system,
@@ -252,12 +253,12 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               ),
               ListTile(
                 leading: const Icon(Icons.language_outlined),
-                title: const Text("Language"),
+                title: Text("menu.language".tr()),
                 onTap: () {},
               ),
               ListTile(
                 leading: const Icon(Icons.upload_file_outlined),
-                title: const Text("Export Subscriptions"),
+                title: Text("menu.export".tr()),
                 onTap: () {
                   _exportSubscriptions();
                   Navigator.of(context).pop();
@@ -265,7 +266,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
               ),
               ListTile(
                 leading: const Icon(Icons.download_outlined),
-                title: const Text("Import Subscriptions"),
+                title: Text("menu.import".tr()),
                 onTap: () {
                   _importSubscriptions().then((_) {
                     if (context.mounted) {
@@ -274,7 +275,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                   });
                 },
               ),
-              const _SectionTitle("About"),
+              _SectionTitle("menu.about".tr()),
               FutureBuilder<PackageInfo>(
                 future: _pkg,
                 builder: (context, snap) {
@@ -283,7 +284,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                       : "—";
                   return AboutListTile(
                     icon: const Icon(Icons.info_outline),
-                    applicationName: "SubsTracker",
+                    applicationName: "settings.app_name".tr(),
                     applicationVersion: version,
                     applicationIcon: Image.asset(
                       "assets/App_Logo.png",
@@ -293,13 +294,13 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                     aboutBoxChildren: [
                       SizedBox(height: 8),
                       Text(
-                        "An open source application that allows you to easily track your subscriptions.",
+                        "menu.about_desc".tr(),
                       ),
                       const SizedBox(height: 12),
                       InkWell(
                         onTap: _launchUrl,
                         child: Text(
-                          "View on GitHub",
+                          "menu.view_github".tr(),
                           style: TextStyle(
                             color: Colors.blue,
                             decoration: TextDecoration.underline,
@@ -307,7 +308,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                         ),
                       ),
                     ],
-                    child: const Text("About"),
+                    child: Text("menu.about".tr()),
                   );
                 },
               ),

@@ -29,7 +29,7 @@ class RootLayout extends ConsumerWidget {
 
     return Scaffold(
           appBar: AppBar(
-                  title: const Text("Subs Tracker"),
+                  title: const Text("SubZilla"),
                   actions: [
                     Visibility(
                       visible: currentPath == Routes.home.route,

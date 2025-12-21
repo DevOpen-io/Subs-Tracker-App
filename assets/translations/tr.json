@@ -1,0 +1,123 @@
+{
+	"settings": {
+		"title": "Ayarlar",
+		"appearance": "Görünüm",
+		"theme": "Tema",
+		"light": "Açık",
+		"dark": "Koyu",
+		"system": "Sistem",
+		"select_theme": "Tema Seç",
+		"currency": "Para Birimi",
+		"currency_unit": "Para Birimi",
+		"select_currency": "Para Birimi Seç",
+		"language": "Dil",
+		"select_language": "Dil Seç",
+		"about": "Hakkında",
+		"version": "Sürüm",
+		"app_name": "SubsTracker"
+	},
+	"home": {
+		"no_subs": "Henüz Abonelik Eklenmedi.",
+		"add_sub": "Abonelik Ekle",
+		"total_spending": "Toplam Aylık Harcama",
+		"active_count": "{} aktif",
+		"most_expensive": "En pahalı: ",
+		"delete_title": "Aboneliği Sil?",
+		"delete_confirm": "{} silinsin mi?",
+		"cancel": "İptal",
+		"delete": "Sil",
+		"renews_info": "Yenilenme {} • {}"
+	},
+	"frequency": {
+		"daily": "Günlük",
+		"weekly": "Haftalık",
+		"monthly": "Aylık",
+		"yearly": "Yıllık",
+		"short": {
+			"daily": "/gün",
+			"weekly": "/hft",
+			"monthly": "/ay",
+			"yearly": "/yıl"
+		}
+	},
+	"intro": {
+		"title": "SubZilla'ya\nHoş Geldiniz",
+		"subtitle": "Tüm aboneliklerinizi tek bir yerden takip edin.\nÖdemelerinizi bir daha asla kaçırmayın.",
+		"name_title": "Size nasıl\nhitap edelim?",
+		"name_label": "Adınız",
+		"name_hint": "Ali Yılmaz",
+		"profile_title": "Profilinizi\ntammlayın",
+		"email_label": "E-posta Adresi",
+		"email_hint": "ornek@email.com",
+		"gallery_btn": "Galeri",
+		"error_email_empty": "Lütfen E-posta Adresinizi Giriniz.",
+		"error_gravatar": "Gravatar'dan Profil Resmi Alınamadı.",
+		"error_image": "Resim Seçilirken Hata: {}",
+		"loading": "Yükleniyor...",
+		"gravatar_btn": "Gravatar",
+		"profile_desc": "Galeriden bir fotoğraf seçin veya e-postanızı kullanarak Gravatar'dan getirin."
+	},
+	"common": {
+		"back": "Geri",
+		"next": "İleri",
+		"finish": "Bitir"
+	},
+	"dialogs": {
+		"add_title": "Abonelik Ekle",
+		"edit_title": "Aboneliği Düzenle",
+		"custom_color": "Özel renk",
+		"cancel": "İptal",
+		"use_color": "Rengi kullan",
+		"brand_label": "Marka veya özel isim",
+		"required": "Zorunlu",
+		"amount_label": "Tutar",
+		"invalid_number": "Geçerli bir sayı girin",
+		"start_date": "Başlangıç tarihi",
+		"frequency_label": "Sıklık",
+		"slice_color": "Dilim rengi",
+		"custom_color_selected": "Özel renk seçildi",
+		"custom_color_btn": "Özel renk",
+		"add_btn": "Ekle",
+		"save_btn": "Kaydet",
+		"close_btn": "Kapat",
+		"error_loading": "Markalar yüklenirken hata: {}",
+		"selected_tooltip": "Seçilen: {}"
+	},
+	"menu": {
+		"main_menu": "Ana Menü",
+		"home": "Ana Sayfa",
+		"favorites": "Favoriler",
+		"add_sub": "Abonelik Ekle",
+		"settings": "Ayarlar",
+		"dark_mode": "Karanlık Mod",
+		"language": "Dil",
+		"export": "Abonelikleri Dışa Aktar",
+		"import": "Abonelikleri İçe Aktar",
+		"about": "Hakkında",
+		"about_desc": "Aboneliklerinizi kolayca takip etmenizi sağlayan açık kaynaklı bir uygulama.",
+		"view_github": "GitHub'da Görüntüle",
+		"export_success": "Abonelikler başarıyla dışa aktarıldı!",
+		"export_error": "Abonelikler dışa aktarılırken hata: {}",
+		"save_backup_title": "Abonelik Yedeğini Kaydet",
+		"import_success": "Abonelikler başarıyla içe aktarıldı!",
+		"import_error": "Abonelikler içe aktarılırken hata. Geçersiz dosya formatı.",
+		"import_error_details": "Abonelikler içe aktarılırken hata: {}"
+	},
+	"analytics": {
+		"no_data": "Henüz analiz edilecek abonelik verisi yok.",
+		"title": "Abonelik Analizi",
+		"summary": "Özet",
+		"total_monthly": "Toplam Aylık Harcama",
+		"active_subs": "Aktif Abonelikler",
+		"avg_cost": "Ortalama Aylık Maliyet",
+		"breakdown": "Abonelik Dağılımı",
+		"per_month": "/ay",
+		"percent_total": "toplamın %"
+	},
+	"frequency_names": {
+		"daily": "GÜNLÜK",
+		"weekly": "HAFTALIK",
+		"monthly": "AYLIK",
+		"yearly": "YILLIK"
+	}
+}
