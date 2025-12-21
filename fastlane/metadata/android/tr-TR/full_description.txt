@@ -1,0 +1,13 @@
+SubZilla, aylık aboneliklerinizi yönetmenize, tekrarlayan harcamalarınızı takip etmenize ve bütçenizi kontrol altında tutmanıza yardımcı olmak için tasarlanmış güçlü ve sezgisel bir Flutter uygulamasıdır.
+
+Son büyük güncellemelerle birlikte SubZilla, gelişmiş performans, yeni özellikler ve cilalanmış bir tasarımla çok daha akıcı bir deneyim sunuyor.
+
+Özellikler:
+
+• Abonelik Takibi: Tüm aboneliklerinizi tek bir yerde tutun.
+• Görsel Analizler: Harcama trendlerinizi görselleştirmek için etkileşimli grafikler.
+• Takvim Görünümü: Aylık takvim görünümü ile ödemelerinizi yönetin.
+• Akıllı Bildirimler: Ödeme günü yaklaşmadan bildirim alın, böylece hiçbir ödemeyi kaçırmazsınız.
+• Yerel Veritabanı: Verileriniz size aittir. Cihazınızda güvenle saklanır.
+• Çoklu Dil Desteği: İngilizce ve Türkçe seçenekleri mevcuttur.
+• Özelleştirilebilir Deneyim: Karanlık mod, özel temalar ve para birimi ayarları.
