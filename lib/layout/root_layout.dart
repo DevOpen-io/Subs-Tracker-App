@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,7 +30,7 @@ class RootLayout extends ConsumerWidget {
 
     return Scaffold(
           appBar: AppBar(
-                  title: const Text("SubZilla"),
+                  title: Text("settings.app_name".tr()),
                   actions: [
                     Visibility(
                       visible: currentPath == Routes.home.route,
@@ -66,22 +67,22 @@ class RootLayout extends ConsumerWidget {
                         break;
                     }
                   },
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home),
-                      label: 'Subscriptions',
+                      label: 'menu.subscriptions'.tr(),
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.calendar_month),
-                      label: 'Calendar',
+                      label: 'menu.calendar'.tr(),
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.analytics),
-                      label: 'Analytics',
+                      label: 'menu.analytics'.tr(),
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.settings),
-                      label: 'Settings',
+                      label: 'menu.settings'.tr(),
                     ),
                   ],
                 ),

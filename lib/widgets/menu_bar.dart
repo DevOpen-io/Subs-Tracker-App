@@ -54,7 +54,9 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
         final tempFile = File('${tempDir.path}/$fileName');
         await tempFile.writeAsString(jsonString);
 
-        await SharePlus.instance.share(ShareParams(files: [XFile(tempFile.path)]));
+        await SharePlus.instance.share(
+          ShareParams(files: [XFile(tempFile.path)]),
+        );
       } else {
         // On desktop, use file picker to select save location
         final result = await FilePicker.platform.saveFile(
@@ -108,9 +110,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                success
-                    ? 'menu.import_success'.tr()
-                    : 'menu.import_error'.tr(),
+                success ? 'menu.import_success'.tr() : 'menu.import_error'.tr(),
               ),
               backgroundColor: success ? Colors.green : Colors.red,
             ),
@@ -246,15 +246,8 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                 onChanged: (value) {
                   ref
                       .read(settingsControllerProvider.notifier)
-                      .updateTheme(
-                         value ? ThemeMode.dark : ThemeMode.light,
-                      );
+                      .updateTheme(value ? ThemeMode.dark : ThemeMode.light);
                 },
-              ),
-              ListTile(
-                leading: const Icon(Icons.language_outlined),
-                title: Text("menu.language".tr()),
-                onTap: () {},
               ),
               ListTile(
                 leading: const Icon(Icons.upload_file_outlined),
@@ -293,9 +286,7 @@ class _MenubarState extends ConsumerState<SidebarMenu> {
                     ),
                     aboutBoxChildren: [
                       SizedBox(height: 8),
-                      Text(
-                        "menu.about_desc".tr(),
-                      ),
+                      Text("menu.about_desc".tr()),
                       const SizedBox(height: 12),
                       InkWell(
                         onTap: _launchUrl,

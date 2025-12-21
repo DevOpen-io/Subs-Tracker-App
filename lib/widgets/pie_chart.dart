@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +22,7 @@ class _SubsPieState extends ConsumerState<SubsPie> {
     final slicesAsync = ref.watch(subsControllerProvider);
 
     return slicesAsync.when(
-      error: (e, st) => Center(child: Text('Error: $e')),
+      error: (e, st) => Center(child: Text("common.error_generic".tr())),
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       data: (slices) => _buildChart(slices),
     );

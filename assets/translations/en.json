@@ -14,7 +14,7 @@
 		"select_language": "Select Language",
 		"about": "About",
 		"version": "Version",
-		"app_name": "SubsTracker"
+		"app_name": "SubZilla"
 	},
 	"home": {
 		"no_subs": "Subscription Data Not Added Yet.",
@@ -55,12 +55,22 @@
 		"error_image": "Error While Select Image : {}",
 		"loading": "Loading...",
 		"gravatar_btn": "Gravatar",
-		"profile_desc": "Choose a photo from your gallery or fetch it from Gravatar using your email."
+		"profile_desc": "Choose a photo from your gallery or fetch it from Gravatar using your email.",
+		"choose_gallery": "Choose From Gallery",
+		"take_camera": "Take A Picture With The Camera",
+		"edit_picture": "Edit Profile Picture",
+		"upload_photo": "Upload A Photo",
+		"connect_gravatar": "Connect Gravatar",
+		"username_saved": "User Name Saved!",
+		"email_saved": "Email Saved!",
+		"username_label": "User Name"
 	},
 	"common": {
 		"back": "Back",
 		"next": "Next",
-		"finish": "Finish"
+		"finish": "Finish",
+		"error_generic": "Something went wrong",
+		"second_page": "Second Page"
 	},
 	"dialogs": {
 		"add_title": "Add Subscription",
@@ -101,7 +111,10 @@
 		"save_backup_title": "Save Subscriptions Backup",
 		"import_success": "Subscriptions imported successfully!",
 		"import_error": "Error importing subscriptions. Invalid file format.",
-		"import_error_details": "Error importing subscriptions: {}"
+		"import_error_details": "Error importing subscriptions: {}",
+		"subscriptions": "Subscriptions",
+		"calendar": "Calendar",
+		"analytics": "Analytics"
 	},
 	"analytics": {
 		"no_data": "No subscription data to analyze yet.",

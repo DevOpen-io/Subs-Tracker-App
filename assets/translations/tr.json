@@ -14,7 +14,7 @@
 		"select_language": "Dil Seç",
 		"about": "Hakkında",
 		"version": "Sürüm",
-		"app_name": "SubsTracker"
+		"app_name": "SubZilla"
 	},
 	"home": {
 		"no_subs": "Henüz Abonelik Eklenmedi.",
@@ -55,12 +55,22 @@
 		"error_image": "Resim Seçilirken Hata: {}",
 		"loading": "Yükleniyor...",
 		"gravatar_btn": "Gravatar",
-		"profile_desc": "Galeriden bir fotoğraf seçin veya e-postanızı kullanarak Gravatar'dan getirin."
+		"profile_desc": "Galeriden bir fotoğraf seçin veya e-postanızı kullanarak Gravatar'dan getirin.",
+		"choose_gallery": "Galeriden Seç",
+		"take_camera": "Kamerayla Fotoğraf Çek",
+		"edit_picture": "Profil Resmini Düzenle",
+		"upload_photo": "Fotoğraf Yükle",
+		"connect_gravatar": "Gravatar'a Bağlan",
+		"username_saved": "Kullanıcı Adı Kaydedildi!",
+		"email_saved": "E-posta Kaydedildi!",
+		"username_label": "Kullanıcı Adı"
 	},
 	"common": {
 		"back": "Geri",
 		"next": "İleri",
-		"finish": "Bitir"
+		"finish": "Bitir",
+		"error_generic": "Bir şeyler ters gitti",
+		"second_page": "İkinci Sayfa"
 	},
 	"dialogs": {
 		"add_title": "Abonelik Ekle",
@@ -101,7 +111,10 @@
 		"save_backup_title": "Abonelik Yedeğini Kaydet",
 		"import_success": "Abonelikler başarıyla içe aktarıldı!",
 		"import_error": "Abonelikler içe aktarılırken hata. Geçersiz dosya formatı.",
-		"import_error_details": "Abonelikler içe aktarılırken hata: {}"
+		"import_error_details": "Abonelikler içe aktarılırken hata: {}",
+		"subscriptions": "Abonelikler",
+		"calendar": "Takvim",
+		"analytics": "Analiz"
 	},
 	"analytics": {
 		"no_data": "Henüz analiz edilecek abonelik verisi yok.",

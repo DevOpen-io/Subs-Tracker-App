@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:subs_tracker/models/sub_slice.dart';
 import 'package:subs_tracker/providers/subs_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -113,7 +113,7 @@ class CalendarScreen extends HookConsumerWidget {
                       subtitle: Text(
                         NumberFormat.simpleCurrency().format(sub.amount),
                       ),
-                      trailing: Text(sub.frequency.toString().split('.').last.toUpperCase()),
+                      trailing: Text("frequency_names.${sub.frequency.name}".tr()),
                     );
                   },
                 ),

@@ -69,7 +69,7 @@ class SettingsScreen extends HookConsumerWidget {
                 subtitle: context.locale.languageCode == 'en'
                     ? 'English'
                     : 'Türkçe',
-                onTap: () => _showLanguageBottomSheet(context, ref),
+                onTap: () async => await _showLanguageBottomSheet(context),
               ),
             ],
           ),
@@ -192,11 +192,10 @@ class SettingsScreen extends HookConsumerWidget {
       },
     );
   }
-  void _showLanguageBottomSheet(
+  Future<void> _showLanguageBottomSheet(
     BuildContext context,
-    WidgetRef ref,
-  ) {
-    showModalBottomSheet(
+  ) async {
+    await showModalBottomSheet(
       context: context,
       builder: (context) {
         return SafeArea(
@@ -212,7 +211,7 @@ class SettingsScreen extends HookConsumerWidget {
                       ),
                 ),
               ),
-              _LanguageOption(
+              LanguageOption(
                 label: "English",
                 isSelected: context.locale.languageCode == 'en',
                 onTap: () {
@@ -220,7 +219,7 @@ class SettingsScreen extends HookConsumerWidget {
                   Navigator.pop(context);
                 },
               ),
-              _LanguageOption(
+              LanguageOption(
                 label: "Türkçe",
                 isSelected: context.locale.languageCode == 'tr',
                 onTap: () {
@@ -357,8 +356,8 @@ class _CurrencyOption extends StatelessWidget {
   }
 }
 
-class _LanguageOption extends StatelessWidget {
-  const _LanguageOption({
+class LanguageOption extends StatelessWidget {
+  const LanguageOption({super.key, 
     required this.label,
     required this.isSelected,
     required this.onTap,
