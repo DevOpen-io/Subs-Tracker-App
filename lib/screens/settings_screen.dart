@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
@@ -27,19 +28,19 @@ class SettingsScreen extends HookConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: [
           Text(
-            "Settings",
+            "settings.title",
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
-          ),
+          ).tr(),
           const SizedBox(height: 24),
           // Theme Section
           _SettingsSection(
-            title: "Appearance",
+            title: "settings.appearance".tr(),
             children: [
               _SettingsTile(
-                title: "Theme",
-                subtitle: _getThemeLabel(settings.theme),
+                title: "settings.theme".tr(),
+                subtitle: _getThemeLabel(settings.theme).tr(),
                 onTap: () => _showThemeBottomSheet(context, settings, ref),
               ),
             ],
@@ -47,10 +48,10 @@ class SettingsScreen extends HookConsumerWidget {
           const SizedBox(height: 24),
           // Currency Section
           _SettingsSection(
-            title: "Currency",
+            title: "settings.currency".tr(),
             children: [
               _SettingsTile(
-                title: "Currency Unit",
+                title: "settings.currency_unit".tr(),
                 subtitle:
                     "${settings.currency.label} (${settings.currency.symbol})",
                 onTap: () =>
@@ -59,18 +60,32 @@ class SettingsScreen extends HookConsumerWidget {
             ],
           ),
           const SizedBox(height: 24),
-          // About Section
+          // Language Section
           _SettingsSection(
-            title: "About",
+            title: "settings.language".tr(),
             children: [
               _SettingsTile(
-                title: "Version",
+                title: "settings.language".tr(),
+                subtitle: context.locale.languageCode == 'en'
+                    ? 'English'
+                    : 'Türkçe',
+                onTap: () async => await _showLanguageBottomSheet(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          // About Section
+          _SettingsSection(
+            title: "settings.about".tr(),
+            children: [
+              _SettingsTile(
+                title: "settings.version".tr(),
                 subtitle: "1.0.0",
                 onTap: null,
               ),
               _SettingsTile(
-                title: "App Name",
-                subtitle: "Subs Tracker",
+                title: "settings.app_name".tr(),
+                subtitle: "SubZilla",
                 onTap: null,
               ),
             ],
@@ -83,11 +98,11 @@ class SettingsScreen extends HookConsumerWidget {
   String _getThemeLabel(ThemeMode mode) {
     switch (mode) {
       case ThemeMode.light:
-        return "Light";
+        return "settings.light";
       case ThemeMode.dark:
-        return "Dark";
+        return "settings.dark";
       case ThemeMode.system:
-        return "System";
+        return "settings.system";
     }
   }
 
@@ -106,7 +121,7 @@ class SettingsScreen extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Select Theme",
+                  "settings.select_theme".tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -114,7 +129,7 @@ class SettingsScreen extends HookConsumerWidget {
               ),
               ...[ThemeMode.light, ThemeMode.dark, ThemeMode.system]
                   .map((mode) => _ThemeOption(
-                        label: _getThemeLabel(mode),
+                        label: _getThemeLabel(mode).tr(),
                         isSelected: settings.theme == mode,
                         onTap: () {
                           ref
@@ -146,7 +161,7 @@ class SettingsScreen extends HookConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Select Currency",
+                  "settings.select_currency".tr(),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -169,6 +184,48 @@ class SettingsScreen extends HookConsumerWidget {
                           ))
                       .toList(),
                 ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  Future<void> _showLanguageBottomSheet(
+    BuildContext context,
+  ) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "settings.select_language".tr(),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              LanguageOption(
+                label: "English",
+                isSelected: context.locale.languageCode == 'en',
+                onTap: () {
+                  context.setLocale(const Locale('en'));
+                  Navigator.pop(context);
+                },
+              ),
+              LanguageOption(
+                label: "Türkçe",
+                isSelected: context.locale.languageCode == 'tr',
+                onTap: () {
+                  context.setLocale(const Locale('tr'));
+                  Navigator.pop(context);
+                },
               ),
               const SizedBox(height: 16),
             ],
@@ -290,6 +347,30 @@ class _CurrencyOption extends StatelessWidget {
     return ListTile(
       title: Text(label),
       subtitle: Text(symbol),
+      leading: isSelected
+          ? Icon(Icons.radio_button_checked,
+              color: Theme.of(context).primaryColor)
+          : const Icon(Icons.radio_button_unchecked),
+      onTap: onTap,
+    );
+  }
+}
+
+class LanguageOption extends StatelessWidget {
+  const LanguageOption({super.key, 
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(label),
       leading: isSelected
           ? Icon(Icons.radio_button_checked,
               color: Theme.of(context).primaryColor)

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,7 +39,7 @@ class AddSubsDialog extends HookConsumerWidget {
           return StatefulBuilder(
             builder: (context, setStateDialog) {
               return AlertDialog.adaptive(
-                title: const Text('Custom color'),
+                title: Text('dialogs.custom_color'.tr()),
                 content: SingleChildScrollView(
                   child: ColorPicker(
                     pickerColor: tempColor,
@@ -56,11 +57,11 @@ class AddSubsDialog extends HookConsumerWidget {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(dialogContext),
-                    child: const Text('Cancel'),
+                    child: Text('dialogs.cancel'.tr()),
                   ),
                   FilledButton(
                     onPressed: () => Navigator.pop(dialogContext, tempColor),
-                    child: const Text('Use color'),
+                    child: Text('dialogs.use_color'.tr()),
                   ),
                 ],
               );
@@ -76,7 +77,7 @@ class AddSubsDialog extends HookConsumerWidget {
 
     Widget buildDialog(BuildContext context, List<Brand> allBrands) {
       return AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
+        title: Text('dialogs.add_title'.tr()),
         content: Material(
           type: MaterialType.transparency,
           child: Form(
@@ -126,7 +127,7 @@ class AddSubsDialog extends HookConsumerWidget {
                             controller: textEditingController,
                             focusNode: focusNode,
                             decoration: InputDecoration(
-                              labelText: 'Brand or custom name',
+                              labelText: 'dialogs.brand_label'.tr(),
                               isDense: true,
                               prefixIcon: draftSlice.value.brand != null
                                   ? Padding(
@@ -166,7 +167,7 @@ class AddSubsDialog extends HookConsumerWidget {
                               suffixIcon: draftSlice.value.brand != null
                                   ? Tooltip(
                                       message:
-                                          'Selected: ${draftSlice.value.brand!.text}',
+                                          "dialogs.selected_tooltip".tr(args: [draftSlice.value.brand!.text]),
                                       child: Icon(
                                         Icons.check_circle,
                                         color: Theme.of(
@@ -178,7 +179,7 @@ class AddSubsDialog extends HookConsumerWidget {
                             ),
                             validator: (value) =>
                                 (value == null || value.trim().isEmpty)
-                                ? 'Required'
+                                ? 'dialogs.required'.tr()
                                 : null,
                             textInputAction: TextInputAction.search,
                             onChanged: (value) {
@@ -262,15 +263,15 @@ class AddSubsDialog extends HookConsumerWidget {
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
-                    decoration: const InputDecoration(
-                      labelText: 'Amount',
-                      prefixIcon: Icon(Icons.payments_outlined),
+                    decoration: InputDecoration(
+                      labelText: 'dialogs.amount_label'.tr(),
+                      prefixIcon: const Icon(Icons.payments_outlined),
                       isDense: true,
                     ),
 
                     validator: (v) {
                       final d = double.tryParse((v ?? '').replaceAll(',', '.'));
-                      if (d == null || d < 0) return 'Enter a valid number';
+                      if (d == null || d < 0) return 'dialogs.invalid_number'.tr();
                       return null;
                     },
                   ),
@@ -295,7 +296,7 @@ class AddSubsDialog extends HookConsumerWidget {
                       ).colorScheme.primaryContainer,
                       child: const Icon(Icons.event, size: 20),
                     ),
-                    title: const Text('Start date'),
+                    title: Text('dialogs.start_date'.tr()),
                     subtitle: Text(
                       draftSlice.value.startDate
                           .toLocal()
@@ -308,15 +309,15 @@ class AddSubsDialog extends HookConsumerWidget {
                   ),
                   DropdownButtonFormField<Frequency>(
                     initialValue: draftSlice.value.frequency,
-                    decoration: const InputDecoration(
-                      labelText: 'Frequency',
-                      prefixIcon: Icon(Icons.repeat),
+                    decoration: InputDecoration(
+                      labelText: 'dialogs.frequency_label'.tr(),
+                      prefixIcon: const Icon(Icons.repeat),
                       isDense: true,
                     ),
                     items: Frequency.values.map((f) {
                       return DropdownMenuItem(
                         value: f,
-                        child: Text(f.name.toUpperCase()),
+                        child: Text("frequency_names.${f.name.toLowerCase()}".tr()),
                       );
                     }).toList(),
                     onChanged: (v) {
@@ -328,7 +329,7 @@ class AddSubsDialog extends HookConsumerWidget {
                     },
                   ),
                   Text(
-                    'Slice color',
+                    'dialogs.slice_color'.tr(),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   Wrap(
@@ -395,7 +396,7 @@ class AddSubsDialog extends HookConsumerWidget {
                                 isCustomColor ? Icons.check_circle : Icons.colorize,
                               ),
                               label: Text(
-                                isCustomColor ? 'Custom color selected' : 'Custom color',
+                                isCustomColor ? 'dialogs.custom_color_selected'.tr() : 'dialogs.custom_color_btn'.tr(),
                               ),
                               style: isCustomColor
                                   ? OutlinedButton.styleFrom(
@@ -448,7 +449,7 @@ class AddSubsDialog extends HookConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('dialogs.cancel'.tr()),
           ),
           TextButton(
             onPressed: () {
@@ -467,7 +468,7 @@ class AddSubsDialog extends HookConsumerWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Add'),
+            child: Text('dialogs.add_btn'.tr()),
           ),
         ],
       );
@@ -478,19 +479,19 @@ class AddSubsDialog extends HookConsumerWidget {
     return brandsAsync.when(
       data: (allBrands) => buildDialog(context, allBrands),
       loading: () => AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
+        title: Text('dialogs.add_title'.tr()),
         content: const SizedBox(
           height: 100,
           child: Center(child: CircularProgressIndicator()),
         ),
       ),
       error: (err, stack) => AlertDialog.adaptive(
-        title: const Text('Add Subscription'),
-        content: Text('Error loading brands: $err'),
+        title: Text('dialogs.add_title'.tr()),
+        content: Text('dialogs.error_loading'.tr(args: [err.toString()])),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: Text('dialogs.close_btn'.tr()),
           ),
         ],
       ),

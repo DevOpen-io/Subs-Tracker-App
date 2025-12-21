@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class BottomControls extends StatelessWidget {
@@ -30,7 +31,7 @@ class BottomControls extends StatelessWidget {
                   curve: Curves.easeInOut,
                 );
               },
-              child: const Text('Back'),
+              child: Text('common.back'.tr()),
             )
           else
             const SizedBox(width: 64), // Placeholder for alignment
@@ -58,12 +59,12 @@ class BottomControls extends StatelessWidget {
                   curve: Curves.easeInOut,
                 );
               },
-              child: const Text('Next'),
+              child: Text('common.next'.tr()),
             )
           else
             ElevatedButton(
               onPressed: finishOnboarding,
-              child: const Text('Finish'),
+              child: Text('common.finish'.tr()),
             ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:subs_tracker/models/settings_view_model.dart';
@@ -37,7 +38,7 @@ class HomeScreen extends HookConsumerWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Center(child: Text("Subscription Data Not Added Yet.")),
+            Center(child: Text("home.no_subs".tr())),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () {
@@ -46,7 +47,7 @@ class HomeScreen extends HookConsumerWidget {
                   builder: (_) => const AddSubsDialog(),
                 );
               },
-              child: const Text("Add Subscription"),
+              child: Text("home.add_sub".tr()),
             ),
           ],
         );
@@ -130,7 +131,7 @@ class _SummaryCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Total Monthly Spending",
+                    "home.total_spending".tr(),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.white70,
                         ),
@@ -152,7 +153,7 @@ class _SummaryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  "$count active",
+                  "home.active_count".tr(args: [count.toString()]),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -171,13 +172,13 @@ class _SummaryCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "Most expensive: ",
+                  "home.most_expensive".tr(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white70,
                       ),
                 ),
                 Text(
-                  "${mostExpensive.name} ($currencySymbol${mostExpensive.amount.toStringAsFixed(2)}/${mostExpensive.frequency.name.substring(0, 1)})",
+                  "${mostExpensive.name} ($currencySymbol${mostExpensive.amount.toStringAsFixed(2)}${'frequency.short.${mostExpensive.frequency.name.toLowerCase()}'.tr()})",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -205,21 +206,7 @@ class _CompactSubscriptionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String frequencyShort;
-    switch (slice.frequency) {
-      case Frequency.daily:
-        frequencyShort = "/day";
-        break;
-      case Frequency.weekly:
-        frequencyShort = "/wk";
-        break;
-      case Frequency.monthly:
-        frequencyShort = "/mo";
-        break;
-      case Frequency.yearly:
-        frequencyShort = "/yr";
-        break;
-    }
+    String frequencyShort = 'frequency.short.${slice.frequency.name.toLowerCase()}'.tr();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -231,19 +218,19 @@ class _CompactSubscriptionTile extends ConsumerWidget {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog.adaptive(
-                title: const Text(
-                  "Delete Subscription?",
+                title: Text(
+                  "home.delete_title".tr(),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                content: Text("Remove ${slice.name}?"),
+                content: Text("home.delete_confirm".tr(args: [slice.name])),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text("Cancel"),
+                    child: Text("home.cancel".tr()),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text("Delete"),
+                    child: Text("home.delete".tr()),
                   ),
                 ],
               );
@@ -303,7 +290,10 @@ class _CompactSubscriptionTile extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "Renews ${slice.startDate.month}/${slice.startDate.day} • ${slice.frequency.name}",
+                        "home.renews_info".tr(args: [
+                          "${slice.startDate.month}/${slice.startDate.day}",
+                          "frequency.${slice.frequency.name.toLowerCase()}".tr()
+                        ]),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),

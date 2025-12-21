@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,7 +42,7 @@ class UserNamePage extends HookConsumerWidget {
             ),
             const SizedBox(height: 40),
             Text(
-              'What should we\ncall you?',
+              'intro.name_title'.tr(),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 height: 1.2,
@@ -69,8 +70,8 @@ class UserNamePage extends HookConsumerWidget {
                       .updateUserName(value.trim());
                 },
                 decoration: InputDecoration(
-                  labelText: 'Your Name',
-                  hintText: 'John Doe',
+                  labelText: 'intro.name_label'.tr(),
+                  hintText: 'intro.name_hint'.tr(),
                   prefixIcon: const Icon(Icons.badge_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),

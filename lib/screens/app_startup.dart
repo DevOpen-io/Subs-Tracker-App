@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subs_tracker/providers/settings_controller.dart';
@@ -20,8 +21,8 @@ class _AppStartupState extends ConsumerState<AppStartup> {
         return widget.child;
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => const Center(
-        child: Text('Something went wrong'),
+      error: (error, stackTrace) => Center(
+        child: Text("common.error_generic".tr()),
       ),
     );
   }

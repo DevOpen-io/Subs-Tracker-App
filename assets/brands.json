@@ -1,25 +1,25 @@
 [
   {
     "text": "Netflix",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/69/Netflix_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Netflix_logo.svg/500px-Netflix_logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Spotify",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/500px-Spotify_logo_without_text.svg.png",
     "category": "Music",
     "country": "SE"
   },
   {
     "text": "YouTube Premium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/500px-YouTube_full-color_icon_%282017%29.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Disney+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Disney%2B_logo.svg/500px-Disney%2B_logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
@@ -43,13 +43,13 @@
   },
   {
     "text": "Apple TV+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Apple_TV_Plus_Logo.svg/500px-Apple_TV_Plus_Logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "iCloud+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1c/ICloud_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/ICloud_logo.svg/500px-ICloud_logo.svg.png",
     "category": "Cloud",
     "country": "US"
   },
@@ -61,25 +61,25 @@
   },
   {
     "text": "Microsoft 365",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_365_%282022%29.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Microsoft_365_%282022%29.svg/1091px-Microsoft_365_%282022%29.svg.png",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Xbox Game Pass",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Xbox_Game_Pass_logo_-_colored_version.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Xbox_Game_Pass_logo_-_colored_version.svg/1200px-Xbox_Game_Pass_logo_-_colored_version.svg.png",
     "category": "Gaming",
     "country": "US"
   },
   {
     "text": "PlayStation Plus",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4b/PlayStation_Plus_second_logo_and_wordmark.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/PlayStation_Plus_second_logo_and_wordmark.svg/1200px-PlayStation_Plus_second_logo_and_wordmark.svg.png",
     "category": "Gaming",
     "country": "JP"
   },
   {
     "text": "Nintendo Switch Online",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/83/Nintendo_Switch_Online_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Nintendo_Switch_Online_logo.svg/1200px-Nintendo_Switch_Online_logo.svg.png",
     "category": "Gaming",
     "country": "JP"
   },
@@ -91,19 +91,19 @@
   },
   {
     "text": "ChatGPT Plus",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/500px-ChatGPT_logo.svg.png",
     "category": "AI",
     "country": "US"
   },
   {
     "text": "Claude Pro",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Anthropic_logo.svg/500px-Anthropic_logo.svg.png",
     "category": "AI",
     "country": "US"
   },
   {
     "text": "GitHub Copilot",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/500px-Octicons-mark-github.svg.png",
     "category": "Developer",
     "country": "US"
   },
@@ -115,91 +115,91 @@
   },
   {
     "text": "Duolingo",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/15/Duolingo_logo_2019.svg",
+    "logo": "https://logo.clearbit.com/duolingo.com",
     "category": "Education",
     "country": "US"
   },
   {
     "text": "Hulu",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Hulu_logo_%282018%29.svg/1200px-Hulu_logo_%282018%29.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Max (HBO)",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Max_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Max_logo.svg/500px-Max_logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Peacock",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d3/NBCUniversal_Peacock_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/NBCUniversal_Peacock_Logo.svg/500px-NBCUniversal_Peacock_Logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Paramount+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Paramount_Plus.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Paramount_Plus.svg/500px-Paramount_Plus.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Audible",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/09/Audible_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Audible_logo.svg/1200px-Audible_logo.svg.png",
     "category": "Books",
     "country": "US"
   },
   {
     "text": "Kindle Unlimited",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/29/Amazon_Kindle_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Amazon_Kindle_logo.svg/1200px-Amazon_Kindle_logo.svg.png",
     "category": "Books",
     "country": "US"
   },
   {
     "text": "Dropbox",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/78/Dropbox_Icon.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Dropbox_Icon.svg/500px-Dropbox_Icon.svg.png",
     "category": "Cloud",
     "country": "US"
   },
   {
     "text": "Slack",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Slack_icon_2019.svg/500px-Slack_icon_2019.svg.png",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Zoom",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Zoom_communications_logo.svg",
+    "logo": "https://logo.clearbit.com/zoom.us",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Discord Nitro",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/73/Discord_Color_Text_Logo_%282021%29.svg",
+    "logo": "https://logo.clearbit.com/discord.com",
     "category": "Social",
     "country": "US"
   },
   {
     "text": "Twitch",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/26/Twitch_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Twitch_logo.svg/500px-Twitch_logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Patreon",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/94/Patreon_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Patreon_logo.svg/500px-Patreon_logo.svg.png",
     "category": "Social",
     "country": "US"
   },
   {
     "text": "Canva",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg",
+    "logo": "https://logo.clearbit.com/canva.com",
     "category": "Design",
     "country": "AU"
   },
   {
     "text": "Figma",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Figma-logo.svg/500px-Figma-logo.svg.png",
     "category": "Design",
     "country": "US"
   },
@@ -211,67 +211,67 @@
   },
   {
     "text": "Evernote",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/Evernote_logo_2018.svg",
+    "logo": "https://logo.clearbit.com/evernote.com",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Todoist",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Todoist_logo.svg",
+    "logo": "https://logo.clearbit.com/todoist.com",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "NordVPN",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/NordVPN_Horizontal_Logo.svg",
+    "logo": "https://logo.clearbit.com/nordvpn.com",
     "category": "Security",
     "country": "PA"
   },
   {
     "text": "ExpressVPN",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/83/ExpressVPN_logo.svg",
+    "logo": "https://logo.clearbit.com/expressvpn.com",
     "category": "Security",
     "country": "VG"
   },
   {
     "text": "Dashlane",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Dashlane_logo.svg",
+    "logo": "https://logo.clearbit.com/dashlane.com",
     "category": "Security",
     "country": "US"
   },
   {
     "text": "1Password",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5b/1Password_logo.svg",
+    "logo": "https://logo.clearbit.com/1password.com",
     "category": "Security",
     "country": "CA"
   },
   {
     "text": "Peloton",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/85/Peloton_logo.svg",
+    "logo": "https://logo.clearbit.com/onepeloton.com",
     "category": "Fitness",
     "country": "US"
   },
   {
     "text": "Strava",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Strava_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Strava_Logo.svg/500px-Strava_Logo.svg.png",
     "category": "Fitness",
     "country": "US"
   },
   {
     "text": "Fitbit Premium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Fitbit_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Fitbit_logo.svg/500px-Fitbit_logo.svg.png",
     "category": "Fitness",
     "country": "US"
   },
   {
     "text": "Calm",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Calm_Logo.svg",
+    "logo": "https://logo.clearbit.com/calm.com",
     "category": "Health",
     "country": "US"
   },
   {
     "text": "Headspace",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Headspace_logo.svg",
+    "logo": "https://logo.clearbit.com/headspace.com",
     "category": "Health",
     "country": "US"
   },
@@ -283,49 +283,49 @@
   },
   {
     "text": "Lyft Pink",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Lyft_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Lyft_logo.svg/500px-Lyft_logo.svg.png",
     "category": "Transport",
     "country": "US"
   },
   {
     "text": "DoorDash DashPass",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e5/DoorDash_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/DoorDash_Logo.svg/1200px-DoorDash_Logo.svg.png",
     "category": "Food",
     "country": "US"
   },
   {
     "text": "Grubhub+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/93/Grubhub_Logo.svg",
+    "logo": "https://logo.clearbit.com/grubhub.com",
     "category": "Food",
     "country": "US"
   },
   {
     "text": "Instacart+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Instacart_logo_and_wordmark.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Instacart_logo_and_wordmark.svg/500px-Instacart_logo_and_wordmark.svg.png",
     "category": "Food",
     "country": "US"
   },
   {
     "text": "Walmart+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Walmart_logo_%282008%29.svg/1200px-Walmart_logo_%282008%29.svg.png",
     "category": "Shopping",
     "country": "US"
   },
   {
     "text": "Tinder Gold",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/74/Tinder_Logo_2017.svg",
+    "logo": "https://logo.clearbit.com/tinder.com",
     "category": "Dating",
     "country": "US"
   },
   {
     "text": "Bumble Boost",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Bumble_logo.svg",
+    "logo": "https://logo.clearbit.com/bumble.com",
     "category": "Dating",
     "country": "US"
   },
   {
     "text": "Hinge Preferred",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Hinge_Logo.svg",
+    "logo": "https://logo.clearbit.com/hinge.co",
     "category": "Dating",
     "country": "US"
   },
@@ -337,19 +337,19 @@
   },
   {
     "text": "X Premium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/X_logo_2023.svg/500px-X_logo_2023.svg.png",
     "category": "Social",
     "country": "US"
   },
   {
     "text": "Snapchat+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c6/Snapchat_logo.svg",
+    "logo": "https://logo.clearbit.com/snapchat.com",
     "category": "Social",
     "country": "US"
   },
   {
     "text": "Medium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Medium_logo_Monogram.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Medium_logo_Monogram.svg/500px-Medium_logo_Monogram.svg.png",
     "category": "Reading",
     "country": "US"
   },
@@ -361,43 +361,43 @@
   },
   {
     "text": "Wall Street Journal",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Wall_Street_Journal_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/The_Wall_Street_Journal_Logo.svg/1200px-The_Wall_Street_Journal_Logo.svg.png",
     "category": "News",
     "country": "US"
   },
   {
     "text": "Washington Post",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/93/The_Washington_Post_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/The_Washington_Post_logo.svg/1200px-The_Washington_Post_logo.svg.png",
     "category": "News",
     "country": "US"
   },
   {
     "text": "The Guardian",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/75/The_Guardian_2018.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/The_Guardian_2018.svg/500px-The_Guardian_2018.svg.png",
     "category": "News",
     "country": "GB"
   },
   {
     "text": "Financial Times",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/38/Financial_Times_logo.svg",
+    "logo": "https://logo.clearbit.com/ft.com",
     "category": "News",
     "country": "GB"
   },
   {
     "text": "HelloFresh",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3c/HelloFresh_logo.svg",
+    "logo": "https://logo.clearbit.com/hellofresh.com",
     "category": "Food",
     "country": "DE"
   },
   {
     "text": "Blue Apron",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/34/Blue_Apron_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Blue_Apron_logo.svg/1200px-Blue_Apron_logo.svg.png",
     "category": "Food",
     "country": "US"
   },
   {
     "text": "Ipsy",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Ipsy_logo.svg",
+    "logo": "https://logo.clearbit.com/ipsy.com",
     "category": "Beauty",
     "country": "US"
   },
@@ -409,7 +409,7 @@
   },
   {
     "text": "Stitch Fix",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/19/Stitch_Fix_logo.svg",
+    "logo": "https://logo.clearbit.com/stitchfix.com",
     "category": "Fashion",
     "country": "US"
   },
@@ -421,7 +421,7 @@
   },
   {
     "text": "Fabletics",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Fabletics_logo.svg",
+    "logo": "https://logo.clearbit.com/fabletics.com",
     "category": "Fashion",
     "country": "US"
   },
@@ -439,206 +439,224 @@
   },
   {
     "text": "Crunchyroll",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Crunchyroll_Logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Crunchyroll_Logo.svg/500px-Crunchyroll_Logo.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Funimation",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Funimation_2016.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Funimation_2016.svg/1200px-Funimation_2016.svg.png",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Shudder",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Shudder_logo.svg",
+    "logo": "https://logo.clearbit.com/shudder.com",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "Criterion Channel",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/17/The_Criterion_Channel_logo.svg",
+    "logo": "https://logo.clearbit.com/criterionchannel.com",
     "category": "Streaming",
     "country": "US"
   },
   {
     "text": "DAZN",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/22/DAZN_Logo_Master.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/DAZN_Logo_Master.svg/1200px-DAZN_Logo_Master.svg.png",
     "category": "Sports",
     "country": "GB"
   },
   {
     "text": "ESPN+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0e/ESPN%2B_logo.svg",
+    "logo": "https://logo.clearbit.com/espn.com",
     "category": "Sports",
     "country": "US"
   },
   {
     "text": "NBA League Pass",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1a/NBA_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NBA_script.svg/1200px-NBA_script.svg.png",
     "category": "Sports",
     "country": "US"
   },
   {
     "text": "MLB.TV",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Major_League_Baseball_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/500px-Major_League_Baseball_logo.svg.png",
     "category": "Sports",
     "country": "US"
   },
   {
     "text": "Coursera Plus",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_600x600.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Coursera-Logo_600x600.svg/500px-Coursera-Logo_600x600.svg.png",
     "category": "Education",
     "country": "US"
   },
   {
     "text": "Skillshare",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/92/Skillshare_logo_2020.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Skillshare_logo_2020.svg/1200px-Skillshare_logo_2020.svg.png",
     "category": "Education",
     "country": "US"
   },
   {
     "text": "MasterClass",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/47/MasterClass_logo.svg",
+    "logo": "https://logo.clearbit.com/masterclass.com",
     "category": "Education",
     "country": "US"
   },
   {
     "text": "Udemy",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Udemy_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Udemy_logo.svg/500px-Udemy_logo.svg.png",
     "category": "Education",
     "country": "US"
   },
   {
     "text": "Scribd",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f7/Scribd_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Scribd_logo.svg/1200px-Scribd_logo.svg.png",
     "category": "Books",
     "country": "US"
   },
   {
     "text": "Blinkist",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Blinkist_Logo.svg",
+    "logo": "https://logo.clearbit.com/blinkist.com",
     "category": "Books",
     "country": "DE"
   },
   {
     "text": "Tidal",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/04/Tidal_Logo.svg",
+    "logo": "https://logo.clearbit.com/tidal.com",
     "category": "Music",
     "country": "NO"
   },
   {
     "text": "Deezer",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/32/Deezer_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Deezer_logo_2019.svg/1200px-Deezer_logo_2019.svg.png",
     "category": "Music",
     "country": "FR"
   },
   {
     "text": "SoundCloud Go+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Soundcloud_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Soundcloud_logo.svg/1200px-Soundcloud_logo.svg.png",
     "category": "Music",
     "country": "DE"
   },
   {
     "text": "Pandora Plus",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Pandora_Logo.svg",
+    "logo": "https://logo.clearbit.com/pandora.com",
     "category": "Music",
     "country": "US"
   },
   {
     "text": "Grammarly Premium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/2/23/Grammarly_Logo.svg",
+    "logo": "https://logo.clearbit.com/grammarly.com",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Asana",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Asana_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Asana_logo.svg/500px-Asana_logo.svg.png",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Trello",
-    "logo": "https://upload.wikimedia.org/wikipedia/en/8/8c/Trello_logo.svg",
+    "logo": "https://logo.clearbit.com/trello.com",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "Monday.com",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Monday_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Monday_logo.svg/1200px-Monday_logo.svg.png",
     "category": "Productivity",
     "country": "IL"
   },
   {
     "text": "ClickUp",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/f3/ClickUp_Logo.svg",
+    "logo": "https://logo.clearbit.com/clickup.com",
     "category": "Productivity",
     "country": "US"
   },
   {
     "text": "EA Play",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1e/EA_Play_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/EA_Play_logo.svg/1200px-EA_Play_logo.svg.png",
     "category": "Gaming",
     "country": "US"
   },
   {
     "text": "Ubisoft+",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/7/78/Ubisoft_logo.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Ubisoft_logo.svg/500px-Ubisoft_logo.svg.png",
     "category": "Gaming",
     "country": "FR"
   },
   {
     "text": "GeForce Now",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8f/NVIDIA_GeForce_NOW_logo.svg",
+    "logo": "https://logo.clearbit.com/nvidia.com",
     "category": "Gaming",
     "country": "US"
   },
   {
     "text": "Mailchimp",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Mailchimp_Logo.svg",
+    "logo": "https://logo.clearbit.com/mailchimp.com",
     "category": "Marketing",
     "country": "US"
   },
   {
     "text": "Shopify",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopify_logo_2018.svg",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Shopify_logo_2018.svg/500px-Shopify_logo_2018.svg.png",
     "category": "E-commerce",
     "country": "CA"
   },
   {
     "text": "Wix",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/f/ff/WIX_Logo.svg",
+    "logo": "https://logo.clearbit.com/wix.com",
     "category": "Website",
     "country": "IL"
   },
   {
     "text": "Squarespace",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Squarespace_Logo.svg",
+    "logo": "https://logo.clearbit.com/squarespace.com",
     "category": "Website",
     "country": "US"
   },
   {
     "text": "Surfshark",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Surfshark_Logo.svg",
+    "logo": "https://logo.clearbit.com/surfshark.com",
     "category": "Security",
     "country": "NL"
   },
   {
-    "text": "CyberGhost VPN",
-    "logo": "https://www.cyberghostvpn.com/themes/cyberghost/images/logo.svg",
-    "category": "Security",
-    "country": "RO"
-  },
-  {
     "text": "LastPass",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d3/LastPass_Logo.svg",
+    "logo": "https://logo.clearbit.com/lastpass.com",
     "category": "Security",
     "country": "US"
   },
   {
     "text": "Bitwarden Premium",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Bitwarden_Logo.svg",
+    "logo": "https://logo.clearbit.com/bitwarden.com",
     "category": "Security",
+    "country": "US"
+  },
+  {
+    "text": "Proton Mail",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/ProtonMail_logo.svg/1200px-ProtonMail_logo.svg.png",
+    "category": "Cloud",
+    "country": "CH"
+  },
+  {
+    "text": "Proton VPN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/ProtonMail_logo.svg/1200px-ProtonMail_logo.svg.png",
+    "category": "Security",
+    "country": "CH"
+  },
+  {
+    "text": "Mullvad VPN",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Mullvad_logo.svg/1200px-Mullvad_logo.svg.png",
+    "category": "Security",
+    "country": "SE"
+  },
+  {
+    "text": "Standard Notes",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Standard_Notes_Logo.png/600px-Standard_Notes_Logo.png",
+    "category": "Productivity",
     "country": "US"
   }
 ]

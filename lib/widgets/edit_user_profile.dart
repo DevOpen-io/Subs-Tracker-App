@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -50,7 +52,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
             children: [
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
-                title: const Text("Choose From Gallery"),
+                title: Text("intro.choose_gallery".tr()),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.gallery);
@@ -58,7 +60,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt_outlined),
-                title: const Text("Take A Picture With The Camera"),
+                title: Text("intro.take_camera".tr()),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.camera);
@@ -76,7 +78,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
     final settingsController = ref.watch(settingsControllerProvider);
 
     return AlertDialog.adaptive(
-      title: const Text("Edit Profile Picture"),
+      title: Text("intro.edit_picture".tr()),
       content: settingsController.when(
         error: (e, st) => Center(child: Text('Error: $e')),
         loading: () =>
@@ -103,7 +105,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                   ElevatedButton.icon(
                     icon: const Icon(Icons.upload_file_outlined),
                     onPressed: _showImageSourceOptions,
-                    label: const Text("Upload A Photo"),
+                    label: Text("intro.upload_photo".tr()),
                   ),
                   // Aradaki SizedBox'a gerek kalmadı
                   ElevatedButton.icon(
@@ -128,13 +130,13 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                         debugPrint("Error While Select Image : $e");
                       }
                     },
-                    label: const Text("Connect Gravatar"),
+                    label: Text("intro.connect_gravatar".tr()),
                   ),
                 ],
               ),
               const Divider(height: 32),
               ActionTextFormField(
-                labelText: "User Name",
+                labelText: "intro.username_label".tr(),
                 initialValue: slice.userName ?? "",
                 onSave: (newUserName) {
                   // Provider'ı güncelle
@@ -144,13 +146,13 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
 
                   // (Opsiyonel) Kullanıcıya geri bildirim ver
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("User Name Saved!")),
+                    SnackBar(content: Text("intro.username_saved".tr())),
                   );
                 },
               ),
               const SizedBox(height: 8),
               ActionTextFormField(
-                labelText: "User Mail",
+                labelText: "intro.email_label".tr(),
                 initialValue: slice.email ?? "",
                 onSave: (newEmail) {
                   // Provider'ı güncelle
@@ -161,7 +163,7 @@ class _ChooseOrEditPPState extends ConsumerState<EditUserProfileDialog> {
                   // (Opsiyonel) Kullanıcıya geri bildirim ver
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(const SnackBar(content: Text("Email Saved!")));
+                  ).showSnackBar(SnackBar(content: Text("intro.email_saved".tr())));
                 },
               ),
             ],
