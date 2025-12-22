@@ -1,13 +1,10 @@
 name: Flutter APK Build and Release
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - main
-
-env:
-  APP_NAME: subs_tracker
+  workflow_dispatch:
 
 jobs:
   android-release-upload:
@@ -17,14 +14,6 @@ jobs:
 
     outputs:
       version_prefix: ${{ steps.version.outputs.version_prefix }}
-
-    env:
-      DISTRIBUTION_GROUPS: "YP-Android"
-      RELEASE_NOTES: |
-        ${{ github.event.pull_request.title }}
-
-        ${{ github.event.pull_request.body }}
-        release build from ${{ github.sha }}
 
     steps:
       # 1️⃣  Source
@@ -100,19 +89,33 @@ jobs:
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
       
+      - name: 📝 Fetch PR Details
+        id: pr_details
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Retrieve the PR associated with the commit SHA
+          PR_DATA=$(gh pr list --state merged --search "${{ github.sha }}" --json title,body --jq '.[0]')
+          
+          # Extract Title (fallback to commit message if no PR found)
+          TITLE=$(echo "$PR_DATA" | jq -r '.title // empty')
+          if [ -z "$TITLE" ]; then TITLE="Manual Build: ${{ github.sha }}"; fi
+          
+          # Extract Body
+          BODY=$(echo "$PR_DATA" | jq -r '.body // empty')
+          
+          # Save to Env for the next step
+          echo "RELEASE_TITLE=$TITLE" >> $GITHUB_ENV
+          
+          # Use EOF for multi-line strings in GITHUB_ENV
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+          echo "$BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: 🏷️ Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          name: Release v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          body: |
-            ${{ github.event.pull_request.title }}
-
-            ${{ github.event.pull_request.body }}
-            
-            Release build from ${{ github.sha }}
+          name: ${{ env.RELEASE_TITLE }}  # Uses the fetched PR title
+          body: ${{ env.RELEASE_BODY }}   # Uses the fetched PR body
           files: ./artifacts/app-release.apk
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
