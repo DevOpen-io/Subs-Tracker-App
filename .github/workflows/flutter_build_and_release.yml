@@ -1,19 +1,17 @@
 name: Flutter APK Build and Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [closed]
   workflow_dispatch:
 
 jobs:
   android-release-upload:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-
-    outputs:
-      version_prefix: ${{ steps.version.outputs.version_prefix }}
+      contents: write
 
     steps:
       # 1️⃣  Source
@@ -56,66 +54,12 @@ jobs:
             --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
             --build-number "${{ github.run_number }}"
 
-      - name: 📤 Upload APK artifact
-        uses: actions/upload-artifact@v4
+      # Step 3: Create GitHub Release & Upload APK
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: apk-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          files: build/app/outputs/flutter-apk/app-release.apk
+          generate_release_notes: true
+          make_latest: true
 
-  github-release:
-    needs: [android-release-upload]
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-
-    steps:
-      - name: 📥 Check out code
-        uses: actions/checkout@v4
-      
-      - name: 📥 Download APK artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-release
-          path: ./artifacts
-      
-      - name: 🔢 Get App Version and Build Number
-        id: get_version
-        run: |
-          VERSION_LINE=$(grep "version:" pubspec.yaml)
-          VERSION=$(echo $VERSION_LINE | cut -d' ' -f2 | cut -d'+' -f1)
-          BUILD_NUMBER=${{ github.run_number }}
-          
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-      
-      - name: 📝 Fetch PR Details
-        id: pr_details
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Retrieve the PR associated with the commit SHA
-          PR_DATA=$(gh pr list --state merged --search "${{ github.sha }}" --json title,body --jq '.[0]')
-          
-          # Extract Title (fallback to commit message if no PR found)
-          TITLE=$(echo "$PR_DATA" | jq -r '.title // empty')
-          if [ -z "$TITLE" ]; then TITLE="Manual Build: ${{ github.sha }}"; fi
-          
-          # Extract Body
-          BODY=$(echo "$PR_DATA" | jq -r '.body // empty')
-          
-          # Save to Env for the next step
-          echo "RELEASE_TITLE=$TITLE" >> $GITHUB_ENV
-          
-          # Use EOF for multi-line strings in GITHUB_ENV
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
-          echo "$BODY" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: 🏷️ Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ env.APP_VERSION }}+${{ env.BUILD_NUMBER }}
-          name: ${{ env.RELEASE_TITLE }}  # Uses the fetched PR title
-          body: ${{ env.RELEASE_BODY }}   # Uses the fetched PR body
-          files: ./artifacts/app-release.apk
