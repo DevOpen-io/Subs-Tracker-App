@@ -37,8 +37,11 @@ jobs:
       - name: 🔢 Parse pubspec version
         id: version
         run: |
-          prefix=$(grep '^version:' pubspec.yaml | cut -d '+' -f 1 | awk '{print $2}')
+          version=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          prefix=$(echo $version | cut -d '+' -f 1)
+          echo "VERSION=$version" >> $GITHUB_ENV
           echo "VERSION_PREFIX=$prefix" >> $GITHUB_ENV
+          echo "version=$version" >> $GITHUB_OUTPUT
           echo "version_prefix=$prefix" >> $GITHUB_OUTPUT
 
       - name: 📦 Get Flutter dependencies
@@ -54,11 +57,11 @@ jobs:
             --build-name "$VERSION_PREFIX-${{ github.run_number }}" \
             --build-number "${{ github.run_number }}"
 
-      # Step 3: Create GitHub Release & Upload APK
-      - name: Create Release
+      # Step 6️⃣  Create GitHub Release & Upload APK
+      - name: 🚀 Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: ${{ steps.version.outputs.version }}
           files: build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
           make_latest: true
