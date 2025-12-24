@@ -77,7 +77,7 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'82123b1d0cff91b83e3972bedcc6b2cdc5ef2740';
+    r'610a416f158d112cfcfd67d1900856a9d5478737';
 
 @JsonPersist()
 abstract class _$SettingsControllerBase
