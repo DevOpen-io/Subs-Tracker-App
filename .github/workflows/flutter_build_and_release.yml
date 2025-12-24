@@ -34,7 +34,7 @@ jobs:
         id: version
         run: |
           # Bump the build version in the file to match the CI run number
-          cider bump --build=${{ github.run_number }}
+          cider bump build --build=${{ github.run_number }}
           
           # Extract the new full version (e.g., 1.0.0+49) for the tag
           NEW_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
