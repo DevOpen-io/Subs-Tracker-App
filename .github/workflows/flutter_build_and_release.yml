@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
       - name: 🔢 Parse pubspec version
-        id: version
+        id: pubversion
         run: |
           version=$(grep '^version:' pubspec.yaml | awk '{print $2}')
           prefix=$(echo $version | cut -d '+' -f 1)
