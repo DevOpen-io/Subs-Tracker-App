@@ -1,10 +1,9 @@
 name: Flutter APK Build and Release
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [closed]
   workflow_dispatch:
 
 jobs:
@@ -24,6 +23,31 @@ jobs:
         with:
           channel: stable
           cache: true
+    
+      # 3️⃣ Install Cider (The Version Manager)
+      - name: 🍺 Install Cider
+        run: dart pub global activate cider
+
+      # 4️⃣ SYNC: Update pubspec.yaml to match GitHub Run Number
+      # This is the magic fix. It changes the file content to 1.0.0+49
+      - name: 🔄 Sync Version in pubspec.yaml
+        id: version
+        run: |
+          # Bump the build version in the file to match the CI run number
+          cider bump build --build=${{ github.run_number }}
+          
+          # Extract the new full version (e.g., 1.0.0+49) for the tag
+          NEW_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # Configure Git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Commit the file change back to the repo
+          git add pubspec.yaml
+          git commit -m "🔖 Bump version to $NEW_VERSION [skip ci]"
+          git push
 
       # 3️⃣  Cache Pub + Gradle to speed up CI
       - name: 🧹 Cache dependencies
@@ -35,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
 
       - name: 🔢 Parse pubspec version
-        id: version
+        id: pubversion
         run: |
           version=$(grep '^version:' pubspec.yaml | awk '{print $2}')
           prefix=$(echo $version | cut -d '+' -f 1)
