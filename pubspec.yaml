@@ -2,7 +2,7 @@ name: subs_tracker
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.0+53
+version: 1.0.0+55
 
 environment:
   sdk: ^3.8.1
