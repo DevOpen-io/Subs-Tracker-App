@@ -17,6 +17,12 @@ jobs:
       - name: 📥 Check out code
         uses: actions/checkout@v4
 
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       # 2️⃣  Flutter SDK (with built-in cache flag)
       - name: 🐦 Set up Flutter
         uses: subosito/flutter-action@v2
@@ -73,9 +79,20 @@ jobs:
       
       - name: Run build runner
         run: dart run build_runner build --delete-conflicting-outputs
+      
+      - name: 🔐 Decode Keystore
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+        run: |
+          # Base64 string'i dosyaya çevirip android/app klasörüne koyuyoruz
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > android/app/upload-keystore.jks
 
       # 5️⃣  Build release APK
       - name: 🏗️ Build Android release APK
+        env:
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ALIAS: ${{ secrets.ALIAS }}
         run: |
           flutter build apk --release
 
