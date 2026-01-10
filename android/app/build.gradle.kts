@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,15 +8,17 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+// Groovy'deki "def" yerine Kotlin'de "val" kullanılır.
+// Tek tırnak (') yerine çift tırnak (") kullanılır.
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "io.devopen.subzilla"
-    compileSdk = 36
+    compileSdk = 36 // Eğer hata alırsan bunu 34 veya 35 yapabilirsin.
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -22,37 +27,29 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    dependenciesInfo {
-        includeInApk = false
-        includeInBundle = false
-    }
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "io.devopen.subzilla"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = 33
+        targetSdk = 33 // Genelde compileSdk ile uyumlu olması önerilir ama 33 de çalışır.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
     }
 
     signingConfigs {
-        release {
-            // IF key.properties file is exist read from file beacuse local development
-            // Else not exist read envoirment variable for CI/CD
+        // Kotlin DSL'de yeni bir config oluştururken create("isim") kullanılır.
+        create("release") {
             if (keystorePropertiesFile.exists()) {
-                keyAlias = keystoreProperties['keyAlias']
-                keyPassword = keystoreProperties['keyPassword']
-                storeFile = file(keystoreProperties['storeFile'])
-                storePassword = keystoreProperties['storePassword']
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
             } else {
+                // CI/CD Ortamı (GitHub Actions)
                 storeFile = file("upload-keystore.jks")
                 storePassword = System.getenv("KEY_STORE_PASSWORD")
                 keyAlias = System.getenv("ALIAS")
@@ -63,11 +60,14 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Kotlin DSL'de atama yapılırken "=" kullanılır ve getByName ile çağrılır.
+            signingConfig = signingConfigs.getByName("release")
+            
+            // Kotlin DSL'de "isMinifyEnabled" property'si kullanılır.
+            isMinifyEnabled = false
+            
+            // Fonksiyon çağrıları parantez içinde olmalıdır.
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 }
