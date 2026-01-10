@@ -65,6 +65,7 @@ android {
             
             // Kotlin DSL'de "isMinifyEnabled" property'si kullanılır.
             isMinifyEnabled = false
+            isShrinkResources = false
             
             // Fonksiyon çağrıları parantez içinde olmalıdır.
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
